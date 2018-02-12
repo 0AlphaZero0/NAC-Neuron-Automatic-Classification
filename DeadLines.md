@@ -1,11 +1,12 @@
 # DEADLINES
 
-##Remise rapport + code
-    '8 mai'
-    
----
+## Remise rapport + code
 
-##Soutenance
-    '15 mai'
+	`8 mai`
+
+---
+## Soutenance
+
+	`15 mai`
 
 ---
