@@ -20,6 +20,6 @@ fichiers de données facilement et de visualiser les résultats d'analyse en fon
 de classification qui sera développée.
 Un jeu de données est mis à la disposition des étudiants avec la catégorie (1 ou 2) de chaque
 neurone. Idéalement une méthode d'apprentissage supervisé est envisagée à l'aide de la
-bibliothèque Caret et du logiciel R mais également en utilisant le langage Python et la librairie
-Scikit-Learn. Toute autre solution peut être envisagée et ceci peut être discuté avec le groupe
+bibliothèque **Caret** et du **logiciel R** mais également en utilisant le **langage Python** et **la librairie
+Scikit-Learn**. Toute autre solution peut être envisagée et ceci peut être discuté avec le groupe
 d'étudiants.
