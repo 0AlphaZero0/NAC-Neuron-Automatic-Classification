@@ -5,6 +5,7 @@ Développement d'un outil de classification automatique de signaux neuronaux bio
 **Cahier des charges** : https://www.overleaf.com/13775721dzzjsknmydhv
 
 **Rapport** : https://www.overleaf.com/13781350mcsgyrmmnxxg
+Soutenance = 20 min -> 15 diapos +10min de questions
 
 
 # A lire absolument!!!!
