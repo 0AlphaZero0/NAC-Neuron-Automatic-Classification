@@ -11,9 +11,9 @@ Développement d'un outil de classification automatique de signaux neuronaux bio
 
 Créer un compte github https://github.com/
 
-<span style="display:block;text-align:center">
-**PENSER A PULL AVANT DE TRAVAILLER**
-</span>
+<p align='center' fontstyle='blod'>
+	**PENSER A PULL AVANT DE TRAVAILLER**
+</p>
 
 ## INSTALLER GITHUB (normalement installé par défaut sur linux)
 
