@@ -14,8 +14,12 @@ Créer un compte github https://github.com/
 
 <p align='center'; fontstyle='blod';> 
 	##################!!!!   PENSER A PULL AVANT DE TRAVAILLER   !!!!##################
+</p>
+
+<p align='center'; fontstyle='blod';> 
 	Et ne travailler que dans votre dossier!
 </p>
+
 
 ## INSTALLER GITHUB (normalement installé par défaut sur linux)
 
