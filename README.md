@@ -13,7 +13,7 @@ Logiciel R
 
 Langage Python
 
-Librairie Scikit-Learn
+Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
 
 # A lire absolument jusqu'au bout!!!!
 
