@@ -13,7 +13,7 @@ Créer un compte github https://github.com/
 
 **PENSER A PULL AVANT DE TRAVAILLER**
 
-## installer github
+## INSTALLER GITHUB (normalement installé par défaut sur linux)
 
 	`sudo apt-get install git`
 
