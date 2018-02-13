@@ -34,5 +34,6 @@ Créer un compte github https://github.com/
 
 	//dans le répertoir courant
 	`git add --all`
-	`git commit -m "update" //choisir un nom pour la mise à jour (pas forcément update mais plutôt ce que vous avez modifié)`
+	`git commit -m "update" //choisir un nom pour la mise à jour 
+	(pas forcément "update" mais plutôt ce que vous avez modifié)`
 	`git push //envoyer sur le github`
