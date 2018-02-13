@@ -63,7 +63,7 @@ Ce logiciel nécessite un micro/casque si possible (écouteur et micro des écou
 Il est possible de l'installer ou de directement passer par le navigateur d'un ordinateur :
 		https://discordapp.com/
 		
-Et utiliser ce lien pour rejoindre le serveur du projet : https://discord.gg/kE8jJ8g
+Utiliser ce lien pour rejoindre le serveur du projet : https://discord.gg/kE8jJ8g
 	(serveur bioinfo : https://discord.gg/gZ4U3YV)
 
 Vous êtes entrer vous n'avez plus qu'à cliquer sur le salon de votre choix.
