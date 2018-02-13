@@ -57,7 +57,7 @@ Créer un compte github https://github.com/
 
 ## LOGICIEL DISCORD
 
-	Ce logiciel nécessite un micro et casque si possible (écouteur et micro des écouteurs marchent également)
+	Ce logiciel nécessite un micro/casque si possible (écouteur et micro des écouteurs marchent également)
 	
 	Il est possible de l'installer ou de directement passer par le navigateur d'un ordinateur :
 		https://discordapp.com/
