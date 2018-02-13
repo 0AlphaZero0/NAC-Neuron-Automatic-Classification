@@ -1,11 +1,15 @@
 # Projet-Neuro
 Développement d'un outil de classification automatique de signaux neuronaux biologiques.
 
+
+
 **Cahier des charges** : https://www.overleaf.com/13775721dzzjsknmydhv
 
 **Rapport** : https://www.overleaf.com/13781350mcsgyrmmnxxg
 
-# README
+
+
+# A lire absolument!!!!
 
 Créer un compte github https://github.com/
 
