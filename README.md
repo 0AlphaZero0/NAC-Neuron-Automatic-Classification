@@ -49,6 +49,7 @@ Créer un compte github https://github.com/
 Ce logiciel va nous permettre de travailler en même temps sur un même script.
 	
 Télécharger et installer Atom : https://atom.io/
+
 	Ouvrir Atom :
 		Install a Package -> Open Installer
 		Search packages : "teletype" -> Install
@@ -61,9 +62,11 @@ Ce logiciel nécessite un micro/casque si possible (écouteur et micro des écou
 	
 Il est possible de l'installer ou de directement passer par le navigateur d'un ordinateur :
 		https://discordapp.com/
-	Et utiliser ce lien pour rejoindre le serveur du projet : https://discord.gg/kE8jJ8g
-		(serveur bioinfo : https://discord.gg/gZ4U3YV)
-	Vous êtes entrer vous n'avez plus qu'à cliquer sur le salon de votre choix.
+		
+Et utiliser ce lien pour rejoindre le serveur du projet : https://discord.gg/kE8jJ8g
+	(serveur bioinfo : https://discord.gg/gZ4U3YV)
+
+Vous êtes entrer vous n'avez plus qu'à cliquer sur le salon de votre choix.
 		
 ## SI VOUS AVEZ UN DOUTE UNE ERREUR NE FAITES RIEN
 
