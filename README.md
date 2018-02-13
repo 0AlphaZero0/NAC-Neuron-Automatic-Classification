@@ -19,7 +19,7 @@ Créer un compte github https://github.com/
 
 ## IMPORTER LE DOSSIER
 
-	`git clone https://github.com/coddy33/Projet_python`
+	`git clone https://github.com/0AlphaZero0/Projet-Neuro.git`
 
 ---
 
