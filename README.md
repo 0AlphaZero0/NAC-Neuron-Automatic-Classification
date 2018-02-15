@@ -7,9 +7,9 @@ Développement d'un outil de classification automatique de signaux neuronaux bio
 **Rapport** : https://www.overleaf.com/13781350mcsgyrmmnxxg
 Soutenance = 20 min -> 15 diapos +10min de questions
 
-Bibliothèque Caret : http://topepo.github.io/caret/index.html
+Package Caret(Rstudio/R) : http://topepo.github.io/caret/index.html
 
-Logiciel R
+Logiciel R/Rstudio
 
 Langage Python
 
