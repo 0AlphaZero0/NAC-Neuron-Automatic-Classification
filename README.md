@@ -14,6 +14,10 @@ Logiciel R/Rstudio
 Langage Python
 
 Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
+Documentation scikit :
+- http://scikit-learn.org/stable/modules/svm.html docs
+- https://www.youtube.com/watch?v=ZD5lJGq1rvQ Youtube
+
 
 # A lire absolument jusqu'au bout!!!!
 
