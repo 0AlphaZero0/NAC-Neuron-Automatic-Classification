@@ -1,7 +1,7 @@
-BIBLIO ARTHUR
+# BIBLIO ARTHUR
 
 
-Type de neurones :
+## Type de neurones :
 
 https://blogs.scientificamerican.com/brainwaves/know-your-neurons-classifying-the-many-types-of-cells-in-the-neuron-forest/
 
