@@ -115,7 +115,7 @@ for i, clf in enumerate((svc, lin_svc, rbf_svc, poly_svc)):
 	 plt.subplot(2, 2, i + 1)
 	 plt.subplots_adjust(wspace=0.4, hspace=0.4)
 	 
-	 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+	 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])#pose pb comprends pas trop pk - 2 features au lieu de 8
 	 
 	 '''# Put the result into a color plot
 	 Z = Z.reshape(xx.shape)
