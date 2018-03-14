@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-# Projet de programmation Python - Virus killer
+# Projet de programmation Neuro
 # BLAIS Benjamin
 # COTTAIS Déborah
 # DE OLIVEIRA Lila
@@ -11,15 +11,15 @@ import sys
 import os
 import random
 import codecs
-#######################
-
-from sklearn import datasets
-from sklearn import svm
-from csv import reader
-import numpy as np
-import matplotlib.pyplot as plt
 import urllib
-
+import matplotlib.pyplot as plt
+import numpy as np
+#######################
+# from http://scikit-learn.org/stable/auto_examples/exercises/plot_iris_exercise.html
+# details here : http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
+from csv import reader
+from sklearn import datasets, svm
+from pylab import *
 
 ########################################   FONCTIONS  ######################################
 # features = 0:nClass 1:IR 2:RMP 3:RH 4:ST 5:DTFS 6:SA 7:SD 8:fAHP 9:ID
@@ -83,13 +83,23 @@ def reformedata():
 	donneesx=donneesx.reshape((116, 8))
 
 ######################################      MAIN      ###########################################
+######## VARIABLES
 donneesx=[]
 donneesy=[]
 features= ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP','ID']
 C = 1.0  # SVM regularization parameter
 h = .02  # step size in the mesh
 titles = ['SVC with linear kernel','LinearSVC (linear kernel)','SVC with RBF kernel','SVC with polynomial (degree 3) kernel']# title for the plots
-#print load_csv("CR.csv")
+n_sample=116
+kern=["linear", "rbf", "poly"]
+fracRange=np.arange(0.1,0.9,0.01)
+res=""
+bestScore=0
+bestRes=""
+linScores=[]
+rbfScores=[]
+polScores=[]
+###################################
 donnees = load_csv("CR.csv")
 donnees = ID(donnees)
 r=nouvelle_liste()
@@ -97,51 +107,38 @@ donneesx= r[0]
 donneesy= r[1]
 visualise_data(donneesx,donneesy)
 reformedata()
-# SVC with linear kernel
-svc = svm.SVC(kernel='linear',C=C).fit(donneesx, donneesy)
-# LinearSVC (linear kernel)
-lin_svc = svm.LinearSVC(C=C).fit(donneesx, donneesy)
-# SVC with RBF kernel
-rbf_svc = svm.SVC(kernel='rbf', gamma=0.7, C=C).fit(donneesx, donneesy)
-# SVC with polynomial (degree 3) kernel
-poly_svc = svm.SVC(kernel='poly', degree=3, C=C).fit(donneesx, donneesy)
-
-x_min,x_max=donneesx.min()-1,donneesx.max()+1
-y_min,y_max=donneesy.min()-1,donneesy.max()+1
-xx, yy = np.meshgrid(np.arange(x_min, x_max, h),np.arange(y_min, y_max, h))
-#################CLEAN####################
-for i, clf in enumerate((svc, lin_svc, rbf_svc, poly_svc)):
-	 # Plot the decision boundary. For that, we will assign a color to each
-	 # point in the mesh [x_min, x_max]x[y_min, y_max].
-	 plt.subplot(2, 2, i + 1)
-	 plt.subplots_adjust(wspace=0.4, hspace=0.4)
-	 
-	 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])#pose pb comprends pas trop pk - 2 features au lieu de 8
-	 
-	 '''# Put the result into a color plot
-	 Z = Z.reshape(xx.shape)
-	 plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
-	 # Plot also the training points
-	 plt.scatter(donneesx[:, 0], donneesy[:, 1], c=y, cmap=plt.cm.coolwarm)
-	 plt.xlabel('IR')
-	 plt.ylabel('RMP')
-	 plt.xlim(xx.min(), xx.max())
-	 plt.ylim(yy.min(), yy.max())
-	 plt.xticks(())
-	 plt.yticks(())
-	 plt.title(titles[i])
-'''
-plt.show()
+np.random.seed(0)
+order=np.random.permutation(n_sample)
+x=donneesx[order]
+y=donneesy[order]
 
 
+for tFrac in fracRange:
+	#print tFrac
+	X_train = x[:int(tFrac * n_sample)]
+	y_train = y[:int(tFrac * n_sample)]
+	X_test = x[int(tFrac * n_sample):]
+	y_test = y[int(tFrac * n_sample):]
+	res+=str("Training fraction : "+str(tFrac)+"\n")
+	for k in kern:
+		clf = svm.SVC(kernel=k)
+		clf.fit(X_train, y_train)
+		predicted = clf.predict(X_test)
+		score=sum(predicted==y_test)/float(len(predicted))
+		res+="\t"+k+" : "+str(score)+"\n"
+		if k=="linear":
+			linScores.append(score)
+		if k=="rbf":
+			rbfScores.append(score)
+		if k=="poly":
+			polScores.append(score)
+		if score>bestScore:
+			bestScore=score
+			bestRes="Fraction = "+str(tFrac)+", method="+k+", results="+str(score)
 
-
-
-"""
-#donnees = np.reshape(1, -1)
-#(-1,1) => une seule dimension ; pour plusieurs (1,-1)
-C = 1.0
-#donneesy = donneesy.reshape(1,-1)
-poly_svc = svm.SVC(kernel='poly', degree=3, C=C).fit(donneesx, donneesy)
-"""
-
+print bestRes
+plot(fracRange,linScores)
+plot(fracRange,rbfScores)
+plot(fracRange,polScores)
+legend(kern)
+show()
