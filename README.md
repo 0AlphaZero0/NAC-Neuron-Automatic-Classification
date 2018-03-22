@@ -20,6 +20,7 @@ Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-a
 Documentation scikit :
 - http://scikit-learn.org/stable/modules/svm.html docs
 - https://www.youtube.com/watch?v=ZD5lJGq1rvQ Youtube
+- https://pythonprogramming.net/linear-svc-example-scikit-learn-svm-python/
 
 
 # A lire absolument jusqu'au bout!!!!
