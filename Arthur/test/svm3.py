@@ -16,10 +16,11 @@ import codecs
 from sklearn import datasets
 from sklearn import svm
 from csv import reader
+from matplotlib import style
 import numpy as np
 import matplotlib.pyplot as plt
 import urllib
-
+style.use("ggplot")
 
 ########################################   FONCTIONS  ######################################
 # features = 0:nClass 1:IR 2:RMP 3:RH 4:ST 5:DTFS 6:SA 7:SD 8:fAHP 9:ID
@@ -118,7 +119,7 @@ for i, clf in enumerate((svc, lin_svc, rbf_svc, poly_svc)):
 	 
 	 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])#pose pb comprends pas trop pk - 2 features au lieu de 8
 	 
-	 '''# Put the result into a color plot
+	 # Put the result into a color plot
 	 Z = Z.reshape(xx.shape)
 	 plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
 	 # Plot also the training points
@@ -130,7 +131,7 @@ for i, clf in enumerate((svc, lin_svc, rbf_svc, poly_svc)):
 	 plt.xticks(())
 	 plt.yticks(())
 	 plt.title(titles[i])
-'''
+
 plt.show()
 
 
