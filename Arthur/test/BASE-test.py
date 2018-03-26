@@ -86,17 +86,22 @@ for i in DATA:
 ####### séparation train ######
 for i in train:
 	y_train.append(i.pop(0))
-X_train = np.array(train)
 ####### spéaration test #######
 for i in test:
 	y_test.append(i.pop(0))
-X_test = np.array(test)
 ################################
+#
+#
+# ICI JE DOIS FAIRE EN SORTE DE SELECTIONNER LES COMBINAISONS DE PARAMETRES DANS TRAIN ET TEST
+#
+#
+################################
+X_test = np.array(test)
+X_train = np.array(train)
 t=10
 first=1
 a=0
 top=0
-
 while top==0:
 	clf = svm.SVC(kernel='linear', C = t)
 	clf.fit(X_train,y_train)
