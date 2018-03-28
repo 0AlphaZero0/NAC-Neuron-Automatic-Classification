@@ -86,70 +86,86 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 ########################################     MAIN     ######################################
-y_train=[]
-y_test=[]
-train=[]
-test=[]
-x=0
+listecombin=[1,2,3,4,5,6,7,8]
+features = ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
 fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
+all_combin=combinaisons(listecombin)
 
-##### need to split data  #####
-for i in DATA:
-	if x%2==0:
-		train.append(i)
-	else:
-		test.append(i)
-	x=x+1
-################################
-#
-#
-# ICI JE DOIS FAIRE EN SORTE DE SELECTIONNER LES COMBINAISONS DE PARAMETRES DANS TRAIN ET TEST
-#
-################################
-####### séparation train ######
-for i in train:
-	y_train.append(i.pop(0))
-####### spéaration test #######
-for i in test:
-	y_test.append(i.pop(0))
-################################
-X_test = np.array(test)
-X_train = np.array(train)
-t=10
-first=1
-a=0
-top=0
-while top==0:
-	clf = svm.SVC(kernel='linear', C = t)
-	clf.fit(X_train,y_train)
-	################################
-	result=clf.predict(X_test)
-	################################
-	y_test=np.array(y_test)
+for combin in all_combin:
+	dataset=[]
+	y_train=[]
+	y_test=[]
+	train=[]
+	test=[]
 	x=0
-	somme=0
-	length=len(y_test)
-	while x<len(y_test):
-		if result[x]==y_test[x]:
-			somme=somme+1
-		x=x+1
-	percentage=(float(somme)/length)*100
-	print percentage,"% pour un C=",t
-	if first==0:
-		if tmp==percentage:
-			a=a+1
-			if a==4:
-				print "BROKE"
-				first =1
-				t=10
-				break
+	for sample in DATA:
+		u=[]
+		u.append(sample[0])
+		for j in combin:
+			u.append(sample[j])
+		dataset.append(u)
+		##### need to split data  #####
+	#print dataset
+	for i in dataset:
+		if x%2==0:
+			train.append(i)
 		else:
-			a=0
-	tmp=percentage
-	first=0
-	t=t*0.1
-
-listecombin=[0,1,2,3,4,5,6,7]
-print combinaisons(listecombin)
+			test.append(i)
+		x=x+1
+	################################
+	#
+	#
+	# ICI JE DOIS FAIRE EN SORTE DE SELECTIONNER LES COMBINAISONS DE PARAMETRES DANS TRAIN ET TEST
+	#
+	################################
+	####### séparation train ######
+	for i in train:
+		y_train.append(i.pop(0))
+	####### spéaration test #######
+	for i in test:
+		y_test.append(i.pop(0))
+	################################
+	X_test = np.array(test)
+	X_train = np.array(train)
+	t=1000
+	first=1
+	a=0
+	top=0
+	while top==0:
+		clf = svm.SVC(kernel='linear', C = t)
+		clf.fit(X_train,y_train)
+		################################
+		result=clf.predict(X_test)
+		################################
+		y_test=np.array(y_test)
+		x=0
+		somme=0
+		length=len(y_test)
+		while x<len(y_test):
+			if result[x]==y_test[x]:
+				somme=somme+1
+			x=x+1
+		percentage=(float(somme)/length)*100
+		print percentage,"% pour un C=",t,"ainsi que les paramètres : ",
+		for j in combin:
+			if j==combin[len(combin)-1]:
+				print features[j]
+				break
+			print features[j],
+		if first==0:
+			if tmp==percentage:
+				a=a+1
+				if a==6:
+					print "BROKE"
+					first =1
+					t=10
+					break
+			else:
+				a=0
+		tmp=percentage
+		first=0
+		t=t*0.1
+		
+		
