@@ -51,21 +51,6 @@ def load(filename): # load le fichier
 			dataset.append(y)
 	return dataset
 #
-def ID(donnees):#ajoute un ID au neurone compteur de chiffre de 1 à len(donnees)
-	'''	Cette fonction permet d'ajouter un identifiant au neurone
-	Description:
-		Ici un simple compteur va ajouter un ID dans le tableau à deux dimensions demandé en entrée
-	Args:
-		Un tableau à deux dimensions
-	Return:
-		Retourne le tableau à deux dimension avec l'ajout d'un ID à chaque sample
-	'''
-	x=0
-	while x<len(donnees):
-		donnees[x].append(x)
-		x=x+1
-	return donnees
-#
 def combinaisons(a):
     def fn(n,src,got,all):
         if n==0:
@@ -85,6 +70,17 @@ def combinaisons(a):
     all.append(a)
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
+def save(percentage,t,ft):
+	file=codecs.open("save.csv","a",encoding="utf-8")
+	file.write(str(percentage))
+	file.write(',')
+	file.write(str(t))
+	file.write(',')
+	for i in ft:
+		file.write(str(i))
+		file.write(',')
+	file.write('\n')
+	file.close
 ########################################     MAIN     ######################################
 listecombin=[1,2,3,4,5,6,7,8]
 features = ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
@@ -92,7 +88,8 @@ fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
 all_combin=combinaisons(listecombin)
-
+file=codecs.open("save.csv","w",encoding="utf-8")
+file.close
 for combin in all_combin:
 	dataset=[]
 	y_train=[]
@@ -114,12 +111,6 @@ for combin in all_combin:
 		else:
 			test.append(i)
 		x=x+1
-	################################
-	#
-	#
-	# ICI JE DOIS FAIRE EN SORTE DE SELECTIONNER LES COMBINAISONS DE PARAMETRES DANS TRAIN ET TEST
-	#
-	################################
 	####### séparation train ######
 	for i in train:
 		y_train.append(i.pop(0))
@@ -149,11 +140,15 @@ for combin in all_combin:
 			x=x+1
 		percentage=(float(somme)/length)*100
 		print percentage,"% pour un C=",t,"ainsi que les paramètres : ",
+		listftsave=[]
 		for j in combin:
 			if j==combin[len(combin)-1]:
+				listftsave.append(features[j])
 				print features[j]
 				break
+			listftsave.append(features[j])
 			print features[j],
+		save(percentage,t,listftsave)
 		if first==0:
 			if tmp==percentage:
 				a=a+1
