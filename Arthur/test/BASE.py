@@ -51,78 +51,117 @@ def load(filename): # load le fichier
 			dataset.append(y)
 	return dataset
 #
-def ID(donnees):#ajoute un ID au neurone compteur de chiffre de 1 à len(donnees)
-	'''	Cette fonction permet d'ajouter un identifiant au neurone
-	Description:
-		Ici un simple compteur va ajouter un ID dans le tableau à deux dimensions demandé en entrée
-	Args:
-		Un tableau à deux dimensions
-	Return:
-		Retourne le tableau à deux dimension avec l'ajout d'un ID à chaque sample
-	'''
-	x=0
-	while x<len(donnees):
-		donnees[x].append(x)
-		x=x+1
-	return donnees
+def combinaisons(a):
+    def fn(n,src,got,all):
+        if n==0:
+            if len(got)>0:
+                all.append(got)
+            return
+        j=0
+        while j<len(src):
+            fn(n-1, src[:j], [src[j]] + got, all)
+            j=j+1
+        return
+    all=[]
+    i=0
+    while i<len(a):
+        fn(i,a,[],all)
+        i=i+1
+    all.append(a)
+    return all #a=[1,2,3,4] print(combinaisons(a))
 #
+def save(percentage,t,ft):
+	file=codecs.open("test.csv","a",encoding="utf-8")
+	file.write(str(percentage))
+	file.write(',')
+	file.write(str(t))
+	file.write(',')
+	for i in ft:
+		file.write(str(i))
+		file.write(',')
+	file.write('\n')
+	file.close
 ########################################     MAIN     ######################################
-y_train=[]
-y_test=[]
-train=[]
-test=[]
-x=0
+listecombin=[1,2,3,4,5,6,7,8]
+features = ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
 fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
-
-##### need to split data  #####
-for i in DATA:
-	if x%2==0:
-		train.append(i)
-	else:
-		test.append(i)
-	x=x+1
-####### séparation train ######
-for i in train:
-	y_train.append(i.pop(0))
-X_train = np.array(train)
-####### spéaration test #######
-for i in test:
-	y_test.append(i.pop(0))
-X_test = np.array(test)
-################################
-t=10
-first=1
-a=0
-top=0
-
-while top==0:
-	clf = svm.SVC(kernel='linear', C = t)
-	clf.fit(X_train,y_train)
-	################################
-	result=clf.predict(X_test)
-	################################
-	y_test=np.array(y_test)
+all_combin=combinaisons(listecombin)
+file=codecs.open("test.csv","w",encoding="utf-8")
+file.close
+for combin in all_combin:
+	dataset=[]
+	y_train=[]
+	y_test=[]
+	train=[]
+	test=[]
 	x=0
-	somme=0
-	length=len(y_test)
-	while x<len(y_test):
-		if result[x]==y_test[x]:
-			somme=somme+1
-		x=x+1
-	percentage=(float(somme)/length)*100
-	print percentage,"% pour un C=",t
-	if first==0:
-		if tmp==percentage:
-			a=a+1
-			if a==4:
-				print "BROKE"
-				first =1
-				t=10
-				break
+	for sample in DATA:
+		u=[]
+		u.append(sample[0])
+		for j in combin:
+			u.append(sample[j])
+		dataset.append(u)
+		##### need to split data  #####
+	#print dataset
+	for i in dataset:
+		if x%2==0:
+			train.append(i)
 		else:
-			a=0
-	tmp=percentage
-	first=0
-	t=t*0.1
+			test.append(i)
+		x=x+1
+	####### séparation train ######
+	for i in train:
+		y_train.append(i.pop(0))
+	####### spéaration test #######
+	for i in test:
+		y_test.append(i.pop(0))
+	################################
+	X_test = np.array(test)
+	X_train = np.array(train)
+	t=0.00001
+	first=1
+	a=0
+	top=0
+	while top==0:
+		if t==100000000:
+			print 'BROKE'
+			break
+		clf = svm.SVC(kernel='linear', C = t)
+		clf.fit(X_train,y_train)
+		################################
+		result=clf.predict(X_test)
+		################################
+		y_test=np.array(y_test)
+		x=0
+		somme=0
+		length=len(y_test)
+		while x<len(y_test):
+			if result[x]==y_test[x]:
+				somme=somme+1
+			x=x+1
+		percentage=(float(somme)/length)*100
+		print percentage,"% pour un C=",t,"ainsi que les paramètres : ",
+		listftsave=[]
+		for j in combin:
+			if j==combin[len(combin)-1]:
+				listftsave.append(features[j])
+				print features[j]
+				break
+			listftsave.append(features[j])
+			print features[j],
+		save(percentage,t,listftsave)
+		if first==0:
+			if tmp==percentage:
+				a=a+1
+				if a==8:
+					print "BROKE"
+					break
+			else:
+				a=0
+		tmp=percentage
+		first=0
+		t=t*10
+		
+		
