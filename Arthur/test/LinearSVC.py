@@ -128,7 +128,7 @@ for combin in all_combin:
 		if t==100000000:
 			print 'BROKE'
 			break
-		clf = svm.SVC(kernel='linear', C = t)
+		clf = svm.LinearSVC(C = t)
 		clf.fit(X_train,y_train)
 		################################
 		result=clf.predict(X_test)
