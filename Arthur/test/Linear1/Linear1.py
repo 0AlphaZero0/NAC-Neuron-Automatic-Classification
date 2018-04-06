@@ -106,7 +106,7 @@ for combin in all_combin:
 	##### need to split data  ##################################
 	g=0
 	while g<len(dataset):
-		if g<len(dataset)/3:
+		if g<len(dataset)/4:
 			test.append(dataset[g])
 		else:
 			train.append(dataset[g])

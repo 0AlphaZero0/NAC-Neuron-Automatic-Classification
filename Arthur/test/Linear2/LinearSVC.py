@@ -103,7 +103,17 @@ for combin in all_combin:
 		for j in combin:
 			u.append(sample[j])
 		dataset.append(u)
-		##### need to split data  #####
+	##### need to split data  #####
+	g=0
+	while g<len(dataset):
+		if g<len(dataset)/4:
+			test.append(dataset[g])
+		else:
+			train.append(dataset[g])
+		g=g+1
+	print "TRAIN = ",len(train)
+	print "TEST = ",len(test)
+	'''
 	#print dataset
 	for i in dataset:
 		if x%2==0:
@@ -111,6 +121,7 @@ for combin in all_combin:
 		else:
 			test.append(i)
 		x=x+1
+	'''
 	####### séparation train ######
 	for i in train:
 		y_train.append(i.pop(0))
