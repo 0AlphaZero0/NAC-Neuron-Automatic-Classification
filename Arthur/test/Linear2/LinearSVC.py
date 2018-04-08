@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("test.csv","a",encoding="utf-8")
+	file=codecs.open("result25train-75test-linear2.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -88,8 +88,6 @@ fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
 all_combin=combinaisons(listecombin)
-file=codecs.open("test.csv","w",encoding="utf-8")
-file.close
 for combin in all_combin:
 	dataset=[]
 	y_train=[]
@@ -104,13 +102,18 @@ for combin in all_combin:
 			u.append(sample[j])
 		dataset.append(u)
 	##### need to split data  #####
+	#les échantillons ne sont pas mélangés dans dataset donc besoin de random
 	g=0
-	while g<len(dataset):
-		if g<len(dataset)/4:
-			test.append(dataset[g])
+	datalength=len(dataset)
+	while g!=len(dataset):
+		top=len(dataset)-1
+		rand=random.randint(0,top)
+		if datalength/4<len(dataset):
+			test.append(dataset.pop(rand))
+			#on met 75% ici
 		else:
-			train.append(dataset[g])
-		g=g+1
+			train.append(dataset.pop(0))
+			#on met 25% ici
 	print "TRAIN = ",len(train)
 	print "TEST = ",len(test)
 	'''
