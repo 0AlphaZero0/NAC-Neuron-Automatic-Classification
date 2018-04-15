@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("test.csv","a",encoding="utf-8")
+	file=codecs.open("result75train-25test-poly.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -90,8 +90,6 @@ fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
 all_combin=combinaisons(listecombin)
-file=codecs.open("test.csv","w",encoding="utf-8")
-file.close
 for combin in all_combin:
 	dataset=[]
 	y_train=[]
@@ -106,6 +104,21 @@ for combin in all_combin:
 			u.append(sample[j])
 		dataset.append(u)
 	##### need to split data  #####
+	#les échantillons ne sont pas mélangés dans dataset donc besoin de random
+	g=0
+	datalength=len(dataset)
+	while g!=len(dataset):
+		top=len(dataset)-1
+		rand=random.randint(0,top)
+		if datalength/4<len(dataset):
+			train.append(dataset.pop(rand))
+			#on met 75% ici
+		else:
+			test.append(dataset.pop(0))
+			#on met 25% ici
+	print "TRAIN = ",len(train)
+	print "TEST = ",len(test)
+	'''
 	#print dataset
 	for i in dataset:
 		if x%2==0:
@@ -113,6 +126,7 @@ for combin in all_combin:
 		else:
 			test.append(i)
 		x=x+1
+	'''
 	####### séparation train ######
 	for i in train:
 		y_train.append(i.pop(0))
@@ -126,14 +140,14 @@ for combin in all_combin:
 	first=1
 	a=0
 	top=0
-	while t<100000000:
+	while t<1:
 		h=0
-		tour=1
+		tour=0
 		#secure
-		if t==100000000:
+		if t==1000:
 			print 'BROKE'
 			break
-		while tour<5:
+		while tour<3:
 			clf = svm.SVC(kernel='poly',degree=h, C = t)
 			clf.fit(X_train,y_train)
 			################################
@@ -148,7 +162,10 @@ for combin in all_combin:
 					somme=somme+1
 				x=x+1
 			percentage=(float(somme)/length)*100
-			print percentage,"% pour un C=",t," et un degree=",h,"ainsi que les paramètres : ",
+			if t==0.1 or t==1:
+				print percentage,"	% pour un C=",t,"	et un degree=",h,"ainsi que les paramètres : ",
+			else:
+				print percentage,"	% pour un C=",t,"	et un degree=",h,"ainsi que les paramètres : ",
 			listftsave=[]
 			for j in combin:
 				if j==combin[len(combin)-1]:
@@ -159,13 +176,14 @@ for combin in all_combin:
 				print features[j],
 			save(percentage,t,listftsave)
 			#secure
-			if tour==4:
+			tour=tour+1
+			if tour==3:
 				print 'BROKE'
 				break
-			tour=tour+1
 			h=h+1
 		tmp=percentage
 		first=0
 		t=t*10
-		
+
+print "FIN"
 		

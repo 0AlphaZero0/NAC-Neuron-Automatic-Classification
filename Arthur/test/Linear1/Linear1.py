@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("result25test-75train-linear1.csv","a",encoding="utf-8")
+	file=codecs.open("result25train-75test-linear1.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -86,6 +86,8 @@ listecombin=[1,2,3,4,5,6,7,8]
 features = ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
 fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
+file=codecs.open("result25train-75test-linear1.csv","w",encoding="utf-8")
+file.close
 print "\n Le fichier fait",len(DATA),"samples.\n"
 all_combin=combinaisons(listecombin)
 for combin in all_combin:
@@ -109,10 +111,10 @@ for combin in all_combin:
 		top=len(dataset)-1
 		rand=random.randint(0,top)
 		if datalength/4<len(dataset):
-			train.append(dataset.pop(rand))
+			test.append(dataset.pop(rand))
 			#on met 75% ici
 		else:
-			test.append(dataset.pop(0))
+			train.append(dataset.pop(0))
 			#on met 25% ici
 	print "TRAIN = ",len(train)
 	print "TEST = ",len(test)
@@ -138,7 +140,7 @@ for combin in all_combin:
 	a=0
 	top=0
 	while top==0:
-		if t==100000000:
+		if t==10000:
 			print 'BROKE'
 			break
 		clf = svm.SVC(kernel='linear', C = t)
@@ -155,7 +157,10 @@ for combin in all_combin:
 				somme=somme+1
 			x=x+1
 		percentage=(float(somme)/length)*100
-		print percentage,"% pour un C=",t,"ainsi que les paramètres : ",
+		if t==0.1 or t==1.0:
+			print percentage,"%	pour un C=",t,"		ainsi que les paramètres : ",
+		else:
+			print percentage,"%	pour un C=",t,"	ainsi que les paramètres : ",
 		listftsave=[]
 		for j in combin:
 			if j==combin[len(combin)-1]:
@@ -176,5 +181,4 @@ for combin in all_combin:
 		tmp=percentage
 		first=0
 		t=t*10
-		
-		
+print "FIN"
