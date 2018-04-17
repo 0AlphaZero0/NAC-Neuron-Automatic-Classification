@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("result75train-25test-poly.csv","a",encoding="utf-8")
+	file=codecs.open("result25train-75test-poly.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -111,10 +111,10 @@ for combin in all_combin:
 		top=len(dataset)-1
 		rand=random.randint(0,top)
 		if datalength/4<len(dataset):
-			train.append(dataset.pop(rand))
+			test.append(dataset.pop(rand))
 			#on met 75% ici
 		else:
-			test.append(dataset.pop(0))
+			train.append(dataset.pop(0))
 			#on met 25% ici
 	print "TRAIN = ",len(train)
 	print "TEST = ",len(test)
@@ -136,19 +136,19 @@ for combin in all_combin:
 	################################
 	X_test = np.array(test)
 	X_train = np.array(train)
-	t=0.00001
+	t=0.8
 	first=1
 	a=0
 	top=0
-	while t<1:
+	while t>0.1:
 		h=0
 		tour=0
 		#secure
-		if t==1000:
+		if t<0.1:
 			print 'BROKE'
 			break
 		while tour<3:
-			clf = svm.SVC(kernel='poly',degree=h, C = t)
+			clf = svm.NuSVC(kernel='poly',degree=h, nu = t)
 			clf.fit(X_train,y_train)
 			################################
 			result=clf.predict(X_test)
@@ -183,7 +183,7 @@ for combin in all_combin:
 			h=h+1
 		tmp=percentage
 		first=0
-		t=t*10
+		t=t-0.1
 
 print "FIN"
 		
