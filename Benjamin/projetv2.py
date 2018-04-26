@@ -47,12 +47,13 @@ def Chargemententrainement():
 
 
 def resultatsappui():
-	print (variableatester.get())
-	if (variableatester.get())==1:
+	variable2=variableatester.get()
+	if variable2==1:
+	#if (variableatester.get())==1:
 			nameentrainement=tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 			print (nameentrainement)
 			return (nameentrainement)
-	if variableatester==2:
+	if variable2==2:
 			nomentrainement=()####Chemin de notre fichier test
 
 
