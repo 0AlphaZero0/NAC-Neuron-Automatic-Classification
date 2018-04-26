@@ -1,10 +1,10 @@
  # coding: utf-8
 from Tkinter import *
 import tkFileDialog  ##Permet de Charger les fichiers
-from matplotlib.figure import *
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import * #Importe les parametres de matplotlib
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg #Importe tkinter
 import matplotlib.pyplot as plt
-
+import subprocess ### Ouvre un script present dans le repertoire courant
 
 #####Fenetre principale
 app = Tk()
@@ -15,9 +15,6 @@ app.configure(background='blue')#fond du programme
 
 
 ############# Variables
-#global variableatester
-#variableatester=StringVar()
-#variableatester.set('True')
 variableatester=IntVar()
 
 ######Definitions
@@ -62,9 +59,6 @@ def resultatsappui():
 def Parametres(): #### A faire suivant les paramètres sortant
 	print "Selection et fixation des paramètres"
 
-def Lanceranalyse():
-	print "Lancer l'analyse"
-
 def presentation():
 	presentation=Toplevel()
 	presentation.title("Presentation")
@@ -88,6 +82,7 @@ def alert():#####Commande bouton du haut
     showinfo("fonctionne")
 
 def Lanceranalyse():
+	subprocess.call("start python test.py")
 	Analyse=Toplevel()
 	Analyse.title("Les résultats")
 	Analyse.geometry("1200x800+600+300")
