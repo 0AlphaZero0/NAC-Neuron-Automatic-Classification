@@ -34,37 +34,25 @@ def Chargementtest(): #### Permet de retourner le chemin absolue permet l'acces 
 
 def Chargemententrainement():
 	global variableatester
-	entrainement=Tk()
+	entrainement=Toplevel()
 	entrainement.title("Le fichier d'entraînement")
 	entrainement.geometry("800x600+600+300")
 	textefichier="Avez-vous un jeu d'essai?"
 	fichiers=Label(entrainement,text=textefichier)
 	fichiers.pack()
-	#variable2=IntVar()
-	#variableatester=0
-	#variableatester=StringVar()
-	#variableatester.set('False')
-	#global R1
-	#global R2
 	R1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1,command=resultatsappui)
 	R1.pack( anchor = W )
-	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=0, command=resultatsappui)
+	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=resultatsappui)
 	R2.pack(anchor = W)
-	#radio0 = Radiobutton(entrainement, text="Appui prolonge", variable=variableatester, value=0, command=resultatsappui)
-	#radio1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1, command=resultatsappui)
-	#radio2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=resultatsappui)
-	#radio3 = Button(entrainement, text="Valider", command=entrainement.destroy,width=10)
-	#radio1.pack(side="top");radio2.pack(side="bottom");radio3.pack();radio0.pack()
-	#variableatester=variable2
-	#print variable2,"Test"
+
 
 def resultatsappui():
 	print (variableatester.get())
-	if variableatester==0:
-			nameentrainement = tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt"),("Tous les fichiers","*.*")))
+	if (variableatester.get())==1:
+			nameentrainement=tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 			print (nameentrainement)
 			return (nameentrainement)
-	if variableatester==1:
+	if variableatester==2:
 			nomentrainement=()####Chemin de notre fichier test
 
 
@@ -77,7 +65,7 @@ def Lanceranalyse():
 	print "Lancer l'analyse"
 
 def presentation():
-	presentation=Tk()
+	presentation=Toplevel()
 	presentation.title("Presentation")
 	presentation.geometry("800x600+600+300")
 	textepresentation="Actuellement etudiant en master I à l'Université de Bordeaux,\n nous avons pour projet de classer des neurones en deux types : Type I et Type II. \n"
@@ -86,7 +74,7 @@ def presentation():
 	presentation.mainloop()
 
 def explicationlogiciel():
-	explication=Tk()
+	explication=Toplevel()
 	explication.title("Le logiciel")
 	explication.geometry("1000x500+600+300")
 	texteexplication="Présentation du logiciel : \n - Chargement du fichier test : Prend en entrée le fichier test au format .csv et .txt où l'analyse va être réalisé \n - Choisir le fichier d'entrainement : Si le client dispose d'un fichier d'entraînement ayant les types de neurones, il peut le charger sinon un jeu lui sera fourni \n - Paramètres : Concerne le reglage des paramètres à prendre un compte pour l'analyse \n  - Lancer : Permet de lancer l'analyse et d'y afficher les resultats dans une nouvelle fenetre"   ###A mettre en forme
@@ -99,7 +87,7 @@ def alert():#####Commande bouton du haut
     showinfo("fonctionne")
 
 def Lanceranalyse():
-	Analyse=Tk()
+	Analyse=Toplevel()
 	Analyse.title("Les résultats")
 	Analyse.geometry("1200x800+600+300")
 	titretext=Label(Analyse, text="LES RESULTATS", fg="Black", bg="Grey")
@@ -113,8 +101,8 @@ def Lanceranalyse():
 
 
 ######## Creation de tous les boutons de chargement
-text=Label(app, text="Classification Neuronale", fg="White", bg="Blue")   #####Mettre en gras et en gros (titre)
-b1= Button(app, text="Chargement du fichier test",fg="Black", bg="White", command=Chargementtest, width=25)
+text=Label(app, text="Classification Neuronale", fg="White", bg="Grey")   #####Mettre en gras et en gros (titre)
+b1= Button(app, text="Chargement du fichier test",fg="Black", bg="Purple", command=Chargementtest, width=25)
 b2= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="White", command=Chargemententrainement,width=25)
 b3= Button(app, text="Paramètres", fg="Black",bg="White", command=Parametres,width=25)
 b4= Button(app, text="Lancer", fg="Black",bg="White", command=Lanceranalyse)
