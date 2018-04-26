@@ -24,7 +24,7 @@ variableatester=IntVar()
 
 
 def Chargementtest(): #### Permet de retourner le chemin absolue permet l'acces au fichier
-	name = tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt"),("Tous les fichiers","*.*")))
+	name = tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 	print (name)
 	return (name) #Retourne le chemin absolue du fichier
 	
@@ -40,23 +40,23 @@ def Chargemententrainement():
 	textefichier="Avez-vous un jeu d'essai?"
 	fichiers=Label(entrainement,text=textefichier)
 	fichiers.pack()
-	variable2=IntVar()
+	#variable2=IntVar()
 	#variableatester=0
 	#variableatester=StringVar()
 	#variableatester.set('False')
 	#global R1
 	#global R2
-	R1 = Radiobutton(entrainement, text="Oui", variable=variable2, value=1,command=resultatsappui)
+	R1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1,command=resultatsappui)
 	R1.pack( anchor = W )
-	R2 = Radiobutton(entrainement, text="Non", variable=variable2, value=0, command=resultatsappui)
+	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=0, command=resultatsappui)
 	R2.pack(anchor = W)
 	#radio0 = Radiobutton(entrainement, text="Appui prolonge", variable=variableatester, value=0, command=resultatsappui)
 	#radio1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1, command=resultatsappui)
 	#radio2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=resultatsappui)
 	#radio3 = Button(entrainement, text="Valider", command=entrainement.destroy,width=10)
 	#radio1.pack(side="top");radio2.pack(side="bottom");radio3.pack();radio0.pack()
-	variableatester=variable2
-	print variable2,"Test"
+	#variableatester=variable2
+	#print variable2,"Test"
 
 def resultatsappui():
 	print (variableatester.get())
