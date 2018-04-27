@@ -109,7 +109,7 @@ def resultatsappui():
 			nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 			listeentrainement=load(nomdufichierentrainement,0)
 	if variable2==2:
-			nomdufichierentrainement=()####Chemin de notre fichier test
+			nomdufichierentrainement=('All_ech.csv')####Chemin de notre fichier test
 			listeentrainement=load(nomdufichierentrainement,0)
 	entrainementfichier()
 	
