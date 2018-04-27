@@ -13,7 +13,6 @@ import random
 import codecs
 #######################
 from sklearn.neural_network import MLPClassifier
-from sklearn.neural_network import MLPRegressor
 from sklearn import datasets
 from sklearn import svm
 from csv import reader
@@ -72,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,vf,ft):
-	file=codecs.open("result25train-75test-lbfgs-tanhregre.csv","a",encoding="utf-8")
+	file=codecs.open("result25train-75test-lbfgs-identity.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -163,8 +162,8 @@ for combin in all_combin:
 			print 'BROKE'
 			break
 		while top==0:
-			MLPRegressor(activation='tanh', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
-			clf = MLPRegressor(solver='lbfgs', alpha=t, hidden_layer_sizes=(100,), random_state=None)
+			MLPClassifier(activation='identity', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
+			clf = MLPClassifier(solver='lbfgs', alpha=t, hidden_layer_sizes=(100,), random_state=None)
 			clf.fit(X_train,y_train)
 			################################
 			result=clf.predict(X_test)
@@ -180,7 +179,6 @@ for combin in all_combin:
 				if result[x]==y_test[x]:
 					somme=somme+1
 				x=x+1
-
 			percentage=(float(somme)/length)*100
 			print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
 			listftsave=[]
@@ -190,6 +188,7 @@ for combin in all_combin:
 					print features[j]
 					break
 				listftsave.append(features[j])
+				print listftsave
 				print features[j]
 			save(percentage,t,vf,listftsave)
 			if tour==9:
