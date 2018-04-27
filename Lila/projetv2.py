@@ -4,7 +4,8 @@ import tkFileDialog  ##Permet de Charger les fichiers
 from matplotlib.figure import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-import tkinter.font as tkFont
+import tkFont
+
 
 
 #####Fenetre principale
@@ -60,8 +61,8 @@ def resultatsappui():
 
 	#text1=Label(entrainement,text="Choisir le fichier d'entraînement",fg="black",bg="white")
 
-def Parametres(): #### A faire suivant les paramètres sortant
-	print "Selection et fixation des paramètres"
+#def Parametres(): #### A faire suivant les paramètres sortant
+	#print "Selection et fixation des paramètres"
 
 def Lanceranalyse():
 	print "Lancer l'analyse"
