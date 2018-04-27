@@ -70,8 +70,8 @@ def combinaisons(a):
     all.append(a)
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
-def save(percentage,t,ft):
-	file=codecs.open("result75train-25test-lbfgs.csv","a",encoding="utf-8")
+def save(percentage,t,vf,ft):
+	file=codecs.open("result75train-25test-lbfgs-tanh.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -151,11 +151,11 @@ for combin in all_combin:
 	X_train = np.array(train)
 
 	t=0.00001
-	first=1
 	top=0
-	vf = 0
 	tour = 0
 	while top==0:
+		tour = 0
+		vf = 0
 		h=1
 		if t==1000:
 			print 'BROKE'
@@ -181,7 +181,6 @@ for combin in all_combin:
 			percentage=(float(somme)/length)*100
 			print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
 			listftsave=[]
-			dicdic = []
 			for j in combin:
 				if j==combin[len(combin)-1]:
 					listftsave.append(features[j])
@@ -189,15 +188,15 @@ for combin in all_combin:
 					break
 				listftsave.append(features[j])
 				print features[j]
-			save(percentage,t,listftsave)
-			if tour==15:
+			save(percentage,t,vf,listftsave)
+			if tour==9:
 				print 'BROKE'
 				break
 			tour=tour+1
 			h=h*0.1
 			vf=vf+0.1
 		tmp=percentage
-		first=0
 		t=t*10
+
 
 
