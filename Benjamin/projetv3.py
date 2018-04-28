@@ -39,6 +39,8 @@ app.configure(background='SlateGray2')# Background color
 variableatester=IntVar()
 variableparam=IntVar()
 variableparametres=IntVar()
+t=IntVar()
+gamma=IntVar()
 nomdufichiertest=StringVar()
 methodes=StringVar()
 methode=StringVar()
@@ -162,20 +164,20 @@ def entrainementdufichier():#### Training of the statistical model
     X_train=np.array(listeentrainement)
     if classe==1: ########## If SVC were chosen
         if methode=='rbf':
-            clf= svm.SVC(kernel=methode, gamma=gamma, C=C) ###" to change kernel and gamma
+            clf= svm.SVC(kernel=methode, gamma=gamma, C=t) ###" to change kernel and gamma
         if methode=='sigmoid':
-            clf= svm.SVC(kernel=methode, gamma=gamma, C=C) ###" to change kernel and gamma
+            clf= svm.SVC(kernel=methode, gamma=gamma, C=t) ###" to change kernel and gamma
         if methode=='poly':
-            clf= svm.SVC(kernel=methode, degree=degree, C=C) ###" to change kernel and degree
+            clf= svm.SVC(kernel=methode, degree=degree, C=t) ###" to change kernel and degree
         if methode=='linear':
-            clf= svm.SVC(kernel=methode, C=C) ###" to change kernel and gamma
+            clf= svm.SVC(kernel=methode, C=t) ###" to change kernel and gamma
     if classe==2: ########## S'il a choisi les NuSVC
         if methode=='rbf':
-            clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=nu) ###" to change kernel and gamma
+            clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=t) ###" to change kernel and gamma
         if methode=='sigmoid':
-            clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=nu) ###" to change kernel and gamma
+            clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=t) ###" to change kernel and gamma
         if methode=='poly':
-            clf= svm.NuSVC(kernel=methode, degree=degree, nu=nu) ###" to change kernel and degree
+            clf= svm.NuSVC(kernel=methode, degree=degree, nu=t) ###" to change kernel and degree
         if methode=='linear':
             clf= svm.NuSVC(kernel=methode, nu=nu) ###" to change kernel and gamma
     if classe==3: ########## If LinearSVC were chosen
@@ -216,7 +218,10 @@ def choixmethode():#### Permet de choisir la méthode de Classification
         R4=Radiobutton(classe1, text='linear', variable=methodes, value="linear",command=choixhyperparametres)
         R1.pack();R2.pack();R3.pack();R4.pack
     if classe==3:
-        methodes='linear'
+        choixhyperparametres()
+
+
+
 def choixhyperparametres():#### Permet de choisir les hyperparameters de la méthode
     '''Dans cette fonction on propose à l'utilisateur de régler les hyperparameters de la méthode choisie précèdement
     Description :
@@ -226,24 +231,61 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
     Return:
         There is no return here. Seul les variables des hyperparameters vont être modifiés.
     '''
+    def validerhyperparam():
+        t= ttest.get()
+        gamma=gammatest.get()
+        print t
+        print gamma
+        hyperparametres.destroy
+
     global methode
     methode=methodes.get()
-    print methode
-    if methode=='rbf' or methode=='sigmoid':
-        hyperparametres1=Toplevel()
-        gamma=Scale(hyperparametres1, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur gamma')
-        C=Scale(hyperparametres1, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
-        gamma.pack();C.pack()
-    if methode=='poly':
-        hyperparametres2=Toplevel()
-        degree=Scale(hyperparametres2, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur degree')
-        nu=Scale(hyperparametres2, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur nu ou C')
-    if methode=='linear':
-        hyperparametres3=Toplevel()
-        Scale(hyperparametres3, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
-def showIt(event):
-    gamaa=gamma.widget.get()
-    print gammaa
+    classe=variableparam.get()
+    hyperparametres=Toplevel()
+
+    #validerhyperparam.place(x=300, y=470, width=200, height=50)
+    if (methode=='rbf' or methode=='sigmoid') and classe==1:
+        gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur gamma')
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        gammatest.pack();ttest.pack()
+    if methode=='poly' and classe==1:
+        #hyperparametres2=Toplevel()
+        gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur de degree')
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur de C')
+        validerchoix=Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        gammatest.pack();ttest.pack()
+    if methode=='linear' and (classe==1 or classe==3):
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        ttest.pack()
+    if (methode=='rbf' or methode=='sigmoid') and classe==2:
+        gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de gamma')
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de nu')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        gammatest.pack();ttest.pack()
+    if methode=='poly' and classe==2:
+        gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de degree')
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de nu')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        gammatest.pack();ttest.pack()
+    if methode=='linear' and classe==2:
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de nu')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        ttest.pack()
+    if classe==3:
+        ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
+        validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
+        validerchoix.pack()
+        ttest.pack()
+
+
 
 def presentation():
 	presentation=Toplevel()
