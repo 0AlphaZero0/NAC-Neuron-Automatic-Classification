@@ -1,5 +1,5 @@
  # coding: utf-8
-from Tkinter import *
+import Tkinter  as tk #### CHANGER
 import tkFileDialog  ##Permet de Charger les fichiers
 from matplotlib.figure import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -7,15 +7,16 @@ import matplotlib.pyplot as plt
 import tkFont
 from PIL import Image, ImageTk
 
-image = Image.open("exit.jpg")
-photo = ImageTk.PhotoImage(image)
-canvas=Tk.Canvas(app, width=600,height=451)
-canvas.create_image(0,0,anchor=Tk.NW,image=photo)
-canvas.pack()
-canvas.create_texy(150,100,text="Miaou miaou")
-
 #####Fenetre principale
-app = Tk()
+app = tk.Tk()#### CHANGER
+fond0=tk.Canvas(app, width=800, height=600, background='SlateGray2')
+fond0.pack()
+img=tk.PhotoImage(file="miaou2.gif") #https://itsocial.fr/wp-content/uploads/2017/04/iStock-509365378-696x431.png
+fond0.create_image(150,300, image=img)
+img1=tk.PhotoImage(file="bdx1.gif")
+fond0.create_image(650,550, image=img1)
+
+
 app.title("Classification neuronale") # donne un titre à la fenêtre
 app.geometry("800x600+600+300") # place la fenêtre
 app.configure(background='SlateGray2')#fond du programme
@@ -27,7 +28,7 @@ app.configure(background='SlateGray2')#fond du programme
 #global variableatester
 #variableatester=StringVar()
 #variableatester.set('True')
-variableatester=IntVar()
+variableatester=tk.IntVar() #### CHANGER
 
 ######Definitions
 
@@ -108,27 +109,33 @@ def Lanceranalyse():
 	plt.axis('equal')
 	plt.show('Test')
 
+def myFunction (event) :
+    #Ca t'affiche le composants sur lequel l'utilisateur a cliqué ..
+    #Après à toi de choisir ce qu'il faut faire suivant le bouton cliqué !
+    print(event.widget)
+
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 ######## Creation de tous les boutons de chargement
-text=Label(app, text="Classification Neuronale", fg="Black", bg="SlateGray2", font=pourtitre)   #####Mettre en gras et en gros (titre)
-b1= Button(app, text="Chargement du fichier test",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
-b2= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36,bd=4)
-b3= Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=Parametres, font=helv36,bd=4)
-b4= Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
-b5= Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy,width=10, font=helv36, bd=4)
+text=tk.Label(app, text="Classification Neuronale", fg="Black", bg="SlateGray2", font=pourtitre)   #### CHANGER
+b1= tk.Button(app, text="Chargement du fichier test",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4) #### CHANGER
+b2= tk.Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36,bd=4) #### CHANGER
+b3= tk.Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=Parametres, font=helv36,bd=4) #### CHANGER
+b4= tk.Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4) #### CHANGER
+b5= tk.Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy,width=10, font=helv36, bd=4, bitmap="error") #### CHANGER
+
 b1.place(x=300, y=100, width=250, height=40)
 b2.place(x=300, y=170, width=250, height=40)
 b3.place(x=300, y=240, width=250, height=40)
 b4.place(x=350, y=470, width=150, height=60)
-b5.place(x=350, y=550, width=150, height=25)
+b5.place(x=350, y=550, width=150, height=30)
 text.place(x=180, y=0, width=500, height=50)
 # Exemple : helv36 = tkFont.Font(family='Helvetica', size=36, weight='bold')
 #b1.font(family='Helvetica', size=36, weight='bold') Fonctionne pas
-#http://tkinter.fdex.eu/doc/bw.html
+#http://tk.fdex.eu/doc/bw.html
 ###### Barre de menu
-menubar = Menu(app)
-menu1 = Menu(menubar, tearoff=0)
+menubar = tk.Menu(app) #### CHANGER
+menu1 = tk.Menu(menubar, tearoff=0) #### CHANGER
 menu1.add_separator()
 menu1.add_command(label="Créer un nouveau projet", command=alert)
 menu1.add_separator()
@@ -138,19 +145,19 @@ menu1.add_command(label="Enregistrer le projet en cours", command=alert)
 menu1.add_separator()
 menubar.add_cascade(label="Fichier", menu=menu1) ######Nom sur la barre de menu
 
-menu2 = Menu(menubar, tearoff=0)
+menu2 = tk.Menu(menubar, tearoff=0) #### CHANGER
 menu2.add_separator()
 menu2.add_command(label="Regler les paramètres", command=alert)
 menu2.add_separator()
 menubar.add_cascade(label="Option", menu=menu2)
 
-menu3 = Menu(menubar, tearoff=0)
+menu3 = tk.Menu(menubar, tearoff=0) #### CHANGER
 menu3.add_separator()
 menu3.add_command(label="Qui sommes nous?", command=presentation)
 menu3.add_separator()
 menu3.add_command(label="Explication du logiciel", command=explicationlogiciel)
 menu3.add_separator()
-menubar.add_cascade(label="Aide", menu=menu3)
+menubar.add_cascade(label="Aide", menu=menu3, bitmap="question")
 
 app.config(menu=menubar)
 app.mainloop()
