@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-# Projet de programmation Python - Virus killer
 # BLAIS Benjamin
 # COTTAIS Déborah
 # DE OLIVEIRA Lila
@@ -150,54 +149,58 @@ for combin in all_combin:
 
 	X_test = np.array(test)
 	X_train = np.array(train)
-
+	vf = 0
 	t=0.00001
 	top=0
 	tour = 0
-	while top==0:
-		tour = 0
-		vf = 0
-		h=1
-		if t==10000:
-			print 'BROKE'
+	while vf<1:
+		if vf ==1.1:
+			print 'BROKE vf'
+			vf = 0
 			break
 		while top==0:
-			MLPClassifier(activation='tanh', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
-			clf = MLPClassifier(solver='lbfgs', alpha=t, hidden_layer_sizes=(100,), random_state=None)
-			clf.fit(X_train,y_train)
-			################################
-			result=clf.predict(X_test)
-			################################
-			y_test=np.array(y_test)
-			x=0
-			somme=0
-			length=len(y_test)
+			tour = 0
+			h=1
+			if t==10000:
+				print 'BROKE 2'
+				t=0.00001
+				break
+			while top==0:
+				clf = MLPClassifier(solver='lbfgs', activation='tanh', batch_size='auto', alpha=t, hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
+				clf.fit(X_train,y_train)
+				################################
+				result=clf.predict(X_test)
+				################################
+				y_test=np.array(y_test)
+				x=0
+				somme=0
+				length=len(y_test)
 
 
 
-			while x<len(y_test):
-				if result[x]==y_test[x]:
-					somme=somme+1
-				x=x+1
-			percentage=(float(somme)/length)*100
-			print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
-			listftsave=[]
-			for j in combin:
-				if j==combin[len(combin)-1]:
+				while x<len(y_test):
+					if result[x]==y_test[x]:
+						somme=somme+1
+					x=x+1
+				percentage=(float(somme)/length)*100
+				print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
+				listftsave=[]
+				for j in combin:
+					if j==combin[len(combin)-1]:
+						listftsave.append(features[j])
+						print features[j]
+						break
 					listftsave.append(features[j])
 					print features[j]
+				save(percentage,t,vf,listftsave)
+				if tour==9:
+					print 'BROKE 3'
 					break
-				listftsave.append(features[j])
-				print features[j]
-			save(percentage,t,vf,listftsave)
-			if tour==9:
-				print 'BROKE'
-				break
-			tour=tour+1
-			h=h*0.1
-			vf=vf+0.1
-		tmp=percentage
-		t=t*10
+				tour=tour+1
+				h=h*0.1
+			tmp=percentage
+			t=t*10
+		vf=vf+0.1
 
 
 
