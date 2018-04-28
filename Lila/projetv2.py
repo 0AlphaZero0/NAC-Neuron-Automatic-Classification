@@ -5,8 +5,14 @@ from matplotlib.figure import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import tkFont
+from PIL import Image, ImageTk
 
-
+image = Image.open("exit.jpg")
+photo = ImageTk.PhotoImage(image)
+canvas=Tk.Canvas(app, width=600,height=451)
+canvas.create_image(0,0,anchor=Tk.NW,image=photo)
+canvas.pack()
+canvas.create_texy(150,100,text="Miaou miaou")
 
 #####Fenetre principale
 app = Tk()
@@ -61,8 +67,8 @@ def resultatsappui():
 
 	#text1=Label(entrainement,text="Choisir le fichier d'entraînement",fg="black",bg="white")
 
-#def Parametres(): #### A faire suivant les paramètres sortant
-	#print "Selection et fixation des paramètres"
+def Parametres(): #### A faire suivant les paramètres sortant
+	print "Selection et fixation des paramètres"
 
 def Lanceranalyse():
 	print "Lancer l'analyse"
@@ -102,20 +108,21 @@ def Lanceranalyse():
 	plt.axis('equal')
 	plt.show('Test')
 
+pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 ######## Creation de tous les boutons de chargement
-text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=helv36)   #####Mettre en gras et en gros (titre)
-b1= Button(app, text="Chargement du fichier test",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36)
-b2= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36)
-b3= Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=Parametres, font=helv36)
-b4= Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36)
-b5= Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy,width=10, font=helv36)
-b1.place(x=300, y=100, width=200, height=40)
-b2.place(x=300, y=170, width=200, height=40)
-b3.place(x=300, y=240, width=200, height=40)
-b4.place(x=300, y=470, width=200, height=50)
-b5.place(x=300, y=550, width=200, height=25)
-text.place(x=300, y=0, width=200, height=50)
+text=Label(app, text="Classification Neuronale", fg="Black", bg="SlateGray2", font=pourtitre)   #####Mettre en gras et en gros (titre)
+b1= Button(app, text="Chargement du fichier test",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
+b2= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36,bd=4)
+b3= Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=Parametres, font=helv36,bd=4)
+b4= Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
+b5= Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy,width=10, font=helv36, bd=4)
+b1.place(x=300, y=100, width=250, height=40)
+b2.place(x=300, y=170, width=250, height=40)
+b3.place(x=300, y=240, width=250, height=40)
+b4.place(x=350, y=470, width=150, height=60)
+b5.place(x=350, y=550, width=150, height=25)
+text.place(x=180, y=0, width=500, height=50)
 # Exemple : helv36 = tkFont.Font(family='Helvetica', size=36, weight='bold')
 #b1.font(family='Helvetica', size=36, weight='bold') Fonctionne pas
 #http://tkinter.fdex.eu/doc/bw.html
