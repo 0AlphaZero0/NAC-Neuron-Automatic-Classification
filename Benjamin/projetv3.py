@@ -31,7 +31,7 @@ style.use("ggplot")
 app = Tk()
 app.title("Classification neuronale") # Give a title to a window
 app.geometry("800x600+600+300") # Place the window
-app.configure(background='SlateGray2')# Background color
+app.configure(background="SlateGray2")# Background color
 
 
 
@@ -168,7 +168,7 @@ def entrainementdufichier():#### Training of the statistical model
         if methode=='sigmoid':
             clf= svm.SVC(kernel=methode, gamma=gamma, C=t) ###" to change kernel and gamma
         if methode=='poly':
-            clf= svm.SVC(kernel=methode, degree=degree, C=t) ###" to change kernel and degree
+            clf= svm.SVC(kernel=methode, degree=gamma, C=t) ###" to change kernel and degree
         if methode=='linear':
             clf= svm.SVC(kernel=methode, C=t) ###" to change kernel and gamma
     if classe==2: ########## S'il a choisi les NuSVC
@@ -177,9 +177,9 @@ def entrainementdufichier():#### Training of the statistical model
         if methode=='sigmoid':
             clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=t) ###" to change kernel and gamma
         if methode=='poly':
-            clf= svm.NuSVC(kernel=methode, degree=degree, nu=t) ###" to change kernel and degree
+            clf= svm.NuSVC(kernel=methode, degree=gamma, nu=t) ###" to change kernel and degree
         if methode=='linear':
-            clf= svm.NuSVC(kernel=methode, nu=nu) ###" to change kernel and gamma
+            clf= svm.NuSVC(kernel=methode, nu=t) ###" to change kernel and gamma
     if classe==3: ########## If LinearSVC were chosen
             clf= svm.LinearSVC(C=t) ##### To change the t
     clf.fit(X_train,y_train)
@@ -236,7 +236,7 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
         gamma=gammatest.get()
         print t
         print gamma
-        hyperparametres.destroy
+
 
     global methode
     methode=methodes.get()
@@ -367,9 +367,9 @@ text.place(x=300, y=0, width=200, height=50)
 menubar = Menu(app)
 menu1 = Menu(menubar, tearoff=0)
 menu1.add_separator()
-menu1.add_command(label="Créer un nouveau projet", command=alert)
+menu1.add_command(label="Ouvrir un fichier test", command=Chargementtest)
 menu1.add_separator()
-menu1.add_command(label="Ouvrir un projet", command=alert)
+menu1.add_command(label="Ouvrir un fichier d'entrainement", command=Chargemententrainement)
 menu1.add_separator()
 menu1.add_command(label="Enregistrer le projet en cours", command=alert)
 menu1.add_separator()
@@ -377,7 +377,7 @@ menubar.add_cascade(label="Fichier", menu=menu1) ######Nom sur la barre de menu
 
 menu2 = Menu(menubar, tearoff=0)
 menu2.add_separator()
-menu2.add_command(label="Regler les paramètres", command=alert)
+menu2.add_command(label="Regler les paramètres", command=ChoixClasseparam)
 menu2.add_separator()
 menubar.add_cascade(label="Option", menu=menu2)
 
