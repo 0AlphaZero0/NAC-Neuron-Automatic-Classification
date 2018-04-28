@@ -42,7 +42,7 @@ def load(filename): # load le fichier
 		if line and line[0].isalpha():
 			pass
 		else:
-			y=line.split(',')
+			y=line.split('	')
 			y[0]=int(y[0])
 			x=1
 			while x<len(y):
@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("result75train-25test-rbf.csv","a",encoding="utf-8")
+	file=codecs.open("resultECH1-75train-25test-rbf.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
