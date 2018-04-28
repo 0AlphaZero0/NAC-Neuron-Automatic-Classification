@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,vf,ft):
-	file=codecs.open("result75train-25test-lbfgs-tanh.csv","a",encoding="utf-8")
+	file=codecs.open("result50train-50test-lbfgs-tanh_tol.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -108,25 +108,25 @@ for combin in all_combin:
 	for sample in DATA:
 		u=[]
 		u.append(sample[0])
-		for j in combin:	tour = 0
+		for j in combin:
 			u.append(sample[j])
 		dataset.append(u)
 	##### need to split data  #####
 	#les échantillons ne sont pas mélangés dans dataset donc besoin de random
-	g=0
-	datalength=len(dataset)
-	while g!=len(dataset):
-		top=len(dataset)-1
-		rand=random.randint(0,top)
-		if datalength/4<len(dataset):
-			train.append(dataset.pop(rand))
-			#on met 75% ici
-		else:
-			test.append(dataset.pop(0))
-			#on met 25% ici
-	print "TRAIN = ",len(train)
-	print "TEST = ",len(test)
-	'''
+	# g=0
+	# datalength=len(dataset)
+	# while g!=len(dataset):
+	# 	top=len(dataset)-1
+	# 	rand=random.randint(0,top)
+	# 	if datalength/4<len(dataset):
+	# 		train.append(dataset.pop(rand))
+	# 		#on met 75% ici
+	# 	else:
+	# 		test.append(dataset.pop(0))
+	# 		#on met 25% ici
+	# print "TRAIN = ",len(train)
+	# print "TEST = ",len(test)
+	# '''
 	#print dataset
 	for i in dataset:
 		if x%2==0:
@@ -134,7 +134,7 @@ for combin in all_combin:
 		else:
 			test.append(i)
 		x=x+1
-	'''
+#	'''
 	####### séparation train ######
 	for i in train:
 		y_train.append(i.pop(0))
@@ -193,7 +193,7 @@ for combin in all_combin:
 				print 'BROKE'
 				break
 			tour=tour+1
-			h=h*0.1
+			h=h*10
 			vf=vf+0.1
 		tmp=percentage
 		t=t*10
