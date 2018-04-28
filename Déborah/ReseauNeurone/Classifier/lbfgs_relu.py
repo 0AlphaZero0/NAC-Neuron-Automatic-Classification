@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,vf,ft):
-	file=codecs.open("result75train-25test-lbfgs-relu_tol.csv","a",encoding="utf-8")
+	file=codecs.open("result75train-25test-lbfgs-relu.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -119,11 +119,12 @@ for combin in all_combin:
 		top=len(dataset)-1
 		rand=random.randint(0,top)
 		if datalength/4<len(dataset):
-			train.append(dataset.pop(rand))
+			train.append(dataset.pop(0))
 			#on met 75% ici
 		else:
-			test.append(dataset.pop(0))
+			test.append(dataset.pop(rand))
 			#on met 25% ici
+
 	print "TRAIN = ",len(train)
 	print "TEST = ",len(test)
 	'''
@@ -149,51 +150,55 @@ for combin in all_combin:
 
 	X_test = np.array(test)
 	X_train = np.array(train)
-
+	vf = 0
 	t=0.00001
 	top=0
 	tour = 0
-	while top==0:
-		tour = 0
-		vf = 0
-		h=1
-		if t==10000:
-			print 'BROKE'
+	while vf<1:
+		if vf ==1.1:
+			print 'BROKE vf'
+			vf = 0
 			break
 		while top==0:
-			MLPClassifier(activation='relu', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
-			clf = MLPClassifier(solver='lbfgs', alpha=t, hidden_layer_sizes=(100,), random_state=None)
-			clf.fit(X_train,y_train)
-			################################
-			result=clf.predict(X_test)
-			################################
-			y_test=np.array(y_test)
-			x=0
-			somme=0
-			length=len(y_test)
+			tour = 0
+			h=1
+			if t==10000:
+				print 'BROKE 2'
+				t=0.00001
+				break
+			while top==0:
+				clf = MLPClassifier(solver='lbfgs', activation='relu',alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
+				clf.fit(X_train,y_train)
+				################################
+				result=clf.predict(X_test)
+				################################
+				y_test=np.array(y_test)
+				x=0
+				somme=0
+				length=len(y_test)
 
 
 
-			while x<len(y_test):
-				if result[x]==y_test[x]:
-					somme=somme+1
-				x=x+1
-			percentage=(float(somme)/length)*100
-			print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
-			listftsave=[]
-			for j in combin:
-				if j==combin[len(combin)-1]:
+				while x<len(y_test):
+					if result[x]==y_test[x]:
+						somme=somme+1
+					x=x+1
+				percentage=(float(somme)/length)*100
+				print percentage,"	% et un alpha=",t, "et un tol=", h,	"validation fraction=", vf, "ainsi que les paramètres : ",
+				listftsave=[]
+				for j in combin:
+					if j==combin[len(combin)-1]:
+						listftsave.append(features[j])
+						print features[j]
+						break
 					listftsave.append(features[j])
 					print features[j]
+				save(percentage,t,vf,listftsave)
+				if tour==9:
+					print 'BROKE 3'
 					break
-				listftsave.append(features[j])
-				print features[j]
-			save(percentage,t,vf,listftsave)
-			if tour==9:
-				print 'BROKE'
-				break
-			tour=tour+1
-			h=h*10
-			vf=vf+0.1
-		tmp=percentage
-		t=t*10
+				tour=tour+1
+				h=h*0.1
+			tmp=percentage
+			t=t*10
+		vf=vf+0.1
