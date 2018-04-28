@@ -157,7 +157,7 @@ for combin in all_combin:
 		tour = 0
 		vf = 0
 		h=1
-		if t==100:
+		if t==10000:
 			print 'BROKE'
 			break
 		while top==0:

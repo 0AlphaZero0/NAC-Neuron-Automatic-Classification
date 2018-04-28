@@ -71,7 +71,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,vf,ft):
-	file=codecs.open("result50train-50test-lbfgs-identity.csv","a",encoding="utf-8")
+	file=codecs.open("result50train-50test-lbfgs-tanh-neg.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -161,7 +161,7 @@ for combin in all_combin:
 			print 'BROKE'
 			break
 		while top==0:
-			MLPClassifier(activation='identity', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
+			MLPClassifier(activation='tanh', alpha=t, batch_size='auto', hidden_layer_sizes=(100,), random_state=None, tol=h, validation_fraction=vf, verbose=False, warm_start=False)
 			clf = MLPClassifier(solver='lbfgs', alpha=t, hidden_layer_sizes=(100,), random_state=None)
 			clf.fit(X_train,y_train)
 			################################
@@ -193,7 +193,7 @@ for combin in all_combin:
 				print 'BROKE'
 				break
 			tour=tour+1
-			h=h*0.1
+			h=h*10
 			vf=vf+0.1
 		tmp=percentage
 		t=t*10
