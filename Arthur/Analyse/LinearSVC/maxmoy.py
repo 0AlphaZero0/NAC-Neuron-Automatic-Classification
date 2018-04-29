@@ -27,7 +27,8 @@ while i<len(dataset):
         listcombin.append(dataset[i][2:9])
     if dataset[i][0]>maxi:
         maxi=dataset[i][0]
-    if i+1==size:
+    if i==(size-1):
+        somme=somme+float(dataset[i][0])
         moy=somme/tmp
         listmoy.append(moy)
         listmaxi.append(maxi)
@@ -35,12 +36,13 @@ while i<len(dataset):
         maxi=0
         somme=0
         size=size+tmp
+        i=i+1
         pass
     somme = somme+float(dataset[i][0])
     i=i+1
 
 #print listmaxi
-file=codecs.open("save.csv","w",encoding="utf-8")
+file=codecs.open("saveech1.csv","w",encoding="utf-8")
 x=0
 while x < len(listcombin):
     file.write(str(listmoy[x]))
