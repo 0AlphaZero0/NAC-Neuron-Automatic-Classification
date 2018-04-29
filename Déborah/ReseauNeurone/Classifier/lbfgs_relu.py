@@ -161,7 +161,7 @@ for combin in all_combin:
 			break
 		while top==0:
 			tour = 0
-			h=1
+			h=0.0000001
 			if t==10000:
 				print 'BROKE 2'
 				t=0.00001
@@ -198,7 +198,7 @@ for combin in all_combin:
 					print 'BROKE 3'
 					break
 				tour=tour+1
-				h=h*0.1
+				h=h*10
 			tmp=percentage
 			t=t*10
 		vf=vf+0.1
