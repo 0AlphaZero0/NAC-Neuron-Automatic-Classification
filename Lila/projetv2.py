@@ -12,9 +12,11 @@ app = tk.Tk()#### CHANGER
 fond0=tk.Canvas(app, width=800, height=600, background='SlateGray2')
 fond0.pack()
 img=tk.PhotoImage(file="miaou2.gif") #https://itsocial.fr/wp-content/uploads/2017/04/iStock-509365378-696x431.png
-fond0.create_image(150,300, image=img)
-img1=tk.PhotoImage(file="bdx1.gif")
-fond0.create_image(650,550, image=img1)
+fond0.create_image(150,350, image=img)
+img1=tk.PhotoImage(file="bdx_1.gif")
+fond0.create_image(700,550, image=img1)
+img2=tk.PhotoImage(file="scikit_learn11.gif")
+fond0.create_image(700,450, image=img2)
 
 
 app.title("Classification neuronale") # donne un titre à la fenêtre
@@ -157,7 +159,7 @@ menu3.add_command(label="Qui sommes nous?", command=presentation)
 menu3.add_separator()
 menu3.add_command(label="Explication du logiciel", command=explicationlogiciel)
 menu3.add_separator()
-menubar.add_cascade(label="Aide", menu=menu3, bitmap="question")
+menubar.add_cascade(label="Aide", menu=menu3)
 
 app.config(menu=menubar)
 app.mainloop()
