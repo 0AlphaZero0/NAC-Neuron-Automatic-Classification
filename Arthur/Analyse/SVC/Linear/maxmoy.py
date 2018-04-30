@@ -21,14 +21,15 @@ listcombin=[]
 listmaxi=[]
 size=input("\nEntrer la taille de la combinaison : \n")
 tmp=size
+size=size-1
 maxi=0
-while i<(len(dataset)):
+while i<len(dataset):
     print i
-    if i==(size-1):
-        listcombin.append(dataset[i][2:-1])
     if dataset[i][0]>maxi:
         maxi=dataset[i][0]
-    if i+1==size:
+    if i==size:
+        listcombin.append(dataset[i][2:-1])
+        somme=somme+float(dataset[i][0])
         moy=somme/tmp
         listmoy.append(moy)
         listmaxi.append(maxi)
@@ -37,6 +38,10 @@ while i<(len(dataset)):
         maxi=0
         somme=0
         size=size+tmp
+        i=i+1
+        if size>len(dataset)-1:
+            print "FIN"
+            break
         pass
     somme = somme+float(dataset[i][0])
     i=i+1

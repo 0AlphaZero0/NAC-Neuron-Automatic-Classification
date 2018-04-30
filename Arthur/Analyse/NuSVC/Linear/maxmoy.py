@@ -50,7 +50,7 @@ while i<len(dataset):
     somme = somme+float(dataset[i][0])
     i=i+1
 
-file=codecs.open("saveech1.csv","w",encoding="utf-8")
+file=codecs.open("save.csv","w",encoding="utf-8")
 x=0
 while x < len(listcombin):
     file.write(str(listmoy[x]))
