@@ -5,6 +5,7 @@
  #JOUAN Clement
  #THOUVENIN Arthur
 
+import Tkinter  as tk
 from Tkinter import *
 import tkFileDialog  ##Permet de Charger les fichiers
 from matplotlib.figure import * #Importe les parametres de matplotlib
@@ -371,12 +372,12 @@ b2= Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=ChoixClass
 b3= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36, bd=4)
 b4= Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
 b5= Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy, font=helv36, bd=4, bitmap="error")
-b1.place(x=300, y=100, width=200, height=40)
-b2.place(x=300, y=170, width=200, height=40)
-b3.place(x=300, y=240, width=200, height=40)
-b4.place(x=300, y=470, width=200, height=50)
-b5.place(x=300, y=550, width=200, height=25)
-text.place(x=300, y=0, width=200, height=50)
+b1.place(x=300, y=100, width=250, height=40)
+b2.place(x=300, y=170, width=250, height=40)
+b3.place(x=300, y=240, width=250, height=40)
+b4.place(x=350, y=470, width=150, height=60)
+b5.place(x=350, y=550, width=150, height=30)
+text.place(x=180, y=0, width=500, height=50)
 
 ###### Barre de menu
 menubar = Menu(app)
