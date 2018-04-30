@@ -70,7 +70,7 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,vf,ft):
-	file=codecs.open("result25train-75test-lbfgs-tanh.csv","a",encoding="utf-8")
+	file=codecs.open("result25train-75test-lbfgs-tanhround.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
@@ -160,7 +160,7 @@ for combin in all_combin:
 			break
 		while top==0:
 			tour = 0
-			h=1
+			h=0.0000001
 			if t==10000:
 				print 'BROKE 2'
 				t=0.00001
@@ -197,10 +197,7 @@ for combin in all_combin:
 					print 'BROKE 3'
 					break
 				tour=tour+1
-				h=h*0.1
+				h=h*10
 			tmp=percentage
 			t=t*10
 		vf=vf+0.1
-
-
-
