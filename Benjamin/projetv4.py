@@ -255,7 +255,6 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
     methode=methodes.get()
     classe=variableparam.get()
     hyperparametres=Toplevel()
-
     #validerhyperparam.place(x=300, y=470, width=200, height=50)
     if (methode=='rbf' or methode=='sigmoid') and classe==1:
         gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur gamma')
@@ -318,9 +317,6 @@ def explicationlogiciel():
 	text.pack()
 	explication.mainloop()
 
-def alert():#####Commande bouton du haut
-    showinfo("fonctionne")
-
 
 def Lanceranalyse():
 	X_test=np.array(listetest)
@@ -367,11 +363,11 @@ helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 
 ######## Creation de tous les boutons de chargement
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)   #####Mettre en gras et en gros (titre)
-b1= Button(app, text="Chargement du fichier test",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
-b2= Button(app, text="Paramètres", fg="Black",bg="SkyBlue3", command=ChoixClasseparam, font=helv36, bd=4)
-b3= Button(app, text="Choisir le fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36, bd=4)
-b4= Button(app, text="Lancer", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
-b5= Button(app, text="Quitter", fg="Black",bg="SkyBlue3", command=app.destroy, font=helv36, bd=4, bitmap="error")
+b1= Button(app, text="Chargement du fichier à analyser",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
+b2= Button(app, text="Ajustement des paramètres", fg="Black",bg="SkyBlue3", command=ChoixClasseparam, font=helv36, bd=4)
+b3= Button(app, text="Chargement du fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36, bd=4)
+b4= Button(app, text="Lancer l'analyse", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
+b5= Button(app, text="Quitter l'application", fg="Black",bg="SkyBlue3", command=app.destroy, font=helv36, bd=4, bitmap="error")
 b1.place(x=300, y=100, width=250, height=40)
 b2.place(x=300, y=170, width=250, height=40)
 b3.place(x=300, y=240, width=250, height=40)
@@ -387,7 +383,7 @@ menu1.add_command(label="Ouvrir un fichier test", command=Chargementtest)
 menu1.add_separator()
 menu1.add_command(label="Ouvrir un fichier d'entrainement", command=Chargemententrainement)
 menu1.add_separator()
-menu1.add_command(label="Enregistrer le projet en cours", command=alert)
+menu1.add_command(label="Enregistrer le projet en cours", command=Chargemententrainement)#####Save the project
 menu1.add_separator()
 menubar.add_cascade(label="Fichier", menu=menu1) ######Nom sur la barre de menu
 
