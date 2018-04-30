@@ -39,6 +39,9 @@ while i<len(dataset):
         somme=0
         size=size+tmp
         i=i+1
+        if size>len(dataset)-1:
+            print "FIN"
+            break
         pass
     somme = somme+float(dataset[i][0])
     i=i+1
