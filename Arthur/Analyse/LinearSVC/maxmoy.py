@@ -28,7 +28,7 @@ while i<len(dataset):
     if dataset[i][0]>maxi:
         maxi=dataset[i][0]
     if i==size:
-        listcombin.append(dataset[i][2:-1])
+        listcombin.append(dataset[i][4:-1])
         somme=somme+float(dataset[i][0])
         moy=somme/tmp
         listmoy.append(moy)
