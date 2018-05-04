@@ -14,7 +14,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg #Importe tkinter
 import matplotlib.pyplot as plt
 import tkFont
 from PIL import Image, ImageTk
-######################## <SI BESOIN
+######################## SI BESOIN
 import sys
 import os
 ####################### Import des SVM
@@ -58,8 +58,8 @@ nomdufichiertest=StringVar()
 methodes=StringVar()
 methode=StringVar()
 nomfichiersortie=StringVar()
-separateurfichierentree=StringVar()
-separateurfichiersortie=StringVar()
+separateur=StringVar()
+separateur2=StringVar()
 listetest=[]
 listeentrainement=[]
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
@@ -77,7 +77,27 @@ def Chargementtest(): #### Gives the absolute path of the file
 	global nomdufichiertest
 	global listetest
 	nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+	separateurfichier()
 	listetest=load(nomdufichiertest,1)
+
+def separateurfichier():
+	def resultatsseparateur():
+		global separateur
+		global separateur2
+		separateur2=separateur.get()
+		
+	global separateur
+	load=Toplevel()
+	separateur1 = Radiobutton(load, text = "Virgule", variable = separateur, value ='test',command=resultatsseparateur)
+	separateur2 = Radiobutton(load, text = "Point-virgule", variable = separateur, value =';', command=resultatsseparateur)
+	separateur3 = Radiobutton(load, text = "Tab", variable = separateur, value ='	',command=resultatsseparateur)
+	separateur4 = Radiobutton(load, text = "Deux points", variable = separateur, value =':', command=resultatsseparateur)
+	separateur5 = Radiobutton(load, text = "Espace", variable = separateur, value =' ', command=resultatsseparateur)
+	separateur1.pack();separateur2.pack();separateur3.pack();separateur4.pack();separateur5.pack()
+
+
+	
+
 
 def load(filename,typefichier): #### File loading
 	'''This function allows to load the file into the script
@@ -91,12 +111,6 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
-	load=TopLevel()
-	separateur1 = Radiobutton(load, text="Virgule", variable=separateurfichierentree, value=',',command=resultatsappui)
-	separateur2 = Radiobutton(load, text="Point-virgule", variable=separateurfichiersortie, value=';', command=resultatsappui)
-	separateur3 = Radiobutton(load, text="Tab", variable= 
-	separateur1.pack( anchor = W );separateur2.pack(anchor = W)
-
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
 	for line in file.readlines():
@@ -153,12 +167,15 @@ def resultatsappui():#### Choice of the training file
 		There is no return, only the listeentrainement variable is modified, which allows to train the statistic model thanks to the entrainementdufichier() function
 	'''
 	global listeentrainement
+	global separateur2
 	variable2=variableatester.get()
 	if variable2==1:
 		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+		separateurfichier()
 		listeentrainement=load(nomdufichierentrainement,0)
 	if variable2==2:
 		nomdufichierentrainement=('Fichier_test.csv')####Path of our test file
+		separateur2=','
 		listeentrainement=load(nomdufichierentrainement,0)
 	entrainementdufichier()
 
@@ -260,8 +277,7 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
 		global gamma
 		t=float(ttest.get())
 		gamma=float(gammatest.get())
-		#print t
-		#print gamma
+		hyperparametres.destroy
 
 	global methode
 	methode=methodes.get()
