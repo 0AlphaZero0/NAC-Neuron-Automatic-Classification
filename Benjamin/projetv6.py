@@ -61,6 +61,7 @@ methode=StringVar()
 nomfichiersortie=StringVar()
 separateur=StringVar()
 separateur2=StringVar()
+listeparam=[]
 listetest=[]
 listeentrainement=[]
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
@@ -195,7 +196,14 @@ def entrainementdufichier():#### Training of the statistical model
 	for i in listeentrainement:
 		y_train.append(i.pop(0))
 	y_train=np.array(y_train)
-	X_train=np.array(listeentrainement)
+	dataset=[]
+	for sample in listeentrainement:
+		s=[]
+		for i in listeparam:
+			s.append(sample[i])
+		dataset.append(s)
+	X_train=np.array(dataset)
+	print X_train,"test", y_train
 	if classe==1: ########## If SVC were chosen
 		if methode=='rbf':
 			print "RBF Method"
@@ -344,17 +352,26 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
 
 def choixdeshuitparametres(): ########## Chaque bouton retourne une valeur comprise entre 0 et 8, et 9 s'il n'est pas coché. Chaque valeur correspond à la case si on la prend ou pas
 	def recuperationvaleur():
-		p1 = c1.get();
-		p2=c2.get();
-		p3=c3.get();
-		p4=c4.get();
-		p5=c5.get();
-		p6=c6.get();
-		p7=c7.get();
-		p8=c8.get()
-		print c1,c2,c3,c4,c5,c6,c7,c8
+		global listeparam
+		p1 = varparam.get()
+		p2=varparam2.get()
+		p3=varparam3.get()
+		p4=varparam4.get()
+		p5=varparam5.get()
+		p6=varparam6.get()
+		p7=varparam7.get()
+		p8=varparam8.get()
+		liste=[p1,p2,p3,p4,p5,p6,p7,p8]
+
+		for i in liste:
+			if i!=9:
+				listeparam.append(i)
+		print listeparam
+
+	
 	choixhuitparametres=Toplevel()
-	varparam=BooleanVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
+	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
+	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
 	c1 = Checkbutton(choixhuitparametres, text="IR", variable = varparam, onvalue=0, offvalue=9)
 	c2 = Checkbutton(choixhuitparametres, text="RMP", variable = varparam2, onvalue=1, offvalue=9)
 	c3 = Checkbutton(choixhuitparametres, text="RH", variable = varparam3, onvalue=2, offvalue=9)
@@ -381,7 +398,14 @@ def ChoixNomFichier():  #####Choix du nom du fichier de sortie
 	textechoixfichier.pack();entrernomfichier.pack();validernomfichier.pack()
 
 def Lanceranalyse():
-	X_test=np.array(listetest)
+	dataset=[]
+	for sample in listetest:
+		s=[]
+		for i in listeparam:
+			s.append(sample[i])
+		dataset.append(s)
+	X_test=np.array(dataset)
+	print X_test
 	result=clf.predict(X_test)
 	Tk().bell()
 	type1=0
