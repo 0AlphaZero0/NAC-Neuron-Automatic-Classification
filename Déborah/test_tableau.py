@@ -2,76 +2,6 @@
 # #-*- coding: utf-8 -*-
 
 from tkinter import *
-#
-#
-# class Interface(Frame):
-#
-#
-#
-#     """Notre fenêtre principale.
-#
-#     Tous les widgets sont stockés comme attributs de cette fenêtre."""
-#
-#
-#
-#     def __init__(self, fenetre, **kwargs):
-#
-#         Frame.__init__(self, fenetre, width=768, height=576, **kwargs)
-#
-#         self.pack(fill=BOTH)
-#
-#         self.nb_clic = 0
-#
-#
-#
-#         # Création de nos widgets
-#
-#         self.message = Label(self, text="Vous n'avez pas cliqué sur le bouton.")
-#
-#         self.message.pack()
-#
-#
-#
-#         self.bouton_quitter = Button(self, text="Quitter", command=self.quit)
-#
-#         self.bouton_quitter.pack(side="left")
-#
-#
-#
-#         self.bouton_cliquer = Button(self, text="Cliquez ici", fg="red",
-#
-#                 command=self.cliquer)
-#
-#         self.bouton_cliquer.pack(side="right")
-#
-#
-#
-#     def cliquer(self):
-#
-#         """Il y a eu un clic sur le bouton.
-#
-#
-#
-#         On change la valeur du label message."""
-#
-#
-#
-#         self.nb_clic += 1
-#
-#         self.message["text"] = "Vous avez cliqué {} fois.".format(self.nb_clic)
-#
-#
-#
-# fenetre = Tk()
-#
-# interface = Interface(fenetre)
-#
-#
-# interface.mainloop()
-#
-# interface.destroy()
-
-
 
 
 # class IHM(Frame):
@@ -188,6 +118,8 @@ import pickle
 
 
 ##Matrice de départ
+
+
 ligne1=['nClasse','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
 ligne2=[i for i in range(1,10)]
 ligne3=[i for i in range(1,10)]
@@ -236,22 +168,22 @@ def regler(x,ligne,colonne):
     s=Spinbox(fenetre, text=x,from_=0.0, to=4.00,increment=0.01)
     s.pack()
     x=s.get()
-    bouton2=Button(fenetre, text="Fermer", width=10 ,command=fenetre.destroy, bg="red")
+    bouton2=Button(fenetre, text="Fermer", width=10 ,command=fenetre.destroy, bg="skyblue3")
     bouton2.pack()
     return (x)
                                                                                                     #################################
 
 ## definition des valeurs du tableau
 
-def afficher(number):
-    print('Afficher', number)
+# def afficher(number):
+#     print('Afficher', number)
 
 
 def tableau():
     fenetre= Toplevel()
     M=recuptext()
-    Button(fenetre, text="Enregistrer", width=10 ,command=savetexte(M), bg="green").grid(row=8, column=2)
-    Button(fenetre, text="Fermer", width=10 ,command=fenetre.destroy, bg="red").grid(row=8, column=0)
+    Button(fenetre, text="Enregistrer", width=10 ,command=savetexte(M), bg="skyblue3").grid(row=8, column=2)
+    Button(fenetre, text="Fermer", width=10 ,command=fenetre.destroy, bg="skyblue3").grid(row=8, column=0)
     for colonne in range(len(M[0])):                              # Ligne 0 heure de la journée
         Valeur=M[0][colonne]
         Button(fenetre, text=str(Valeur),width=10).grid(row=0, column=colonne)
@@ -262,21 +194,6 @@ def tableau():
         for ligne in range (1,len(M)):
             Value=M[ligne][colonne]
             Button(fenetre, text=Value,textvariable=Value, width=10,command=lambda x=Value,y=ligne,z=colonne:regler(x,y,z)).grid(row=ligne, column=colonne)
-
-          #########
-
-def insuline(M,glycemie,jour,heure):
-    if glycemie>180:
-        if heure==0:
-            M[jour+1][heuremax]=int(M[jour+1][heuremax])+1
-        else:
-            M[jour+1][heure-1]=int(M[jour+1][heure-1])+1
-    if glycemie<80:
-        if heure==0:
-            M[jour+1][heuremax]=int(M[jour+1][heuremax])-1
-        else:
-            M[jour+1][heure-1]=int(M[jour+1][heure-1])-1
-            #########
 
 
 
