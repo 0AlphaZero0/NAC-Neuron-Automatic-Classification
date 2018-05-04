@@ -31,7 +31,7 @@ def load(filename): # load le fichier
 	Args:
 		C'est le nom du fichier qui est demandé en entrée
 	Return:
-		On retourne ici une liste à deux dimension, ce qui est très utile pour la conversion en array numpy
+		On retourne ici une liste à deux dimensions, ce qui est très utile pour la conversion en array numpy
 	'''
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
@@ -63,6 +63,7 @@ def combinaisons(a):
         return
     all=[]
     i=0
+    
     while i<len(a):
         fn(i,a,[],all)
         i=i+1
