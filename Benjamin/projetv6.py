@@ -91,6 +91,12 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
+	load=TopLevel()
+	separateur1 = Radiobutton(load, text="Virgule", variable=separateurfichierentree, value=',',command=resultatsappui)
+	separateur2 = Radiobutton(load, text="Point-virgule", variable=separateurfichiersortie, value=';', command=resultatsappui)
+	separateur3 = Radiobutton(load, text="Tab", variable= 
+	separateur1.pack( anchor = W );separateur2.pack(anchor = W)
+
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
 	for line in file.readlines():

@@ -97,13 +97,15 @@ def load(filename,typefichier): #### File loading
 					y[x]=float(y[x])
 					x=x+1
 					dataset.append(y)
+					print dataset, "train"
 		if typefichier==1:
 			y=line.split(',')
 			x=0
 			while x<len(y):
 				y[x]=float(y[x])
 				x=x+1
-			dataset.append(y)
+				dataset.append(y)
+				print dataset, "test"
 	return dataset
 
 def Chargemententrainement():#### Loading of the training file
