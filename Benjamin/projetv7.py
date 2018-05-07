@@ -14,6 +14,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg #Importe tkinter
 import matplotlib.pyplot as plt
 import tkFont
 from PIL import Image, ImageTk
+from sklearn.neural_network import MLPClassifier
 ######################## SI BESOIN
 import sys
 import os
@@ -53,25 +54,43 @@ variableparam=IntVar()
 variableparametres=IntVar()
 t=IntVar()
 gamma=IntVar()
-classe=IntVar()
+vf=IntVar()
 nomdufichiertest=StringVar()
 methodes=StringVar()
 methode=StringVar()
 nomfichiersortie=StringVar()
 separateur=StringVar()
 separateur2=StringVar()
+listeparam=[]
 listetest=[]
 listeentrainement=[]
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
-sep= ";"
+
 ######Definitions
-def chargementtest():
+def Chargementtest(): #### Gives the absolute path of the file
+	'''This function retrieves the path to the Test file
+	Description:
+		Here, the user is asked to, via the Tkinter GUI, to choose the Test file of his choice. The path to this file will then be retrieved.
+	Args:
+		No Args required
+	Return:
+		No return, here, global variables are modified.
+	'''
+	global nomdufichiertest
+	global listetest
+	separateurfichier()
+	
+def chargementtest2():
+	nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/cljouan/espaces/travail/RESONEURON/Projet-Neuro/Clément/Interface",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+	listetest=load(nomdufichiertest,1)
+
+
+def separateurfichier():
 	def resultatsseparateur():
 		global separateur
 		global sep
 		sep=separateur.get()
 		
-
 	global separateur
 	load=Toplevel()
 	sep1 = Radiobutton(load, text = "Virgule", variable = separateur, value =',',command=resultatsseparateur)
@@ -80,23 +99,10 @@ def chargementtest():
 	sep4 = Radiobutton(load, text = "Deux points", variable = separateur, value =':', command=resultatsseparateur)
 	sep5 = Radiobutton(load, text = "Espace", variable = separateur, value =' ', command=resultatsseparateur)
 	sep6 = Button(load, text= "Valider choix", command=chargementtest2)
+
 	sep1.pack();sep2.pack();sep3.pack();sep4.pack();sep5.pack();sep6.pack()
 
-
-
-	separateurfichier() 
 	
-def chargementtest2():
-	global nomdufichiertest
-	global listetest
-	nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/cljouan/espaces/travail/RESONEURON/Projet-Neuro/Clément/Interface",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
-
-	listetest=load(nomdufichiertest,1)
-
-
-	
-
-
 def load(filename,typefichier): #### File loading
 	'''This function allows to load the file into the script
 	Description:
@@ -109,7 +115,6 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
-	global sep
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
 	for line in file.readlines():
@@ -118,7 +123,6 @@ def load(filename,typefichier): #### File loading
 		if line and line[0].isalpha():
 			pass
 		else:
-			print sep
 			y=line.split(sep)
 			if typefichier==0 :
 				y[0]=int(y[0])
@@ -133,7 +137,6 @@ def load(filename,typefichier): #### File loading
 					y[x]=float(y[x])
 					x=x+1
 				dataset.append(y)
-	print dataset
 	return dataset
 
 def Chargemententrainement():#### Loading of the training file
@@ -195,7 +198,14 @@ def entrainementdufichier():#### Training of the statistical model
 	for i in listeentrainement:
 		y_train.append(i.pop(0))
 	y_train=np.array(y_train)
-	X_train=np.array(listeentrainement)
+	dataset=[]
+	for sample in listeentrainement:
+		s=[]
+		for i in listeparam:
+			s.append(sample[i])
+		dataset.append(s)
+	X_train=np.array(dataset)
+	print X_train,"test", y_train
 	if classe==1: ########## If SVC were chosen
 		if methode=='rbf':
 			print "RBF Method"
@@ -220,6 +230,8 @@ def entrainementdufichier():#### Training of the statistical model
 			clf= svm.NuSVC(kernel=methode, nu=t) ###" to change kernel and gamma
 	if classe==3: ########## If LinearSVC were chosen
 			clf= svm.LinearSVC(C=t) ##### To change the t
+	if classe==4: ####RN Classifier
+		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=gamma, hidden_layer_sizes=(100,), random_state=None, tol=t, validation_fraction=vf, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
 
 def ChoixClasseparam(): #### Allows to set classes
@@ -238,7 +250,8 @@ def ChoixClasseparam(): #### Allows to set classes
 	P1 = Radiobutton(parametres, text="SVC", variable=variableparam, value=1,command=choixmethode)
 	P2 = Radiobutton(parametres, text="NuSVC", variable = variableparam, value=2, command=choixmethode)
 	P3 = Radiobutton(parametres, text="LinearSVC", variable=variableparam, value=3, command=choixmethode)
-	textexplication.pack();P1.pack();P2.pack();P3.pack()
+	P4 = Radiobutton(parametres, text="Classifier", variable=variableparam, value=4, command=choixmethode)
+	textexplication.pack();P1.pack();P2.pack();P3.pack();P4.pack()
 	parametres.mainloop()
 
 def choixmethode():#### Permet de choisir la méthode de Classification
@@ -257,13 +270,21 @@ def choixmethode():#### Permet de choisir la méthode de Classification
 		choixmethodes="Veuillez choisir la méthode de votre choix : "
 		choixmethode=Label(classe1, text=choixmethodes)
 		R1=Radiobutton(classe1, text='rbf', variable=methodes,value="rbf",command=choixhyperparametres)
-		R2=Radiobutton(classe1, text='sigmoid',variable=methodes,value="sigmoid",command=choixhyperparametres)
+		R2=Radiobutton(classe1,text='sigmoid',variable=methodes,value="sigmoid",command=choixhyperparametres)
 		R3=Radiobutton(classe1, text='poly', variable=methodes, value="poly",command=choixhyperparametres)
 		R4=Radiobutton(classe1, text='linear', variable=methodes, value="linear",command=choixhyperparametres)
 		choixmethode.pack();R1.pack();R2.pack();R3.pack();R4.pack()
 	if classe==3:
 		choixhyperparametres()
-
+	if classe==4:
+		classe4=Toplevel()
+		choixmethodes="Quelle est la méthode réseau de neurones de votre choix"
+		choixmethode=Label(classe4, text=choixmethodes)
+		S1=Radiobutton(classe4, text='Relu',variable=methodes, value='relu', command=choixhyperparametres)
+		S2=Radiobutton(classe4, text='Identity',variable=methodes, value='identity', command=choixhyperparametres)
+		S3=Radiobutton(classe4, text='Tanh',variable=methodes, value='tanh', command=choixhyperparametres)
+		S4=Radiobutton(classe4, text='Logistic',variable=methodes, value='logistic', command=choixhyperparametres)
+		choixmethode.pack();S1.pack();S2.pack();S3.pack();S4.pack()
 def choixhyperparametres():#### Permet de choisir les hyperparameters de la méthode
 	'''Dans cette fonction on propose à l'utilisateur de régler les hyperparameters de la méthode choisie précèdement
 	Description :
@@ -273,18 +294,27 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
 	Return:
 		There is no return here. Seul les variables des hyperparameters vont être modifiés.
 	'''
+#on defini vtest et gammatest directement dans la def et non en global car on les utilisent que une seule fois
 	def validerhyperparam():
 		global t
 		global gamma
+		global vf
 		t=float(ttest.get())
 		gamma=float(gammatest.get())
-		hyperparametres.destroy
-		print t, gamma
+		vf=float(vftest.get())
+		print vf, "test"
+		print gamma, "testgamma"
+		print t, "testt"
+		choixdeshuitparametres()
 
 	global methode
 	methode=methodes.get()
 	classe=variableparam.get()
 	hyperparametres=Toplevel()
+	vftest=IntVar()
+	gammatest=IntVar()
+	vftest.set(0)
+	gammatest.set(0)
 	textehyperparametres = "Veuillez regler les hyperparamètres :"
 	textehyperparametres2=Label(hyperparametres,text=textehyperparametres)
 	validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
@@ -314,7 +344,48 @@ def choixhyperparametres():#### Permet de choisir les hyperparameters de la mét
 	if classe==3:
 		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
 		ttest.pack()
+	if classe==4:
+		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de alpha')
+		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de tol')
+		vftest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de validation de fraction')
+		gammatest.pack();ttest.pack();vftest.pack()
 	validerchoix.pack()
+	hyperparametres.mainloop()
+
+def choixdeshuitparametres(): ########## Chaque bouton retourne une valeur comprise entre 0 et 8, et 9 s'il n'est pas coché. Chaque valeur correspond à la case si on la prend ou pas
+	def recuperationvaleur():
+		global listeparam
+		p1 = varparam.get()
+		p2=varparam2.get()
+		p3=varparam3.get()
+		p4=varparam4.get()
+		p5=varparam5.get()
+		p6=varparam6.get()
+		p7=varparam7.get()
+		p8=varparam8.get()
+		liste=[p1,p2,p3,p4,p5,p6,p7,p8]
+
+		for i in liste:
+			if i!=9:
+				listeparam.append(i)
+		print listeparam
+
+	
+	choixhuitparametres=Toplevel()
+	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
+	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
+	c1 = Checkbutton(choixhuitparametres, text="IR", variable = varparam, onvalue=0, offvalue=9)
+	c2 = Checkbutton(choixhuitparametres, text="RMP", variable = varparam2, onvalue=1, offvalue=9)
+	c3 = Checkbutton(choixhuitparametres, text="RH", variable = varparam3, onvalue=2, offvalue=9)
+	c4 = Checkbutton(choixhuitparametres, text="ST", variable = varparam4, onvalue=3, offvalue=9)
+	c5 = Checkbutton(choixhuitparametres, text="DTFS", variable = varparam5, onvalue=4, offvalue=9)
+	c6 = Checkbutton(choixhuitparametres, text="SA", variable = varparam6, onvalue=5, offvalue=9)
+	c7 = Checkbutton(choixhuitparametres, text="SD", variable = varparam7, onvalue=6, offvalue=9)
+	c8 = Checkbutton(choixhuitparametres, text="fAHP", variable = varparam8, onvalue=7, offvalue=9)
+	c9 = Button(choixhuitparametres, text="Valider", command=recuperationvaleur)
+	c1.pack();c2.pack();c3.pack();c4.pack();c5.pack();c6.pack();c7.pack();c8.pack();c9.pack()
+
+
 
 def ChoixNomFichier():  #####Choix du nom du fichier de sortie
 	def recuperationnomfichier(event):
@@ -329,7 +400,14 @@ def ChoixNomFichier():  #####Choix du nom du fichier de sortie
 	textechoixfichier.pack();entrernomfichier.pack();validernomfichier.pack()
 
 def Lanceranalyse():
-	X_test=np.array(listetest)
+	dataset=[]
+	for sample in listetest:
+		s=[]
+		for i in listeparam:
+			s.append(sample[i])
+		dataset.append(s)
+	X_test=np.array(dataset)
+	print X_test
 	result=clf.predict(X_test)
 	Tk().bell()
 	type1=0
