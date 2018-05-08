@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt # Allows to create graphics, especially those in
 import urllib # Allows to open URL links =============================================== ***** est ce que l'on s'en sert???????****
 import tkFont # Allows to modify the TKinter display font
 import codecs # Allows to load a file containing UTF-8 characters
+import random # Allows to use random variables
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
 from sklearn import svm # Allows to use the SVM classification method
@@ -40,6 +41,7 @@ fond0.create_image(700,450, image=img2)
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 listeparam=[]
+listeparamcomplete=["nClass","IR","RMP","RH","ST","DTFS","SA","SD","fAHP"]
 listetest=[]
 listeentrainement=[]
 resultdataset=[]
@@ -59,6 +61,7 @@ variableparam=IntVar()
 variableparametres=IntVar()
 tmp=IntVar()
 classe=IntVar()
+echantillonnage=IntVar()
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 ######Definitions
 def Chargementtest(): #### Gives the absolute path of the file
@@ -176,9 +179,8 @@ def resultatsappui():#### Choice of the training file
 		nomdufichierentrainement=('Fichier_test.csv')####Path of our test file
 		separateur2=','
 		listeentrainement=load(nomdufichierentrainement,0)
-	entrainementdufichier()
 
-def entrainementdufichier():#### Training of the statistical model
+def entrainementdufichier(verif):#### Training of the statistical model
 	'''Here, in function of the class and the model as well as hyperparameters of the method, the training table will allow to train the statistical model
 	Description :
 		Here, thanks to multiple conditions, it is possible to choose the class and the method wished by the user to train the model
@@ -188,19 +190,59 @@ def entrainementdufichier():#### Training of the statistical model
 		There is no return here, only the variable clf is modified, it is the one which contains the training method, it will be modified according to the choice of the user
 	'''
 	global clf
+	# Variables
+	dataset=[]
 	y_train=[]
 	X_train=[]
-	for i in listeentrainement:
-		y_train.append(i.pop(0))
-	y_train=np.array(y_train)
-	dataset=[]
+	#Choix des combinaisons de paramètres
 	for sample in listeentrainement:
 		s=[]
 		for i in listeparam:
 			s.append(sample[i])
 		dataset.append(s)
-	X_train=np.array(dataset)
-	print X_train,"test", y_train
+	######## Analyse
+	if verif==0:
+		for i in dataset:
+			y_train.append(i.pop(0))
+		y_train=np.array(y_train)
+		X_train=np.array(dataset)
+		print X_train,"test", y_train
+	######## Simulation
+	if verif==1:
+		train=[]
+		test=[]
+		y_test=[]
+		X_test=[]
+		g=0
+		datalength=len(dataset)
+		# Echantillonnage
+		while g!=len(dataset):
+			top=len(dataset)-1
+			rand=random.randint(0,top)
+			if echantillonnage==1:
+				o=2
+			else:
+				o=4
+				if datalength/o<len(dataset):
+					if echantillonnage==2:
+						test.append(dataset.pop(rand)) #75% of sample in test
+					if echantillonnage==3:
+						train.append(dataset.pop(rand)) #75% of sample in train
+				else:
+					if echantillonnage==2:
+						train.append(dataset.pop(rand)) #75% of sample in train
+					if echantillonnage==3:
+						test.append(dataset.pop(rand)) #75% of sample in test
+		print "Size of trainning dataset = ",len(train)
+		print "Size of test list = ",len(test)
+		# Séparation de la liste y d'entrainement
+		for sample in train:
+			y_train.append(sample.pop(0))
+		# Séparation de la liste y pour le test
+		for sample in test:
+			y_test.append(sample.pop(0))
+		X_test=np.array(test)
+		X_train=np.array(train)
 	if classe==1: ########## If SVC were chosen
 		if methode=='rbf':
 			print "RBF Method"
@@ -228,6 +270,7 @@ def entrainementdufichier():#### Training of the statistical model
 	if classe==4: ####RN Classifier
 		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
+	return X_test,y_test
 
 def ChoixClasseparam(): #### Allows to set classes
 	'''This function allows the user to choose between the different classes in order to personalize, if he wants to, the training method
@@ -421,6 +464,36 @@ def ChoixNomFichier():  #### Give a name to the output file
 	entrernomfichier.bind("<Return>",recuperationnomfichier)
 	textechoixfichier.pack();entrernomfichier.pack();validernomfichier.pack()
 
+def Simulationentrainement():
+	global simulation
+	global echantillonnage
+	simulation=Toplevel()
+	textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
+	textesimulation=Label(simulation, text=textesimulation)
+	echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillonnage, value = 1,command=choixechantillons)
+	echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillonnage, value = 2, command=choixechantillons)
+	echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillonnage, value = 3, command=choixechantillons)
+	textesimulation.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
+	simulation.mainloop()
+
+def choixechantillons():
+	simulation.destroy()
+	choixechantillons=Toplevel()
+	test=entrainementdufichier(1)
+	result=clf.predict(test[0])
+	x=0
+	somme=0
+	length=len(test[1])
+	while x<len(test[1]):
+		if result[x]==y_test[x]:
+			somme=somme+1
+		x=x+1
+	percentage=(float(somme)/length)*100
+	print percentage
+	#textespourcentage= "Le pourcentage est de :",percentage
+	#textesimulation=Label(choixechantillons, text=textsimulation)
+	choixechantillons.mainloop()
+
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
 	Description:
@@ -452,8 +525,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		canvas.configure(scrollregion=canvas.bbox("all"))
 	#
 	def testfichier(frame):
-		#scrollbar=Scrollbar(Analyse)
-		#scrollbar.pack(side=RIGHT)
 		titretext=Label(frame, text="LES RESULTATS", fg="Black", bg="Grey")
 		titretext.place(x=500, y=0, width=200, height=50)
 		i=0
@@ -464,12 +535,12 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 					Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
 				else:
 					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
-					#Button(fenetre,text=dataset[i][j], relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=5)
 				j=j+1
 			i=i+1
 		print i
 		print j
 	#
+	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.geometry("1200x800+600+300")
 	canvas=tk.Canvas(Analyse,borderwidth=1)
@@ -486,10 +557,11 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		for i in listeparam:
 			s.append(sample[i])
 		dataset.append(s)
-	X_test=np.array(dataset)
+	X_test=np.array(dataset)# Passage du tableau en format numpy
 	print X_test
-	result=clf.predict(X_test)####################### PREDICTION
-	# AJOUTER resultdataset.append(listeparamcomplète)
+	result=clf.predict(X_test)####################### PREDICTION !!!!!!
+	resultdataset.append(listeparamcomplete) # ajout de l'entête
+	#boucle pour former le tableau à 2D final
 	d=0
 	while d<len(result):
 		sample=[]
@@ -500,7 +572,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			k=k+1
 		resultdataset.append(sample)
 		d=d+1
-	Tk().bell()
+	Tk().bell() # son pour signifier à l'utilisateur la fin de l'analyse
 	testfichier(frame)
 	Analyse.mainloop()
 	type1=0
@@ -553,22 +625,24 @@ def explicationlogiciel(): ###### Explications of the software
 	explication.mainloop()
 
 ###############################################################    MAIN    ###############################################################
-b1= Button(app, text="Ajustement des paramètres", fg="Black",bg="SkyBlue3", command=ChoixClasseparam, font=helv36, bd=4)
-b2= Button(app, text="Chargement du fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36, bd=4)
-b3= Button(app, text="Chargement du fichier à analyser",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
-b4= Button(app, text="Choisir le nom du fichier de sortie", fg="Black", bg="SkyBlue3", command=ChoixNomFichier, font=helv36, bd=4)
-b5= Button(app, text="Lancer l'analyse", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
-b6= Button(app, text="Quitter l'application", fg="Black",bg="SkyBlue3", command=app.destroy, font=helv36, bd=4, bitmap="error")
+b1= Button(app, text= "Ajustement des paramètres", fg= "Black",bg= "SkyBlue3", command= ChoixClasseparam, font= helv36, bd= 4)
+b2= Button(app, text= "Chargement du fichier d'entraînement", fg= "Black", bg= "SkyBlue3", command= Chargemententrainement, font= helv36, bd= 4)
+b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", command= Simulationentrainement, font= helv36, bd= 4)
+b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command= Chargementtest, font= helv36, bd= 4)
+b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command= ChoixNomFichier, font= helv36, bd= 4)
+b6= Button(app, text= "Lancer l'analyse", fg= "Black",bg= "SkyBlue3", command= Lanceranalyse, font= helv36, bd= 4)
+b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= app.destroy, font= helv36, bd= 4, bitmap= "error")
 menu1 = Menu(menubar, tearoff=0)
 menu2 = Menu(menubar, tearoff=0)
 menu3 = Menu(menubar, tearoff=0)
 ######################### Anchoring elements in the GUI
 b1.place(x=300, y=100, width=250, height=40)
-b2.place(x=300, y=170, width=250, height=40)
-b3.place(x=300, y=240, width=250, height=40)
-b4.place(x=300, y=310, width=250, height=40)
-b5.place(x=350, y=470, width=150, height=60)
-b6.place(x=350, y=540, width=150, height=30)
+b2.place(x=300, y=150, width=250, height=40)
+b3.place(x=300, y=200, width=250, height=40)
+b4.place(x=300, y=250, width=250, height=40)
+b5.place(x=300, y=300, width=250, height=40)
+b6.place(x=350, y=470, width=150, height=60)
+b7.place(x=350, y=540, width=150, height=30)
 text.place(x=180, y=0, width=500, height=50)
 
 #####################################    Toolbar
