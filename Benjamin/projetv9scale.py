@@ -61,6 +61,7 @@ variableparam=IntVar()
 variableparametres=IntVar()
 tmp=IntVar()
 classe=IntVar()
+echantillons=IntVar()
 echantillonnage=IntVar()
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 ######Definitions
@@ -197,9 +198,11 @@ def entrainementdufichier(verif):#### Training of the statistical model
 	#Choix des combinaisons de paramètres
 	for sample in listeentrainement:
 		s=[]
+		s.append(sample[0])
 		for i in listeparam:
-			s.append(sample[i])
+			s.append(sample[i+1])
 		dataset.append(s)
+	print dataset,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 	######## Analyse
 	if verif==0:
 		for i in dataset:
@@ -209,6 +212,7 @@ def entrainementdufichier(verif):#### Training of the statistical model
 		print X_train,"test", y_train
 	######## Simulation
 	if verif==1:
+		print "Entrer dans simulation"
 		train=[]
 		test=[]
 		y_test=[]
@@ -217,22 +221,28 @@ def entrainementdufichier(verif):#### Training of the statistical model
 		datalength=len(dataset)
 		# Echantillonnage
 		while g!=len(dataset):
+			print "1"
 			top=len(dataset)-1
 			rand=random.randint(0,top)
+			print echantillonnage, "echantillonnage"
 			if echantillonnage==1:
-				o=2
+				print "50/50"
+				div=2
+			if echantillonnage==2 or echantillonnage==3:
+				div=4
+				print "25/75 ou 75/25"
+			limit=datalength/div
+			if limit<len(dataset):
+				print "c'est bon",len(dataset)
+				if echantillonnage==2 or echantillonnage==1:
+					test.append(dataset.pop(rand)) #75% of sample in test
+				if echantillonnage==3:
+					train.append(dataset.pop(rand)) #75% of sample in train
 			else:
-				o=4
-				if datalength/o<len(dataset):
-					if echantillonnage==2:
-						test.append(dataset.pop(rand)) #75% of sample in test
-					if echantillonnage==3:
-						train.append(dataset.pop(rand)) #75% of sample in train
-				else:
-					if echantillonnage==2:
-						train.append(dataset.pop(rand)) #75% of sample in train
-					if echantillonnage==3:
-						test.append(dataset.pop(rand)) #75% of sample in test
+				if echantillonnage==2 or echantillonnage==1:
+					train.append(dataset.pop(rand)) #75% of sample in train
+				if echantillonnage==3:
+					test.append(dataset.pop(rand)) #75% of sample in test
 		print "Size of trainning dataset = ",len(train)
 		print "Size of test list = ",len(test)
 		# Séparation de la liste y d'entrainement
@@ -466,26 +476,30 @@ def ChoixNomFichier():  #### Give a name to the output file
 
 def Simulationentrainement():
 	global simulation
-	global echantillonnage
+	global echantillons
 	simulation=Toplevel()
 	textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
 	textesimulation=Label(simulation, text=textesimulation)
-	echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillonnage, value = 1,command=choixechantillons)
-	echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillonnage, value = 2, command=choixechantillons)
-	echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillonnage, value = 3, command=choixechantillons)
+	echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillons, value = 1,command=choixechantillons)
+	echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillons, value = 2, command=choixechantillons)
+	echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillons, value = 3, command=choixechantillons)
 	textesimulation.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
 	simulation.mainloop()
 
 def choixechantillons():
+	global echantillonnage
 	simulation.destroy()
 	choixechantillons=Toplevel()
+	echantillonnage=echantillons.get()
 	test=entrainementdufichier(1)
+	print test[0],"aaaaaaaaaaaaaaaaaaaaaaaaaa"
+	print test[1],"zzzzzzzzzzzzzzzzzzzzzzzzzz"
 	result=clf.predict(test[0])
 	x=0
 	somme=0
 	length=len(test[1])
 	while x<len(test[1]):
-		if result[x]==y_test[x]:
+		if result[x]==test[1][x]:
 			somme=somme+1
 		x=x+1
 	percentage=(float(somme)/length)*100
