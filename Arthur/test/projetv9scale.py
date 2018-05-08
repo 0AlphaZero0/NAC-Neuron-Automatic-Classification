@@ -90,18 +90,18 @@ def separateurfichier(): #### Give the file separator
 	Return:
 		No return. Here, global variables are modified.
 	'''
-	def resultatsseparateur():
+	def resultatsseparateur(sep):
 		global separateur
 		global separateur2
-		separateur2=separateur.get()
+		separateur2=sep
 
 	global separateur
 	load=Toplevel()
-	separateur1 = Radiobutton(load, text = "Virgule", variable = separateur, value =',',command=resultatsseparateur)
-	separateur2 = Radiobutton(load, text = "Point-virgule", variable = separateur, value =';', command=resultatsseparateur)
-	separateur3 = Radiobutton(load, text = "Tab", variable = separateur, value ='	',command=resultatsseparateur)
-	separateur4 = Radiobutton(load, text = "Deux points", variable = separateur, value =':', command=resultatsseparateur)
-	separateur5 = Radiobutton(load, text = "Espace", variable = separateur, value =' ', command=resultatsseparateur)
+	separateur1 = Radiobutton(load, text = "Virgule", variable = separateur, value =',',command=lambda c=',':resultatsseparateur(c))
+	separateur2 = Radiobutton(load, text = "Point-virgule", variable = separateur, value =';', command=lambda c=';':resultatsseparateur(c))
+	separateur3 = Radiobutton(load, text = "Tab", variable = separateur, value ='	',command=lambda c='	':resultatsseparateur(c))
+	separateur4 = Radiobutton(load, text = "Deux points", variable = separateur, value =':', command=lambda c=':':resultatsseparateur(c))
+	separateur5 = Radiobutton(load, text = "Espace", variable = separateur, value =' ', command=lambda c=' ':resultatsseparateur(c))
 	separateur1.pack();separateur2.pack();separateur3.pack();separateur4.pack();separateur5.pack()
 
 def load(filename,typefichier): #### File loading
@@ -116,9 +116,14 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
+	#revoir
+	print separateur2
+	result=file(filename,"r").read().replace(separateur2, ",")################!!!!!!!!!!!!!!!
+	file("tmp.csv","w").write(result)#######################!!!!!!!!!!!!!!!!!!!
+	# revoir
 	dataset=[]
-	file = codecs.open(filename, "r",encoding="utf-8")
-	for line in file.readlines():
+	files=codecs.open("tmp.csv", "r",encoding="utf-8")
+	for line in files.readlines():
 		if not line:
 			break
 		if line and line[0].isalpha():
@@ -138,6 +143,8 @@ def load(filename,typefichier): #### File loading
 					y[x]=float(y[x])
 					x=x+1
 				dataset.append(y)
+	file.close
+	os.remove("tmp.csv")############################!!!!!!!!!!!!!!!!!!!!!!!
 	return dataset
 
 def Chargemententrainement(check):#### Loading of the training file
@@ -372,7 +379,8 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	global hyperparametres
 	methode=methodes.get()
 	classe=variableparam.get()
-	classe1.destroy()
+	if classe!=3:
+		classe1.destroy()
 	hyperparametres=Toplevel()
 	gammatest=IntVar(); alphatest=IntVar(); toltest=IntVar(); degretest=IntVar(); ttest=IntVar(); ttest1poly=IntVar()
 	ttest1linear=IntVar(); ttest3linear=IntVar(); Nutest=IntVar(); Nu2test=IntVar()
@@ -393,7 +401,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	if methode=='linear' and classe==1:
 		ttest1linear=Scale(hyperparametres, orient='horizontal', from_=-4, to=3, resolution=1, tickinterval=1, length=350, label="Choix de l'exposant de la valeur de C")
 		ttest1linear.pack()
-	if methode=='linear' and classe==3:
+	if classe==3:
 		ttest3linear=Scale(hyperparametres, orient='horizontal', from_=-5, to=7, resolution=1, tickinterval=1, length=350, label='Choix de la valeur de C')
 		ttest3linear.pack();
 	if (methode=='rbf' or methode=='sigmoid') and classe==2:
@@ -525,6 +533,19 @@ def choixechantillons():
 	textesimulation.pack();textepourcentage.pack();
 	choixechantillons.mainloop()
 
+def save():
+	file=codecs.open(nomdufichiersortie,"w",encoding="utf-8")
+	x=0
+	while x<len(resultdataset):
+		y=0
+		while y<len(resultdataset[x]):
+			file.write(str(resultdataset[x][y]))
+			file.write(',')
+			y=y+1
+		file.write('\n')
+		x=x+1
+	file.close
+
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
 	Description:
@@ -535,6 +556,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		No return.
 	'''
 	global resultdataset
+	resultdataset=[]
 	#
 	def entrernom(c):
 		global tmp
@@ -562,7 +584,10 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			j=0
 			while j<len(resultdataset[i]): #### j = column
 				if j==0:
-					Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
+					if i==0:
+						tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
+					if i!=0:
+						Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
 				else:
 					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
 				j=j+1
@@ -571,12 +596,13 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.geometry("1200x800+600+300")
+	A1=Button(Analyse, text="Sauvegarder les résultats", command=save)
+	#A2=Button(Analyse,text="Modifier les résultats",command=modiftable)
 	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y")
-	canvas.pack(side="left", fill="both", expand=True)
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack()
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
