@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt # Allows to create graphics, especially those in
 import urllib # Allows to open URL links =============================================== ***** est ce que l'on s'en sert???????****
 import tkFont # Allows to modify the TKinter display font
 import codecs # Allows to load a file containing UTF-8 characters
+import random # Allows to use random variables
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
 from sklearn import svm # Allows to use the SVM classification method
@@ -40,6 +41,7 @@ fond0.create_image(700,450, image=img2)
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 listeparam=[]
+listeparamcomplete=["nClass","IR","RMP","RH","ST","DTFS","SA","SD","fAHP"]
 listetest=[]
 listeentrainement=[]
 resultdataset=[]
@@ -53,10 +55,14 @@ separateur=StringVar()
 separateur2=StringVar()
 t=IntVar()
 gamma=IntVar()
+alpha=IntVar()
 variableatester=IntVar()
 variableparam=IntVar()
 variableparametres=IntVar()
 tmp=IntVar()
+classe=IntVar()
+echantillons=IntVar()
+echantillonnage=IntVar()
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 ######Definitions
 def Chargementtest(): #### Gives the absolute path of the file
@@ -174,9 +180,8 @@ def resultatsappui():#### Choice of the training file
 		nomdufichierentrainement=('Fichier_test.csv')####Path of our test file
 		separateur2=','
 		listeentrainement=load(nomdufichierentrainement,0)
-	entrainementdufichier()
 
-def entrainementdufichier():#### Training of the statistical model
+def entrainementdufichier(verif):#### Training of the statistical model
 	'''Here, in function of the class and the model as well as hyperparameters of the method, the training table will allow to train the statistical model
 	Description :
 		Here, thanks to multiple conditions, it is possible to choose the class and the method wished by the user to train the model
@@ -186,19 +191,68 @@ def entrainementdufichier():#### Training of the statistical model
 		There is no return here, only the variable clf is modified, it is the one which contains the training method, it will be modified according to the choice of the user
 	'''
 	global clf
+	# Variables
+	dataset=[]
 	y_train=[]
 	X_train=[]
-	for i in listeentrainement:
-		y_train.append(i.pop(0))
-	y_train=np.array(y_train)
-	dataset=[]
+	#Choix des combinaisons de paramètres
 	for sample in listeentrainement:
 		s=[]
+		s.append(sample[0])
 		for i in listeparam:
-			s.append(sample[i])
+			s.append(sample[i+1])
 		dataset.append(s)
-	X_train=np.array(dataset)
-	print X_train,"test", y_train
+	print dataset,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+	######## Analyse
+	if verif==0:
+		for i in dataset:
+			y_train.append(i.pop(0))
+		y_train=np.array(y_train)
+		X_train=np.array(dataset)
+		print X_train,"test", y_train
+	######## Simulation
+	if verif==1:
+		print "Entrer dans simulation"
+		train=[]
+		test=[]
+		y_test=[]
+		X_test=[]
+		g=0
+		datalength=len(dataset)
+		# Echantillonnage
+		while g!=len(dataset):
+			print "1"
+			top=len(dataset)-1
+			rand=random.randint(0,top)
+			print echantillonnage, "echantillonnage"
+			if echantillonnage==1:
+				print "50/50"
+				div=2
+			if echantillonnage==2 or echantillonnage==3:
+				div=4
+				print "25/75 ou 75/25"
+			limit=datalength/div
+			if limit<len(dataset):
+				print "c'est bon",len(dataset)
+				if echantillonnage==2 or echantillonnage==1:
+					test.append(dataset.pop(rand)) #75% of sample in test
+				if echantillonnage==3:
+					train.append(dataset.pop(rand)) #75% of sample in train
+			else:
+				if echantillonnage==2 or echantillonnage==1:
+					train.append(dataset.pop(rand)) #75% of sample in train
+				if echantillonnage==3:
+					test.append(dataset.pop(rand)) #75% of sample in test
+		print "Size of trainning dataset = ",len(train)
+		print "Size of test list = ",len(test)
+		# Séparation de la liste y d'entrainement
+		for sample in train:
+			y_train.append(sample.pop(0))
+		# Séparation de la liste y pour le test
+		for sample in test:
+			y_test.append(sample.pop(0))
+		X_test=np.array(test)
+		X_train=np.array(train)
 	if classe==1: ########## If SVC were chosen
 		if methode=='rbf':
 			print "RBF Method"
@@ -208,24 +262,25 @@ def entrainementdufichier():#### Training of the statistical model
 			clf= svm.SVC(kernel=methode, gamma=gamma, C=t) ###" to change kernel and gamma
 		if methode=='poly':
 			print "Poly Method"
-			clf= svm.SVC(kernel=methode, degree=gamma, C=t) ###" to change kernel and degree
+			clf= svm.SVC(kernel=methode, degree=degre, C=t1poly) ###" to change kernel and degree
 		if methode=='linear':
 			print "Linear Method"
-			clf= svm.SVC(kernel=methode, C=t) ###" to change kernel and gamma
+			clf= svm.SVC(kernel=methode, C=t1linear) ###" to change kernel and gamma
 	if classe==2: ########## If NuSVC were chosen
 		if methode=='rbf':
-			clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=t) ###" to change kernel and gamma
+			clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=Nu) ###" to change kernel and gamma
 		if methode=='sigmoid':
-			clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=t) ###" to change kernel and gamma
+			clf= svm.NuSVC(kernel=methode, gamma=gamma, nu=Nu) ###" to change kernel and gamma
 		if methode=='poly':
-			clf= svm.NuSVC(kernel=methode, degree=gamma, nu=t) ###" to change kernel and degree
+			clf= svm.NuSVC(kernel=methode, degree=degre, nu=Nu) ###" to change kernel and degree
 		if methode=='linear':
-			clf= svm.NuSVC(kernel=methode, nu=t) ###" to change kernel and gamma
+			clf= svm.NuSVC(kernel=methode, nu=Nu2) ###" to change kernel and gamma
 	if classe==3: ########## If LinearSVC were chosen
-			clf= svm.LinearSVC(C=t) ##### To change the t
+			clf= svm.LinearSVC(C=t3linear) ##### To change the t
 	if classe==4: ####RN Classifier
-		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=gamma, hidden_layer_sizes=(100,), random_state=None, tol=t, verbose=False, warm_start=False)
+		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
+	return X_test,y_test
 
 def ChoixClasseparam(): #### Allows to set classes
 	'''This function allows the user to choose between the different classes in order to personalize, if he wants to, the training method
@@ -237,6 +292,7 @@ def ChoixClasseparam(): #### Allows to set classes
 		There is no return here. It modifies the variableparam variable to adjust the training method class
 	'''
 	global variableparam
+	global parametres
 	parametres=Toplevel()
 	texteexplication="Veuillez choisir la classe de SVM : "
 	textexplication=Label(parametres, text=texteexplication)
@@ -257,6 +313,8 @@ def choixmethode():#### Allows to choose the classification method
 	'''
 	global methodes
 	global classe
+	global classe1
+	parametres.destroy()
 	classe=variableparam.get()
 	if classe==1 or classe==2: #### Choice of the method in regard of SVC and NuSVC
 		classe1=Toplevel()
@@ -270,13 +328,13 @@ def choixmethode():#### Allows to choose the classification method
 	if classe==3: # Choice of the method from LinearSVC
 		choixhyperparametres()
 	if classe==4: # Choice of the method in regard of neural network and the Classifier class
-		classe4=Toplevel()
+		classe1=Toplevel()
 		choixmethodes="Quelle est la méthode réseau de neurones de votre choix"
-		choixmethode=Label(classe4, text=choixmethodes)
-		S1=Radiobutton(classe4, text='Relu',variable=methodes, value='relu', command=choixhyperparametres)
-		S2=Radiobutton(classe4, text='Identity',variable=methodes, value='identity', command=choixhyperparametres)
-		S3=Radiobutton(classe4, text='Tanh',variable=methodes, value='tanh', command=choixhyperparametres)
-		S4=Radiobutton(classe4, text='Logistic',variable=methodes, value='logistic', command=choixhyperparametres)
+		choixmethode=Label(classe1, text=choixmethodes)
+		S1=Radiobutton(classe1, text='Relu',variable=methodes, value='relu', command=choixhyperparametres)
+		S2=Radiobutton(classe1, text='Identity',variable=methodes, value='identity', command=choixhyperparametres)
+		S3=Radiobutton(classe1, text='Tanh',variable=methodes, value='tanh', command=choixhyperparametres)
+		S4=Radiobutton(classe1, text='Logistic',variable=methodes, value='logistic', command=choixhyperparametres)
 		choixmethode.pack();S1.pack();S2.pack();S3.pack();S4.pack()
 
 def choixhyperparametres(): #### Allow to choose the hyperparameters of the method
@@ -290,62 +348,63 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	'''
 	# Here, vtest and gammatest are defined directly in the function and not globaly because they are used only once
 	def validerhyperparam():
-		global t
-		global gamma
-		global alpha
-		global tol
-		t=float(ttest.get())
-		gamma=float(gammatest.get())
+		global t; global gamma; global alpha; global tol; global degre; global t1poly
+		global t1linear; global t3linear; global Nu; global Nu2
+		t=1*10**float(ttest.get())
+		gamma=1*10**float(gammatest.get())
 		alpha=1*10**float(alphatest.get())
 		tol = 1*10**float(toltest.get())
+		degre = float(degretest.get())
+		t1poly = 1*10**float(ttest1poly.get())
+		t1linear = 1*10**float(ttest1linear.get())
+		t3linear = 1*10**float(ttest3linear.get())
+		Nu = float(Nutest.get())
+		Nu2 = float(Nu2test.get())
 		print alpha
 		print tol
 		print gamma, "testgamma"
 		print t, "testt"
 		choixdeshuitparametres()
+		hyperparametres.destroy()
 	global methode
+	global hyperparametres
 	methode=methodes.get()
 	classe=variableparam.get()
+	classe1.destroy()
 	hyperparametres=Toplevel()
-	gammatest=IntVar()
-	alphatest=IntVar()
-	toltest=IntVar()
-	ttest=IntVar()
-	gammatest1rbf=IntVar()
-	gammatest.set(0)
-	gammatest1rbf.set(1E-12)
-	ttest.set(0)
-	toltest.set(1E-7)
-	alphatest.set(0.00001)
+	gammatest=IntVar(); alphatest=IntVar(); toltest=IntVar(); degretest=IntVar(); ttest=IntVar(); ttest1poly=IntVar()
+	ttest1linear=IntVar(); ttest3linear=IntVar(); Nutest=IntVar(); Nu2test=IntVar()
+	gammatest.set(-12), ttest.set(-5), toltest.set(-7), alphatest.set(-4), degretest.set(0)
+	ttest1poly.set(-5), ttest1linear.set(-4), ttest3linear.set(-5), Nutest.set(0), Nu2test.set(0)
 	textehyperparametres = "Veuillez regler les hyperparamètres :"
 	textehyperparametres2=Label(hyperparametres,text=textehyperparametres)
 	validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
 	textehyperparametres2.pack()
 	if (methode=='rbf' or methode=='sigmoid') and classe==1:
-		gammatest1rbf=Scale(hyperparametres, orient='horizontal', from_=-12, to=3,resolution=1, tickinterval=1, length=350,label="Choix de l'exposant de la valeur de gamma")
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label="Choix de la valeur de C")
+		gammatest=Scale(hyperparametres, orient='horizontal', from_=-12, to=3,resolution=1, tickinterval=1, length=350,label="Choix de l'exposant de la valeur de gamma")
+		ttest=Scale(hyperparametres, orient='horizontal', from_=-5, to=7, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de C")
 		gammatest.pack();ttest.pack();
 	if methode=='poly' and classe==1:
-		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur de degree')
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur de C')
-		gammatest.pack();ttest.pack();
-	if methode=='linear' and (classe==1 or classe==3):
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
-		ttest.pack();
+		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2,resolution=0.1, tickinterval=0.2, length=350,label='Choix de la valeur de degree')
+		ttest1poly=Scale(hyperparametres, orient='horizontal', from_=-5, to=-1,resolution=1, tickinterval=1, length=350,label="Choix de l'exposant de la valeur de C")
+		degretest.pack();ttest1poly.pack();
+	if methode=='linear' and classe==1:
+		ttest1linear=Scale(hyperparametres, orient='horizontal', from_=-4, to=3, resolution=1, tickinterval=1, length=350, label="Choix de l'exposant de la valeur de C")
+		ttest1linear.pack()
+	if methode=='linear' and classe==3:
+		ttest3linear=Scale(hyperparametres, orient='horizontal', from_=-5, to=7, resolution=1, tickinterval=1, length=350, label='Choix de la valeur de C')
+		ttest3linear.pack();
 	if (methode=='rbf' or methode=='sigmoid') and classe==2:
-		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de gamma')
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
-		gammatest.pack();ttest.pack();
+		gammatest=Scale(hyperparametres, orient='horizontal', from_=-12, to=3, resolution=1, tickinterval=1, length=350, label="Choix de l'exposant de la valeur de gamma")
+		Nutest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
+		gammatest.pack();Nutest.pack();
 	if methode=='poly' and classe==2:
-		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de degree')
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
-		gammatest.pack();ttest.pack();
+		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2, resolution=0.1, tickinterval=0.2, length=350, label='Choix de la valeur de degree')
+		Nutest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
+		degretest.pack();Nutest.pack();
 	if methode=='linear' and classe==2:
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
-		ttest.pack();
-	if classe==3:
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
-		ttest.pack()
+		Nu2test=Scale(hyperparametres, orient='horizontal', from_=0, to=0.6, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
+		Nu2test.pack();
 	if classe==4:
 		alphatest=Scale(hyperparametres, orient='horizontal', from_=-5, to=3, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de alpha")
 		toltest=Scale(hyperparametres, orient='horizontal', from_=-7, to=2, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de tol")
@@ -354,7 +413,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	hyperparametres.mainloop()
 
 def choixdeshuitparametres(): #### Allow to choose the paramaters
-	''' This function allows to user to choose the different paramaters to run the analyze.
+ 	''' This function allows to user to choose the different paramaters to run the analyze.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
 		There is also a button which return 9 if the user doesn't want to chose the paramaters. This is default value.
@@ -379,6 +438,8 @@ def choixdeshuitparametres(): #### Allow to choose the paramaters
 			if i!=9:
 				listeparam.append(i)
 		print "Liste des paramètres : ",listeparam
+		choixhuitparametres.destroy()
+	global choixhuitparametres
 	choixhuitparametres=Toplevel()
 	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
 	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
@@ -413,6 +474,40 @@ def ChoixNomFichier():  #### Give a name to the output file
 	entrernomfichier.bind("<Return>",recuperationnomfichier)
 	textechoixfichier.pack();entrernomfichier.pack();validernomfichier.pack()
 
+def Simulationentrainement():
+	global simulation
+	global echantillons
+	simulation=Toplevel()
+	textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
+	textesimulation=Label(simulation, text=textesimulation)
+	echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillons, value = 1,command=choixechantillons)
+	echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillons, value = 2, command=choixechantillons)
+	echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillons, value = 3, command=choixechantillons)
+	textesimulation.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
+	simulation.mainloop()
+
+def choixechantillons():
+	global echantillonnage
+	simulation.destroy()
+	choixechantillons=Toplevel()
+	echantillonnage=echantillons.get()
+	test=entrainementdufichier(1)
+	print test[0],"aaaaaaaaaaaaaaaaaaaaaaaaaa"
+	print test[1],"zzzzzzzzzzzzzzzzzzzzzzzzzz"
+	result=clf.predict(test[0])
+	x=0
+	somme=0
+	length=len(test[1])
+	while x<len(test[1]):
+		if result[x]==test[1][x]:
+			somme=somme+1
+		x=x+1
+	percentage=(float(somme)/length)*100
+	print percentage
+	#textespourcentage= "Le pourcentage est de :",percentage
+	#textesimulation=Label(choixechantillons, text=textsimulation)
+	choixechantillons.mainloop()
+
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
 	Description:
@@ -437,30 +532,32 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		global resultdataset
 		print test
 		resultdataset[c][0]=test
+		tmp.set(0)
 		testfichier(frame)
 	#
 	def onFrameConfigure(canvas):
 		canvas.configure(scrollregion=canvas.bbox("all"))
 	#
 	def testfichier(frame):
-		titretext=Label(Analyse, text="LES RESULTATS", fg="Black", bg="Grey")
+		titretext=Label(frame, text="LES RESULTATS", fg="Black", bg="Grey")
 		titretext.place(x=500, y=0, width=200, height=50)
 		i=0
 		while i<len(resultdataset): #### i = row
 			j=0
 			while j<len(resultdataset[i]): #### j = column
 				if j==0:
-					Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=2)
+					Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
 				else:
-					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=2)
+					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
 				j=j+1
 			i=i+1
 		print i
 		print j
 	#
+	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.geometry("1200x800+600+300")
-	canvas=tk.Canvas(Analyse,borderwidth=100)
+	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
@@ -474,10 +571,11 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		for i in listeparam:
 			s.append(sample[i])
 		dataset.append(s)
-	X_test=np.array(dataset)
+	X_test=np.array(dataset)# Passage du tableau en format numpy
 	print X_test
-	result=clf.predict(X_test)####################### PREDICTION
-	# AJOUTER resultdataset.append(listeparamcomplète)
+	result=clf.predict(X_test)####################### PREDICTION !!!!!!
+	resultdataset.append(listeparamcomplete) # ajout de l'entête
+	#boucle pour former le tableau à 2D final
 	d=0
 	while d<len(result):
 		sample=[]
@@ -488,7 +586,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			k=k+1
 		resultdataset.append(sample)
 		d=d+1
-	Tk().bell()
+	Tk().bell() # son pour signifier à l'utilisateur la fin de l'analyse
 	testfichier(frame)
 	Analyse.mainloop()
 	type1=0
@@ -499,19 +597,22 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		if i==2:
 			type2=type2+1 #### Counter to find out the number of type II neurons
 	print "Lancer l'analyse"
+	####Rajouter un bouton sur analyse pour appeler la definition permettant d'afficher le diagramme
+	####Rajouter la fonction sauvegarde
 	#### the diagram
-	namepart = ['TypeI', 'TypeII'] #### Part's name
-	data = [type1, type2] #### Number of type I neurons and number of type II
-	explode=(0, 0.1) #### Separation of the two parts
-	plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
-	plt.axis('equal') #### axis = Create a circular diagram
-	plt.show('Test')
-	name = ['TypeI', 'TypeII'] #### Part's name
-	data = [type1, type2] #### Number of type I neurons and number of type II
-	explode=(0, 0.2) #### Separation of the two parts
-	plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
-	plt.axis('equal') #### axis = Create a circular diagram
-	plt.show('Test')
+	def diagram():
+		namepart = ['TypeI', 'TypeII'] #### Part's name
+		data = [type1, type2] #### Number of type I neurons and number of type II
+		explode=(0, 0.1) #### Separation of the two parts
+		plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
+		plt.axis('equal') #### axis = Create a circular diagram
+		plt.show('Test')
+		name = ['TypeI', 'TypeII'] #### Part's name
+		data = [type1, type2] #### Number of type I neurons and number of type II
+		explode=(0, 0.2) #### Separation of the two parts
+		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
+		plt.axis('equal') #### axis = Create a circular diagram
+		plt.show('Test')
 
 def presentation(): #### Presentation of the project's group
 	''' This function allows to present the project's group.
@@ -523,7 +624,7 @@ def presentation(): #### Presentation of the project's group
 	presentation=Toplevel()
 	presentation.title("Presentation")
 	presentation.geometry("800x600+600+300")
-	textepresentation="Actuellement etudiant en master I à l'Université de Bordeaux,\n nous avons pour projet de classer des neurones en deux types : Type I et Type II. \n"
+	textepresentation="Actuellement etudiant en master I à l'Université de Bordeaux,\n nous avons pour projet de classer des neurones en deux types : Type I et Type II.\n Les données electrophysiologiques vont être la source de classification.\n 8 paramètres sont donc retenus : IR,RMP,RH,SD,DTFS,SA,SD,fAHP \n"
 	text=Label(presentation,text=textepresentation)
 	text.pack()
 	presentation.mainloop()
@@ -532,28 +633,30 @@ def explicationlogiciel(): ###### Explications of the software
 	explication=Toplevel()
 	explication.title("Le logiciel")
 	explication.geometry("1000x500+600+300")
-	texteexplication="Présentation du logiciel : \n - Chargement du fichier test : Prend en entrée le fichier test au format .csv et .txt où l'analyse va être réalisé \n - Choisir le fichier d'entrainement : Si le client dispose d'un fichier d'entraînement ayant les types de neurones, il peut le charger sinon un jeu lui sera fourni \n - Paramètres : Concerne le reglage des paramètres à prendre un compte pour l'analyse \n  - Lancer : Permet de lancer l'analyse et d'y afficher les resultats dans une nouvelle fenetre"   ###A mettre en forme
+	texteexplication="Présentation du logiciel : \n"
 	text=Label(explication, text=texteexplication)
 	text.pack()
 	explication.mainloop()
 
 ###############################################################    MAIN    ###############################################################
-b1= Button(app, text="Ajustement des paramètres", fg="Black",bg="SkyBlue3", command=ChoixClasseparam, font=helv36, bd=4)
-b2= Button(app, text="Chargement du fichier d'entraînement", fg="Black", bg="SkyBlue3", command=Chargemententrainement, font=helv36, bd=4)
-b3= Button(app, text="Chargement du fichier à analyser",fg="Black", bg="SkyBlue3", command=Chargementtest, font=helv36, bd=4)
-b4= Button(app, text="Choisir le nom du fichier de sortie", fg="Black", bg="SkyBlue3", command=ChoixNomFichier, font=helv36, bd=4)
-b5= Button(app, text="Lancer l'analyse", fg="Black",bg="SkyBlue3", command=Lanceranalyse, font=helv36, bd=4)
-b6= Button(app, text="Quitter l'application", fg="Black",bg="SkyBlue3", command=app.destroy, font=helv36, bd=4, bitmap="error")
+b1= Button(app, text= "Ajustement des paramètres", fg= "Black",bg= "SkyBlue3", command= ChoixClasseparam, font= helv36, bd= 4)
+b2= Button(app, text= "Chargement du fichier d'entraînement", fg= "Black", bg= "SkyBlue3", command= Chargemententrainement, font= helv36, bd= 4)
+b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", command= Simulationentrainement, font= helv36, bd= 4)
+b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command= Chargementtest, font= helv36, bd= 4)
+b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command= ChoixNomFichier, font= helv36, bd= 4)
+b6= Button(app, text= "Lancer l'analyse", fg= "Black",bg= "SkyBlue3", command= Lanceranalyse, font= helv36, bd= 4)
+b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= app.destroy, font= helv36, bd= 4, bitmap= "error")
 menu1 = Menu(menubar, tearoff=0)
 menu2 = Menu(menubar, tearoff=0)
 menu3 = Menu(menubar, tearoff=0)
 ######################### Anchoring elements in the GUI
 b1.place(x=300, y=100, width=250, height=40)
-b2.place(x=300, y=170, width=250, height=40)
-b3.place(x=300, y=240, width=250, height=40)
-b4.place(x=300, y=310, width=250, height=40)
-b5.place(x=350, y=470, width=150, height=60)
-b6.place(x=350, y=540, width=150, height=30)
+b2.place(x=300, y=150, width=250, height=40)
+b3.place(x=300, y=200, width=250, height=40)
+b4.place(x=300, y=250, width=250, height=40)
+b5.place(x=300, y=300, width=250, height=40)
+b6.place(x=350, y=470, width=150, height=60)
+b7.place(x=350, y=540, width=150, height=30)
 text.place(x=180, y=0, width=500, height=50)
 
 #####################################    Toolbar

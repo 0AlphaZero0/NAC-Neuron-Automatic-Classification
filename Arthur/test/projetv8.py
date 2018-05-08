@@ -38,11 +38,11 @@ fond0.create_image(700,450, image=img2)
 
 ########    Variables    ########
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
-gamma=IntVar()
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 listeparam=[]
 listetest=[]
 listeentrainement=[]
+resultdataset=[]
 menubar = Menu(app)
 methodes=StringVar()
 methode=StringVar()
@@ -52,13 +52,12 @@ pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 separateur=StringVar()
 separateur2=StringVar()
 t=IntVar()
-text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
+gamma=IntVar()
 variableatester=IntVar()
 variableparam=IntVar()
 variableparametres=IntVar()
-vf=IntVar()
 tmp=IntVar()
-
+text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 ######Definitions
 def Chargementtest(): #### Gives the absolute path of the file
 	'''This function retrieves the path to the Test file
@@ -225,7 +224,7 @@ def entrainementdufichier():#### Training of the statistical model
 	if classe==3: ########## If LinearSVC were chosen
 			clf= svm.LinearSVC(C=t) ##### To change the t
 	if classe==4: ####RN Classifier
-		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=gamma, hidden_layer_sizes=(100,), random_state=None, tol=t, validation_fraction=vf, verbose=False, warm_start=False)
+		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=gamma, hidden_layer_sizes=(100,), random_state=None, tol=t, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
 
 def ChoixClasseparam(): #### Allows to set classes
@@ -293,11 +292,14 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	def validerhyperparam():
 		global t
 		global gamma
-		global vf
+		global alpha
+		global tol
 		t=float(ttest.get())
 		gamma=float(gammatest.get())
-		vf=float(vftest.get())
-		print vf, "test"
+		alpha=1*10**float(alphatest.get())
+		tol = 1*10**float(toltest.get())
+		print alpha
+		print tol
 		print gamma, "testgamma"
 		print t, "testt"
 		choixdeshuitparametres()
@@ -305,17 +307,23 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	methode=methodes.get()
 	classe=variableparam.get()
 	hyperparametres=Toplevel()
-	vftest=IntVar()
 	gammatest=IntVar()
-	vftest.set(0)
+	alphatest=IntVar()
+	toltest=IntVar()
+	ttest=IntVar()
+	gammatest1rbf=IntVar()
 	gammatest.set(0)
+	gammatest1rbf.set(1E-12)
+	ttest.set(0)
+	toltest.set(1E-7)
+	alphatest.set(0.00001)
 	textehyperparametres = "Veuillez regler les hyperparamètres :"
 	textehyperparametres2=Label(hyperparametres,text=textehyperparametres)
 	validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
 	textehyperparametres2.pack()
 	if (methode=='rbf' or methode=='sigmoid') and classe==1:
-		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur gamma')
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
+		gammatest1rbf=Scale(hyperparametres, orient='horizontal', from_=-12, to=3,resolution=1, tickinterval=1, length=350,label="Choix de l'exposant de la valeur de gamma")
+		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label="Choix de la valeur de C")
 		gammatest.pack();ttest.pack();
 	if methode=='poly' and classe==1:
 		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1,resolution=0.1, tickinterval=10, length=350,label='Choix de la valeur de degree')
@@ -339,15 +347,14 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de C')
 		ttest.pack()
 	if classe==4:
-		gammatest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de alpha')
-		ttest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de tol')
-		vftest=Scale(hyperparametres, orient='horizontal', from_=0, to=1000, resolution=0.1, tickinterval=10, length=350, label='Choix de la valeur de validation de fraction')
-		gammatest.pack();ttest.pack();vftest.pack()
+		alphatest=Scale(hyperparametres, orient='horizontal', from_=-5, to=3, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de alpha")
+		toltest=Scale(hyperparametres, orient='horizontal', from_=-7, to=2, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de tol")
+		alphatest.pack();toltest.pack()
 	validerchoix.pack()
 	hyperparametres.mainloop()
 
 def choixdeshuitparametres(): #### Allow to choose the paramaters
-	''' This function allows to user to choose the different paramaters to run the analyze.
+ 	''' This function allows to user to choose the different paramaters to run the analyze.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
 		There is also a button which return 9 if the user doesn't want to chose the paramaters. This is default value.
@@ -416,6 +423,8 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		No return.
 	'''
 	global resultdataset
+
+	#
 	def entrernom(c):
 		global tmp
 		test=Toplevel()
@@ -428,8 +437,8 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		test=tmp.get()
 		global resultdataset
 		print test
-		resuldataset[c][0]=test
-		testfichier()
+		resultdataset[c][0]=test
+		testfichier(frame)
 	#
 	def onFrameConfigure(canvas):
 		canvas.configure(scrollregion=canvas.bbox("all"))
@@ -440,7 +449,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		titretext=Label(frame, text="LES RESULTATS", fg="Black", bg="Grey")
 		titretext.place(x=500, y=0, width=200, height=50)
 		i=0
-		a=0
 		while i<len(resultdataset): #### i = row
 			j=0
 			while j<len(resultdataset[i]): #### j = column
@@ -455,7 +463,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		print j
 	#
 	Analyse=Toplevel()
-	Analyse.title("Les résultats")
 	Analyse.geometry("1200x800+600+300")
 	canvas=tk.Canvas(Analyse,borderwidth=0,background="#ffffff")
 	frame = tk.Frame(canvas, background="#ffffff")
@@ -474,7 +481,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	X_test=np.array(dataset)
 	print X_test
 	result=clf.predict(X_test)####################### PREDICTION
-	resultdataset=[]
 	# AJOUTER resultdataset.append(listeparamcomplète)
 	d=0
 	while d<len(result):
@@ -582,4 +588,3 @@ menubar.add_cascade(label="Aide", menu=menu3)
 ####   Toolbar/tools
 app.config(menu=menubar)
 app.mainloop()
-
