@@ -38,6 +38,7 @@ img2=tk.PhotoImage(file="scikit_learn11.gif")
 fond0.create_image(700,450, image=img2)
 
 ########    Variables    ########
+beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
 clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 listeparam=[]
@@ -139,7 +140,7 @@ def load(filename,typefichier): #### File loading
 				dataset.append(y)
 	return dataset
 
-def Chargemententrainement():#### Loading of the training file
+def Chargemententrainement(check):#### Loading of the training file
 	'''This function allows the user to choose a training file from his own data or a default file given by us
 	Description:
 		Here, a window is created to allow the user to choose whether he wants to use his own data or the default one (thanks to yes/no buttons)
@@ -149,17 +150,20 @@ def Chargemententrainement():#### Loading of the training file
 		There is no return, only the variable to be tested is modified as a global variable
 	'''
 	global variableatester
+	global entrainement
+	if check=="avertissement":
+		avertissement.destroy()
 	entrainement=Toplevel()
 	entrainement.title("Le fichier d'entraînement")
 	textefichier="Avez-vous un jeu d'essai?"
 	fichiers=Label(entrainement,text=textefichier)
 	fichiers.pack()
-	R1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1,command=resultatsappui)
+	R1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1,command=lambda c='entrainement':resultatsappui(c))
 	R1.pack( anchor = W )
-	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=resultatsappui)
+	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=lambda c='entrainement':resultatsappui(c))
 	R2.pack(anchor = W)
 
-def resultatsappui():#### Choice of the training file
+def resultatsappui(check):#### Choice of the training file
 	'''This function allows, via a small TKinter window, to choose among the user's folders the desired file
 	Description :
 		Here, a TKinter window is opened allowing the user to choose his file and allowing the program to recover the absolute path
@@ -171,6 +175,8 @@ def resultatsappui():#### Choice of the training file
 	'''
 	global listeentrainement
 	global separateur2
+	if check=="entrainement":
+		entrainement.destroy()
 	variable2=variableatester.get()
 	if variable2==1:
 		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
@@ -202,17 +208,17 @@ def entrainementdufichier(verif):#### Training of the statistical model
 		for i in listeparam:
 			s.append(sample[i+1])
 		dataset.append(s)
-	print dataset,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 	######## Analyse
 	if verif==0:
+		print "=== Analyse ==="
 		for i in dataset:
 			y_train.append(i.pop(0))
 		y_train=np.array(y_train)
 		X_train=np.array(dataset)
-		print X_train,"test", y_train
+		print "Size of trainning dataset : ",len(X_train)
 	######## Simulation
 	if verif==1:
-		print "Entrer dans simulation"
+		print "=== Simulation ===="
 		train=[]
 		test=[]
 		y_test=[]
@@ -221,19 +227,14 @@ def entrainementdufichier(verif):#### Training of the statistical model
 		datalength=len(dataset)
 		# Echantillonnage
 		while g!=len(dataset):
-			print "1"
 			top=len(dataset)-1
 			rand=random.randint(0,top)
-			print echantillonnage, "echantillonnage"
 			if echantillonnage==1:
-				print "50/50"
 				div=2
 			if echantillonnage==2 or echantillonnage==3:
 				div=4
-				print "25/75 ou 75/25"
 			limit=datalength/div
 			if limit<len(dataset):
-				print "c'est bon",len(dataset)
 				if echantillonnage==2 or echantillonnage==1:
 					test.append(dataset.pop(rand)) #75% of sample in test
 				if echantillonnage==3:
@@ -280,7 +281,8 @@ def entrainementdufichier(verif):#### Training of the statistical model
 	if classe==4: ####RN Classifier
 		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
-	return X_test,y_test
+	if verif==1:
+		return X_test,y_test
 
 def ChoixClasseparam(): #### Allows to set classes
 	'''This function allows the user to choose between the different classes in order to personalize, if he wants to, the training method
@@ -385,7 +387,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		ttest=Scale(hyperparametres, orient='horizontal', from_=-5, to=7, resolution=1, tickinterval=1, length=350, label="Choix de la valeur de l'exposant de C")
 		gammatest.pack();ttest.pack();
 	if methode=='poly' and classe==1:
-		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2,resolution=0.1, tickinterval=0.2, length=350,label='Choix de la valeur de degree')
+		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2, resolution=1, tickinterval=1, length=350,label='Choix de la valeur de degree')
 		ttest1poly=Scale(hyperparametres, orient='horizontal', from_=-5, to=-1,resolution=1, tickinterval=1, length=350,label="Choix de l'exposant de la valeur de C")
 		degretest.pack();ttest1poly.pack();
 	if methode=='linear' and classe==1:
@@ -399,7 +401,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		Nutest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
 		gammatest.pack();Nutest.pack();
 	if methode=='poly' and classe==2:
-		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2, resolution=0.1, tickinterval=0.2, length=350, label='Choix de la valeur de degree')
+		degretest=Scale(hyperparametres, orient='horizontal', from_=0, to=2, resolution=1, tickinterval=1, length=350, label='Choix de la valeur de degree')
 		Nutest=Scale(hyperparametres, orient='horizontal', from_=0, to=0.9, resolution=0.1, tickinterval=0.1, length=350, label='Choix de la valeur de nu')
 		degretest.pack();Nutest.pack();
 	if methode=='linear' and classe==2:
@@ -413,7 +415,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	hyperparametres.mainloop()
 
 def choixdeshuitparametres(): #### Allow to choose the paramaters
- 	''' This function allows to user to choose the different paramaters to run the analyze.
+	''' This function allows to user to choose the different paramaters to run the analyze.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
 		There is also a button which return 9 if the user doesn't want to chose the paramaters. This is default value.
@@ -477,24 +479,37 @@ def ChoixNomFichier():  #### Give a name to the output file
 def Simulationentrainement():
 	global simulation
 	global echantillons
-	simulation=Toplevel()
-	textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
-	textesimulation=Label(simulation, text=textesimulation)
-	echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillons, value = 1,command=choixechantillons)
-	echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillons, value = 2, command=choixechantillons)
-	echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillons, value = 3, command=choixechantillons)
-	textesimulation.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
-	simulation.mainloop()
+	if listeentrainement==[]:
+		global avertissement
+		print "Attention fichier d'entrainement non chargé"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier d'entrainement pour la simulation ou le fichier est vide. \n Veuillez chargez un fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Chargement d'un fichier d'entraînement",command=lambda c=c:Chargemententrainement(c))
+		A1.pack();
+		avertissement.mainloop()
+	else:
+		simulation=Toplevel()
+		textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
+		textesimulation=Label(simulation, text=textesimulation)
+		echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillons, value = 1,command=choixechantillons)
+		echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillons, value = 2, command=choixechantillons)
+		echantillon3= Radiobutton(simulation, text = "75/25", variable = echantillons, value = 3, command=choixechantillons)
+		textesimulation.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
+		simulation.mainloop()
 
 def choixechantillons():
 	global echantillonnage
 	simulation.destroy()
 	choixechantillons=Toplevel()
+	choixechantillons.title="Résultats de la simulation du modèle"
 	echantillonnage=echantillons.get()
 	test=entrainementdufichier(1)
-	print test[0],"aaaaaaaaaaaaaaaaaaaaaaaaaa"
-	print test[1],"zzzzzzzzzzzzzzzzzzzzzzzzzz"
 	result=clf.predict(test[0])
+	beep(1)# Permet d'émettre un son
 	x=0
 	somme=0
 	length=len(test[1])
@@ -503,9 +518,11 @@ def choixechantillons():
 			somme=somme+1
 		x=x+1
 	percentage=(float(somme)/length)*100
+	percentage=round(percentage,2)
 	print percentage
-	#textespourcentage= "Le pourcentage est de :",percentage
-	#textesimulation=Label(choixechantillons, text=textsimulation)
+	textesimulation=Label(choixechantillons, text="Le pourcentage de réussite est de :")
+	textepourcentage=Label(choixechantillons, text=percentage)
+	textesimulation.pack();textepourcentage.pack();
 	choixechantillons.mainloop()
 
 def Lanceranalyse(): #### Start the analyse of neuron classification
@@ -530,7 +547,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	def vartest(c):
 		test=tmp.get()
 		global resultdataset
-		print test
 		resultdataset[c][0]=test
 		tmp.set(0)
 		testfichier(frame)
@@ -551,8 +567,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
 				j=j+1
 			i=i+1
-		print i
-		print j
 	#
 	entrainementdufichier(0)
 	Analyse=Toplevel()
@@ -572,7 +586,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			s.append(sample[i])
 		dataset.append(s)
 	X_test=np.array(dataset)# Passage du tableau en format numpy
-	print X_test
 	result=clf.predict(X_test)####################### PREDICTION !!!!!!
 	resultdataset.append(listeparamcomplete) # ajout de l'entête
 	#boucle pour former le tableau à 2D final
@@ -586,7 +599,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			k=k+1
 		resultdataset.append(sample)
 		d=d+1
-	Tk().bell() # son pour signifier à l'utilisateur la fin de l'analyse
+	beep(1)# Permet d'émettre un son
 	testfichier(frame)
 	Analyse.mainloop()
 	type1=0
@@ -640,7 +653,7 @@ def explicationlogiciel(): ###### Explications of the software
 
 ###############################################################    MAIN    ###############################################################
 b1= Button(app, text= "Ajustement des paramètres", fg= "Black",bg= "SkyBlue3", command= ChoixClasseparam, font= helv36, bd= 4)
-b2= Button(app, text= "Chargement du fichier d'entraînement", fg= "Black", bg= "SkyBlue3", command= Chargemententrainement, font= helv36, bd= 4)
+b2= Button(app, text= "Chargement du fichier d'entraînement", fg= "Black", bg= "SkyBlue3", command=lambda c='':Chargemententrainement(c), font= helv36, bd= 4)
 b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", command= Simulationentrainement, font= helv36, bd= 4)
 b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command= Chargementtest, font= helv36, bd= 4)
 b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command= ChoixNomFichier, font= helv36, bd= 4)
@@ -664,9 +677,9 @@ text.place(x=180, y=0, width=500, height=50)
 menu1.add_separator()
 menu1.add_command(label="Ouvrir un fichier test", command=Chargementtest)
 menu1.add_separator()
-menu1.add_command(label="Ouvrir un fichier d'entrainement", command=Chargemententrainement)
+menu1.add_command(label="Ouvrir un fichier d'entrainement", command=lambda c='':Chargemententrainement(c))
 menu1.add_separator()
-menu1.add_command(label="Enregistrer le projet en cours", command=Chargemententrainement)#####Save the project
+menu1.add_command(label="Enregistrer le projet en cours", command=lambda c='':Chargemententrainement(c))#####Save the project
 menu1.add_separator()
 menubar.add_cascade(label="Fichier", menu=menu1) ###### Name on the toolbar
 
