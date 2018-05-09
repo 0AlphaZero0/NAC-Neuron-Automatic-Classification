@@ -113,14 +113,12 @@ def Chargemententrainementfinal(verif):
 	global modi
 	loade.destroy()
 	if verif==1:
-		print 1111111111111
 		modi=1
 		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 		shutil.copyfile(nomdufichierentrainement,'TrainModel.csv')
 		shutil.copyfile(nomdufichierentrainement,'Yourbackup.csv')
 		listeentrainement=load(nomdufichierentrainement,0)
 	else:
-		print 000000000000000
 		modi=0
 		nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 		listetest=load(nomdufichiertest,1)
@@ -609,21 +607,8 @@ def save():
 			x=x+1
 		file.close
 
-def modiftable():
-	print modi,"MMMMMMMOOOOOOOOOODDDDDDDDDDDIIIIIIIIII"
-	if modi!=0:
-		file=codecs.open('TrainModel.csv',"a",encoding="utf-8")
-		i=1
-		while i<len(resultdataset):
-			j=0
-			while j<len(resultdataset[i]):
-				file.write(str(resultdataset[i][j]))
-				file.write(',')
-				j=j+1
-			ile.write('\n')
-			i=i+1
-		file.close
-	file=codecs.open('ModelG.csv',"a",encoding="utf-8")
+def addtodataset(filename):
+	file=codecs.open(filename,"a",encoding="utf-8")
 	i=1
 	while i<len(resultdataset):
 		j=0
@@ -634,6 +619,24 @@ def modiftable():
 		file.write('\n')
 		i=i+1
 	file.close
+	
+def modiftable():
+	global Verif
+	def finaladd():
+		if modi!=0:
+			addtodataset('TrainModel.csv')
+		addtodataset('ModelG.csv')
+		Verif.destroy()
+	Verif=Toplevel()
+	txtavertissement=Label(Verif,text="Etes-vous sûr de vouloir entraîner les modèles?")
+	A1=Button(Verif, text='Oui',command=finaladd)
+	A2=Button(Verif, text='Non', command=Verif.destroy)
+	txtavertissement.pack();A1.pack();A2.pack();
+	Verif.mainloop()
+
+def cancel():
+	shutil.copyfile('Backup_G.csv','ModelG.csv')
+	shutil.copyfile('Yourbackup.csv','TrainModel.csv')
 
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
@@ -728,14 +731,16 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	Analyse.title("Résultats de l'analyse")
 	Analyse.geometry("1200x800+600+300")
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
-	di1=Button(Analyse, text="Afficher le diagramme,", command=diagram, bg="SkyBlue3")
+	di1=Button(Analyse, text="Afficher le diagramme", command=diagram, bg="SkyBlue3")
 	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
 	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
+	A3=Button(Analyse,text="Rétablir les modèles à l'original",command=cancel,bg="thistle")
+	instruc=Label(Analyse,text="Pour charger le modèle entraîné, \n il faudra choisir le fichier d'entraînement : \n 'TrainModel.csv'.")
 	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();A2.pack();
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();A2.pack();A3.pack();
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
