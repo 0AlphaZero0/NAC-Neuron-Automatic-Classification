@@ -11,6 +11,7 @@ import urllib # Allows to open URL links =======================================
 import tkFont # Allows to modify the TKinter display font
 import codecs # Allows to load a file containing UTF-8 characters
 import random # Allows to use random variables
+import os # Allows to modify some things on the os
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
 from sklearn import svm # Allows to use the SVM classification method
@@ -21,7 +22,6 @@ from matplotlib.figure import * # Allows the modification of the matplotlib grap
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg # ???????????????????????????????????????????????
 ########   If needed   #############
 import sys
-import os
 
 #################################    Main window of the GUI    ###################################################
 app = tk.Tk()
@@ -49,8 +49,8 @@ resultdataset=[]
 menubar = Menu(app)
 methodes=StringVar()
 methode=StringVar()
-nomdufichiertest=StringVar()
 nomfichiersortie=StringVar()
+nomfichiersortie.set('')
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 separateur=StringVar()
 separateur2=StringVar()
@@ -66,7 +66,7 @@ echantillons=IntVar()
 echantillonnage=IntVar()
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 ######Definitions
-def Chargementtest(): #### Gives the absolute path of the file
+def Chargementtest(check): #### Gives the absolute path of the file
 	'''This function retrieves the path to the Test file
 	Description:
 		Here, the user is asked to, via the Tkinter GUI, to choose the Test file of his choice. The path to this file will then be retrieved.
@@ -75,13 +75,11 @@ def Chargementtest(): #### Gives the absolute path of the file
 	Return:
 		No return, here, global variables are modified.
 	'''
-	global nomdufichiertest
-	global listetest
-	nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
-	separateurfichier()
-	listetest=load(nomdufichiertest,1)
+	if check=="avertissement":
+		avertissement.destroy()
+	separateurfichier(2)
 
-def separateurfichier(): #### Give the file separator
+def separateurfichier(verif): #### Give the file separator
 	''' This function allows to give the file separator
 	Description:
 		Here, the user can choose the separator of his file. There are five possibilities.
@@ -90,19 +88,33 @@ def separateurfichier(): #### Give the file separator
 	Return:
 		No return. Here, global variables are modified.
 	'''
-	def resultatsseparateur(sep):
+	def resultatsseparateur():
 		global separateur
 		global separateur2
-		separateur2=sep
-
+		separateur2=separateur.get()
+		print separateur2
 	global separateur
-	load=Toplevel()
-	separateur1 = Radiobutton(load, text = "Virgule", variable = separateur, value =',',command=lambda c=',':resultatsseparateur(c))
-	separateur2 = Radiobutton(load, text = "Point-virgule", variable = separateur, value =';', command=lambda c=';':resultatsseparateur(c))
-	separateur3 = Radiobutton(load, text = "Tab", variable = separateur, value ='	',command=lambda c='	':resultatsseparateur(c))
-	separateur4 = Radiobutton(load, text = "Deux points", variable = separateur, value =':', command=lambda c=':':resultatsseparateur(c))
-	separateur5 = Radiobutton(load, text = "Espace", variable = separateur, value =' ', command=lambda c=' ':resultatsseparateur(c))
-	separateur1.pack();separateur2.pack();separateur3.pack();separateur4.pack();separateur5.pack()
+	global loade
+	loade=Toplevel()
+	s1 = Radiobutton(loade, text = "Virgule", variable = separateur, value =',',command=resultatsseparateur)
+	s2 = Radiobutton(loade, text = "Point-virgule", variable = separateur, value =';', command=resultatsseparateur)
+	s3 = Radiobutton(loade, text = "Tab", variable = separateur, value ='	',command=resultatsseparateur)
+	s4 = Radiobutton(loade, text = "Deux points", variable = separateur, value =':', command=resultatsseparateur)
+	s5 = Radiobutton(loade, text = "Espace", variable = separateur, value =' ', command=resultatsseparateur)
+	s9 = Button(loade, text="Valider", command=lambda c=verif:Chargemententrainementfinal(c))
+	s1.pack();s2.pack();s3.pack();s4.pack();s5.pack();s9.pack();
+	loade.mainloop()
+
+def Chargemententrainementfinal(verif):
+	global listeentrainement
+	global listetest
+	loade.destroy()
+	if verif==1:
+		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+		listeentrainement=load(nomdufichierentrainement,0)
+	else:
+		nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+		listetest=load(nomdufichiertest,1)
 
 def load(filename,typefichier): #### File loading
 	'''This function allows to load the file into the script
@@ -116,10 +128,8 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
-	#revoir
-	print separateur2
-	result=file(filename,"r").read().replace(separateur2, ",")################!!!!!!!!!!!!!!!
-	file("tmp.csv","w").write(result)#######################!!!!!!!!!!!!!!!!!!!
+	result=file(filename,"r").read().replace(separateur2, ",")
+	file("tmp.csv","w").write(result)
 	# revoir
 	dataset=[]
 	files=codecs.open("tmp.csv", "r",encoding="utf-8")
@@ -144,7 +154,8 @@ def load(filename,typefichier): #### File loading
 					x=x+1
 				dataset.append(y)
 	file.close
-	os.remove("tmp.csv")############################!!!!!!!!!!!!!!!!!!!!!!!
+	os.remove("tmp.csv")
+	print dataset
 	return dataset
 
 def Chargemententrainement(check):#### Loading of the training file
@@ -180,15 +191,12 @@ def resultatsappui(check):#### Choice of the training file
 	Return :
 		There is no return, only the listeentrainement variable is modified, which allows to train the statistic model thanks to the entrainementdufichier() function
 	'''
-	global listeentrainement
 	global separateur2
 	if check=="entrainement":
 		entrainement.destroy()
 	variable2=variableatester.get()
 	if variable2==1:
-		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
-		separateurfichier()
-		listeentrainement=load(nomdufichierentrainement,0)
+		separateurfichier(1)
 	if variable2==2:
 		nomdufichierentrainement=('Fichier_test.csv')####Path of our test file
 		separateur2=','
@@ -464,7 +472,7 @@ def choixdeshuitparametres(): #### Allow to choose the paramaters
 	c9 = Button(choixhuitparametres, text="Valider", command=recuperationvaleur)
 	c1.pack();c2.pack();c3.pack();c4.pack();c5.pack();c6.pack();c7.pack();c8.pack();c9.pack()
 
-def ChoixNomFichier():  #### Give a name to the output file
+def ChoixNomFichier(check):  #### Give a name to the output file
 	''' This function allows to user to give a name to the output file (the results' file).
 	Description:
 		Here the user can enter the name of his output file.
@@ -473,8 +481,11 @@ def ChoixNomFichier():  #### Give a name to the output file
 	Return:
 		No return.
 	'''
+	if check=="avertissement":
+		avertissement.destroy()
 	def recuperationnomfichier(event):
-		nomdufichier= entrernomfichier.get()
+		global nomfichiersortie
+		nomfichiersortie= entrernomfichier.get()
 	global nomfichiersortie
 	choixnomfichier = Toplevel()
 	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n"
@@ -530,21 +541,37 @@ def choixechantillons():
 	print percentage
 	textesimulation=Label(choixechantillons, text="Le pourcentage de réussite est de :")
 	textepourcentage=Label(choixechantillons, text=percentage)
-	textesimulation.pack();textepourcentage.pack();
+	Q1= Button(choixechantillons, text= "Fermer", command= choixechantillons.destroy)
+	textesimulation.pack();textepourcentage.pack();Q1.pack()
 	choixechantillons.mainloop()
 
 def save():
-	file=codecs.open(nomdufichiersortie,"w",encoding="utf-8")
-	x=0
-	while x<len(resultdataset):
-		y=0
-		while y<len(resultdataset[x]):
-			file.write(str(resultdataset[x][y]))
-			file.write(',')
-			y=y+1
-		file.write('\n')
-		x=x+1
-	file.close
+	#gestion d'erreur à revoir
+	nomfichier=nomfichiersortie.get()
+	if nomfichier=='':
+		global avertissement
+		print "Attention nom de fichier non défini"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention le nom de fichier de sortie n'a pas été fourni. \n Veuillez entrer un nom de fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Choix du nom de fichier de sortie",command=lambda c=c:ChoixNomFichier(c))
+		A1.pack();
+		avertissement.mainloop()
+	else:
+		file=codecs.open(nomfichiersortie,"w",encoding="utf-8")
+		x=0
+		while x<len(resultdataset):
+			y=0
+			while y<len(resultdataset[x]):
+				file.write(str(resultdataset[x][y]))
+				file.write(',')
+				y=y+1
+			file.write('\n')
+			x=x+1
+		file.close
 
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
@@ -556,6 +583,18 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		No return.
 	'''
 	global resultdataset
+	if listetest==[]:
+		global avertissement
+		print "Attention fichier de test non chargé"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier de test pour l'analyse ou le fichier est vide. \n Veuillez chargez un fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Chargement d'un fichier d'entraînement",command=lambda c=c:Chargementtest(c))
+		A1.pack();
+		avertissement.mainloop()
 	resultdataset=[]
 	#
 	def entrernom(c):
@@ -597,6 +636,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	Analyse=Toplevel()
 	Analyse.geometry("1200x800+600+300")
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save)
+
 	#A2=Button(Analyse,text="Modifier les résultats",command=modiftable)
 	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
@@ -627,7 +667,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		d=d+1
 	beep(1)# Permet d'émettre un son
 	testfichier(frame)
-	Analyse.mainloop()
+
 	type1=0
 	type2=0
 	for i in result:
@@ -652,7 +692,9 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
 		plt.axis('equal') #### axis = Create a circular diagram
 		plt.show('Test')
-
+	di1=Button(Analyse, text="Afficher le diagramme,", command=diagram)
+	di1.pack()
+	Analyse.mainloop()
 def presentation(): #### Presentation of the project's group
 	''' This function allows to present the project's group.
 	Args:
@@ -681,8 +723,8 @@ def explicationlogiciel(): ###### Explications of the software
 b1= Button(app, text= "Ajustement des paramètres", fg= "Black",bg= "SkyBlue3", command= ChoixClasseparam, font= helv36, bd= 4)
 b2= Button(app, text= "Chargement du fichier d'entraînement", fg= "Black", bg= "SkyBlue3", command=lambda c='':Chargemententrainement(c), font= helv36, bd= 4)
 b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", command= Simulationentrainement, font= helv36, bd= 4)
-b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command= Chargementtest, font= helv36, bd= 4)
-b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command= ChoixNomFichier, font= helv36, bd= 4)
+b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command=lambda c='':Chargementtest(c), font= helv36, bd= 4)
+b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command=lambda c='':ChoixNomFichier(c), font= helv36, bd= 4)
 b6= Button(app, text= "Lancer l'analyse", fg= "Black",bg= "SkyBlue3", command= Lanceranalyse, font= helv36, bd= 4)
 b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= app.destroy, font= helv36, bd= 4, bitmap= "error")
 menu1 = Menu(menubar, tearoff=0)
@@ -701,7 +743,7 @@ text.place(x=180, y=0, width=500, height=50)
 #####################################    Toolbar
 ####   Menu 1
 menu1.add_separator()
-menu1.add_command(label="Ouvrir un fichier test", command=Chargementtest)
+menu1.add_command(label="Ouvrir un fichier test", command=lambda c='':Chargementtest(c))
 menu1.add_separator()
 menu1.add_command(label="Ouvrir un fichier d'entrainement", command=lambda c='':Chargemententrainement(c))
 menu1.add_separator()
