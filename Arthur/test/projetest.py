@@ -128,6 +128,7 @@ def load(filename,typefichier): #### File loading
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
 	'''
+	global avertissement
 	result=file(filename,"r").read().replace(separateur2, ",")
 	file("tmp.csv","w").write(result)
 	# revoir
@@ -141,6 +142,18 @@ def load(filename,typefichier): #### File loading
 		else:
 			y=line.split(',')
 			if typefichier==0 : # trainning file
+				if len(y)>9 or len(y)<9:
+					print "Attention fichier d'entrainement incorrect"
+					avertissement=Toplevel()
+					beep(1)
+					avertissement.title("Avertissement")
+					txtavertissement=Label(avertissement,text="Attention le fichier d'entrainement soumis, ne correspond à l'entrée nécessaire. \n Veuillez chargez un fichier d'entrainement pour l'analyse.")
+					txtavertissement.pack()
+					c="avertissement"
+					A1= Button(avertissement,text="Chargement d'un fichier d'un fichier d'entrainement",command=lambda c=c:Chargementtest(c))
+					A1.pack();
+					avertissement.mainloop()
+					return
 				y[0]=int(y[0])
 				x=1
 				while x<len(y):
@@ -149,6 +162,18 @@ def load(filename,typefichier): #### File loading
 				dataset.append(y)
 			if typefichier==1: # test file
 				x=0
+				if len(y)>8 or len(y)<8:
+					print "Attention fichier de test incorrect"
+					avertissement=Toplevel()
+					beep(1)
+					avertissement.title("Avertissement")
+					txtavertissement=Label(avertissement,text="Attention le fichier test soumis, ne correspond à l'entrée nécessaire. \n Veuillez chargez un fichier pour l'analyse.")
+					txtavertissement.pack()
+					c="avertissement"
+					A1= Button(avertissement,text="Chargement d'un fichier d'un fichier test",command=lambda c=c:Chargementtest(c))
+					A1.pack();
+					avertissement.mainloop()
+					return
 				while x<len(y):
 					y[x]=float(y[x])
 					x=x+1
@@ -582,8 +607,8 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		No return.
 	'''
 	global resultdataset
+	global avertissement
 	if listetest==[]:
-		global avertissement
 		print "Attention fichier de test non chargé"
 		avertissement=Toplevel()
 		beep(1)
@@ -594,6 +619,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier test",command=lambda c=c:Chargementtest(c))
 		A1.pack();
 		avertissement.mainloop()
+		return
 	if listeentrainement==[]:
 		print "Attention fichier d'entrainement non chargé"
 		avertissement=Toplevel()
@@ -605,6 +631,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier d'entrainement",command=lambda c=c:Chargemententrainement(c))
 		A1.pack();
 		avertissement.mainloop()
+		return
 	resultdataset=[]
 	#
 	def entrernom(c):
@@ -734,7 +761,7 @@ b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", comma
 b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command=lambda c='':Chargementtest(c), font= helv36, bd= 4)
 b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command=lambda c='':ChoixNomFichier(c), font= helv36, bd= 4)
 b6= Button(app, text= "Lancer l'analyse", fg= "Black",bg= "SkyBlue3", command= Lanceranalyse, font= helv36, bd= 4)
-b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= app.destroy, font= helv36, bd= 4, bitmap= "error")
+b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= sys.exit, font= helv36, bd= 4, bitmap= "error")
 menu1 = Menu(menubar, tearoff=0)
 menu2 = Menu(menubar, tearoff=0)
 menu3 = Menu(menubar, tearoff=0)
