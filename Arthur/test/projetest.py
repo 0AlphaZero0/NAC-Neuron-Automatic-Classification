@@ -14,6 +14,7 @@ import random # Allows to use random variables
 import os # Allows to modify some things on the os
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
+import shutil #permet la copie de fichier
 from sklearn import svm # Allows to use the SVM classification method
 from sklearn.neural_network import MLPClassifier # Allows the use of the neural network method from sklearn
 from matplotlib import style # Allows to modify the graphics' appearance
@@ -49,6 +50,7 @@ resultdataset=[]
 menubar = Menu(app)
 methodes=StringVar()
 methode=StringVar()
+modi=0
 nomfichiersortie=StringVar()
 nomfichiersortie.set('')
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
@@ -108,11 +110,18 @@ def separateurfichier(verif): #### Give the file separator
 def Chargemententrainementfinal(verif):
 	global listeentrainement
 	global listetest
+	global modi
 	loade.destroy()
 	if verif==1:
+		print 1111111111111
+		modi=1
 		nomdufichierentrainement=tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier entrainement",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
+		shutil.copyfile(nomdufichierentrainement,'TrainModel.csv')
+		shutil.copyfile(nomdufichierentrainement,'Yourbackup.csv')
 		listeentrainement=load(nomdufichierentrainement,0)
 	else:
+		print 000000000000000
+		modi=0
 		nomdufichiertest = tkFileDialog.askopenfilename(initialdir = "/net/cremi/athouvenin/Bureau/Projet-Neuro/Arthur",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 		listetest=load(nomdufichiertest,1)
 
@@ -222,7 +231,7 @@ def resultatsappui(check):#### Choice of the training file
 	if variable2==1:
 		separateurfichier(1)
 	if variable2==2:
-		nomdufichierentrainement=('Fichier_test.csv')####Path of our test file
+		nomdufichierentrainement=('ModelG.csv')####Path of our test file
 		separateur2=','
 		listeentrainement=load(nomdufichierentrainement,0)
 
@@ -479,7 +488,10 @@ def choixdeshuitparametres(): #### Allow to choose the paramaters
 		for i in liste:
 			if i!=9:
 				listeparam.append(i)
-		print "Liste des paramètres : ",listeparam
+		print "Liste des paramètres : ",
+		for i in listeparam:
+			print listeparamcomplete[i+1],
+		print'.'
 		choixhuitparametres.destroy()
 	global choixhuitparametres
 	choixhuitparametres=Toplevel()
@@ -597,6 +609,32 @@ def save():
 			x=x+1
 		file.close
 
+def modiftable():
+	print modi,"MMMMMMMOOOOOOOOOODDDDDDDDDDDIIIIIIIIII"
+	if modi!=0:
+		file=codecs.open('TrainModel.csv',"a",encoding="utf-8")
+		i=1
+		while i<len(resultdataset):
+			j=0
+			while j<len(resultdataset[i]):
+				file.write(str(resultdataset[i][j]))
+				file.write(',')
+				j=j+1
+			ile.write('\n')
+			i=i+1
+		file.close
+	file=codecs.open('ModelG.csv',"a",encoding="utf-8")
+	i=1
+	while i<len(resultdataset):
+		j=0
+		while j<len(resultdataset[i]):
+			file.write(str(resultdataset[i][j]))
+			file.write(',')
+			j=j+1
+		file.write('\n')
+		i=i+1
+	file.close
+
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
 	Description:
@@ -675,12 +713,15 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
 		plt.axis('equal') #### axis = Create a circular diagram
 		plt.show('Test')
+		'''
 		name = ['TypeI', 'TypeII'] #### Part's name
 		data = [type1, type2] #### Number of type I neurons and number of type II
 		explode=(0, 0.2) #### Separation of the two parts
 		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
 		plt.axis('equal') #### axis = Create a circular diagram
 		plt.show('Test')
+		'''
+		return
 	#
 	entrainementdufichier(0)
 	Analyse=Toplevel()
@@ -688,13 +729,13 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	Analyse.geometry("1200x800+600+300")
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
 	di1=Button(Analyse, text="Afficher le diagramme,", command=diagram, bg="SkyBlue3")
-	modif=Label(Analyse,text="Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.",relief=FLAT,borderwidth=1)
-	#A2=Button(Analyse,text="Modifier les résultats",command=modiftable)
+	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
+	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
 	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();A2.pack();
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
@@ -727,7 +768,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		if i==2:
 			type2=type2+1 #### Counter to find out the number of type II neurons
 	print "Analyse terminée"
-	#### the diagram
 	Analyse.mainloop()
 
 def presentation(): #### Presentation of the project's group
