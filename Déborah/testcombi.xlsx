@@ -1,0 +1,20 @@
+SVC,,,,,,,,,,,,Reseau de neurones,,,,,,,,,,
+rbf ,,,,,,,,,,,,identity,,,,,,,,,,
+pourcentage ,C,Gamma,IR,RMP,RH,ST,DTFS,SA,SD,fAHP,,pourcentage ,alpha,tol ,IR,RMP,RH,ST,DTFS,SA,SD,fAHP
+51.72,"1,00E+05","1,00E-06",,,oui,,,,oui,,,51.72,-5,100,,,,,,,,oui
+62.07,"1,00E+06","1,00E-08",,,oui,,,,oui,,,51.17,-4,1,,,,,,,oui,
+55.17,7,-5,oui,,oui,oui,,,oui,,,55.17,1,1,,,,,,,oui,
+62.07,7,-8,oui,,,oui,oui,oui,oui,oui,,51.72,-4,10,,,,,,,,oui 
+55.17,4,-6,,,oui,,,,oui,,,51.72,1,10,,,,,,,,oui
+55.17,5,-7,,,oui,,,,oui,,,58.62,-5,10,,,,,,,,oui
+44.83,6,-6,,,oui,,,,oui,,,55.17,-3,1,,,,,,,,oui
+62.07,7,-4,,,,oui,,,oui,oui,,51.72,-4,1,,,,,,,,oui
+55.17,6,-4,oui,,oui,oui,,,oui,,,51.72,-2,1,,,,,,,oui,oui 
+62.07,7,-6,oui,oui,,oui,,,oui,oui,,34.48,-3,100,oui,,oui,oui,,,oui,
+68.97,7,-7,,,oui,oui,,oui,oui,oui,,55.17,-3,100,oui,oui,oui,oui,oui ,,,
+58.62,6,-7,oui,oui,,oui,oui,oui,oui,,,55.17,0,100,oui,oui,oui,oui,,,oui ,
+58.62,7,-7,,,oui,oui,oui,oui,oui,oui,,44.83,-5,100,oui ,oui,,oui,oui ,oui,oui ,
+,,,,,,,,,,,,58.62,-5,100,oui,,oui,oui,oui ,oui,oui ,
+,,,,,,,,,,,,62.07,-4,100,oui,oui,oui ,,oui ,,oui,oui 
+,,,,,,,,,,,,44.83,2,100,oui,oui,oui,,oui ,,oui,oui 
+,,,,,,,,,,,,44.83,-4,100,oui,,oui,oui,,oui,oui,oui 

@@ -155,6 +155,7 @@ def load(filename,typefichier): #### File loading
 				dataset.append(y)
 	file.close
 	os.remove("tmp.csv")
+	print dataset
 	return dataset
 
 def Chargemententrainement(check):#### Loading of the training file
@@ -487,7 +488,7 @@ def ChoixNomFichier(check):  #### Give a name to the output file
 		nomfichiersortie= entrernomfichier.get()
 	global nomfichiersortie
 	choixnomfichier = Toplevel()
-	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n Sous la forme example.csv ou example.txt \n"
+	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n"
 	textechoixfichier = Label(choixnomfichier, text=textechoixfichier)
 	validernomfichier= Button(choixnomfichier, text="Fermer", command=choixnomfichier.destroy)
 	entrernomfichier = Entry(choixnomfichier, width=30, textvariable=nomfichiersortie)
@@ -537,7 +538,7 @@ def choixechantillons():
 		x=x+1
 	percentage=(float(somme)/length)*100
 	percentage=round(percentage,2)
-	print percentage,"%"
+	print percentage
 	textesimulation=Label(choixechantillons, text="Le pourcentage de réussite est de :")
 	textepourcentage=Label(choixechantillons, text=percentage)
 	Q1= Button(choixechantillons, text= "Fermer", command= choixechantillons.destroy)
@@ -560,7 +561,7 @@ def save():
 		A1.pack();
 		avertissement.mainloop()
 	else:
-		file=codecs.open(nomfichier,"w",encoding="utf-8")
+		file=codecs.open(nomfichiersortie,"w",encoding="utf-8")
 		x=0
 		while x<len(resultdataset):
 			y=0
@@ -591,18 +592,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier de test pour l'analyse ou le fichier est vide. \n Veuillez chargez un fichier.")
 		txtavertissement.pack()
 		c="avertissement"
-		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier test",command=lambda c=c:Chargementtest(c))
-		A1.pack();
-		avertissement.mainloop()
-	if listeentrainement==[]:
-		print "Attention fichier d'entrainement non chargé"
-		avertissement=Toplevel()
-		beep(1)
-		avertissement.title("Avertissement")
-		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier d'entrainement pour l'analyse ou le fichier est vide. \n Veuillez chargez un fichier.")
-		txtavertissement.pack()
-		c="avertissement"
-		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier d'entrainement",command=lambda c=c:Chargemententrainement(c))
+		A1= Button(avertissement,text="Chargement d'un fichier d'entraînement",command=lambda c=c:Chargementtest(c))
 		A1.pack();
 		avertissement.mainloop()
 	resultdataset=[]
@@ -614,7 +604,6 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		A2= Radiobutton(test, text='2',variable=tmp, value=2,command=lambda c=c:vartest(c))
 		A3= Button(test,text='Valider',command=test.destroy)
 		A1.pack();A2.pack();A3.pack();
-		test.mainloop()
 	#
 	def vartest(c):
 		test=tmp.get()
@@ -627,47 +616,33 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		canvas.configure(scrollregion=canvas.bbox("all"))
 	#
 	def testfichier(frame):
+		titretext=Label(frame, text="LES RESULTATS", fg="Black", bg="Grey")
+		titretext.place(x=500, y=0, width=200, height=50)
 		i=0
 		while i<len(resultdataset): #### i = row
 			j=0
 			while j<len(resultdataset[i]): #### j = column
 				if j==0:
 					if i==0:
-						tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1, bg="White").grid(row=i,column=j,ipadx=5,ipady=4)
+						tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
 					if i!=0:
-						Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, bg="White", command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
+						Button(frame,text=resultdataset[i][j], relief=FLAT, borderwidth=1, command=lambda c=i:entrernom(c)).grid(row=i,column=j,ipadx=5,ipady=4)
 				else:
-					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1, bg="White").grid(row=i,column=j,ipadx=5,ipady=4)
+					tk.Label(frame,text=resultdataset[i][j],relief=FLAT, borderwidth=1).grid(row=i,column=j,ipadx=5,ipady=4)
 				j=j+1
 			i=i+1
 	#
-	def diagram():
-		namepart = ['TypeI', 'TypeII'] #### Part's name
-		data = [type1, type2] #### Number of type I neurons and number of type II
-		explode=(0, 0.1) #### Separation of the two parts
-		plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
-		plt.axis('equal') #### axis = Create a circular diagram
-		plt.show('Test')
-		name = ['TypeI', 'TypeII'] #### Part's name
-		data = [type1, type2] #### Number of type I neurons and number of type II
-		explode=(0, 0.2) #### Separation of the two parts
-		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
-		plt.axis('equal') #### axis = Create a circular diagram
-		plt.show('Test')
-	#
 	entrainementdufichier(0)
-	Analyse=Toplevel(bg="White")
-	Analyse.title("Résultats de l'analyse")
+	Analyse=Toplevel()
 	Analyse.geometry("1200x800+600+300")
-	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
-	di1=Button(Analyse, text="Afficher le diagramme,", command=diagram, bg="SkyBlue3")
-	modif=Label(Analyse,text="Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.",relief=FLAT,borderwidth=1,  bg="White")
+	A1=Button(Analyse, text="Sauvegarder les résultats", command=save)
+
 	#A2=Button(Analyse,text="Modifier les résultats",command=modiftable)
-	canvas=tk.Canvas(Analyse,borderwidth=1, bg="White")
-	frame = tk.Frame(canvas, bg="White")
+	canvas=tk.Canvas(Analyse,borderwidth=1)
+	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack()
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
@@ -692,6 +667,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		d=d+1
 	beep(1)# Permet d'émettre un son
 	testfichier(frame)
+
 	type1=0
 	type2=0
 	for i in result:
@@ -699,10 +675,26 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			type1=type1+1 #### Counter to find out the number of type I neurons
 		if i==2:
 			type2=type2+1 #### Counter to find out the number of type II neurons
-	print "Analyse terminée"
+	print "Lancer l'analyse"
+	####Rajouter un bouton sur analyse pour appeler la definition permettant d'afficher le diagramme
+	####Rajouter la fonction sauvegarde
 	#### the diagram
+	def diagram():
+		namepart = ['TypeI', 'TypeII'] #### Part's name
+		data = [type1, type2] #### Number of type I neurons and number of type II
+		explode=(0, 0.1) #### Separation of the two parts
+		plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
+		plt.axis('equal') #### axis = Create a circular diagram
+		plt.show('Test')
+		name = ['TypeI', 'TypeII'] #### Part's name
+		data = [type1, type2] #### Number of type I neurons and number of type II
+		explode=(0, 0.2) #### Separation of the two parts
+		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
+		plt.axis('equal') #### axis = Create a circular diagram
+		plt.show('Test')
+	di1=Button(Analyse, text="Afficher le diagramme,", command=diagram)
+	di1.pack()
 	Analyse.mainloop()
-
 def presentation(): #### Presentation of the project's group
 	''' This function allows to present the project's group.
 	Args:
@@ -734,7 +726,7 @@ b3= Button(app, text= "Lancer la simulation", fg= "Black", bg= "SkyBlue3", comma
 b4= Button(app, text= "Chargement du fichier à analyser",fg= "Black", bg= "SkyBlue3", command=lambda c='':Chargementtest(c), font= helv36, bd= 4)
 b5= Button(app, text= "Choisir le nom du fichier de sortie", fg= "Black", bg= "SkyBlue3", command=lambda c='':ChoixNomFichier(c), font= helv36, bd= 4)
 b6= Button(app, text= "Lancer l'analyse", fg= "Black",bg= "SkyBlue3", command= Lanceranalyse, font= helv36, bd= 4)
-b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= sys.exit, font= helv36, bd= 4, bitmap= "error")
+b7= Button(app, text= "Quitter l'application", fg= "Black",bg= "SkyBlue3", command= app.destroy, font= helv36, bd= 4, bitmap= "error")
 menu1 = Menu(menubar, tearoff=0)
 menu2 = Menu(menubar, tearoff=0)
 menu3 = Menu(menubar, tearoff=0)

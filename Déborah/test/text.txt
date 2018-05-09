@@ -1,0 +1,21 @@
+methode statistiques : entrée du fichier. Doit-on ajouter le nom dans une liste?
+
+une méthode entrainement du fichier, l'inserer dans cette ligne sur ce modèle
+faire un readme
+permettre la modification des parametres
+
+Les paramètres (à mettre dans un fichier de configuration) --> Si on a besoin de modifier il ajoute dans son fichier de texte
+
+Qui lie les deux (sortir de la partie des SVM tout ce qui vas dans le chargement des fichiers --> Schema global)
+Analyse des SVM : Générique au SVM (presentation globale)
+Le logiciel : Importation des paramètres optimaux
+
+
+Conception : Comment on prevoit de le faire
+Realisation : Le code ecrit en interface graphique
+
+Entrée, statistiques, interface graphique
+
+
+
+
