@@ -7,6 +7,7 @@
 
 import numpy as np # Allows to manipulate the necessary table for sklearn
 import matplotlib.pyplot as plt # Allows to create graphics, especially those in 3D
+import matplotlib as mpl
 import urllib # Allows to open URL links =============================================== ***** est ce que l'on s'en sert???????****
 import tkFont # Allows to modify the TKinter display font
 import codecs # Allows to load a file containing UTF-8 characters
@@ -15,15 +16,14 @@ import os # Allows to modify some things on the os
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
 import shutil #permet la copie de fichier
-from sklearn import svm # Allows to use the SVM classification method
-from sklearn.neural_network import MLPClassifier # Allows the use of the neural network method from sklearn
-from matplotlib import style # Allows to modify the graphics' appearance
-from Tkinter import * # Allows the use of the TKinter GUI
-from matplotlib.figure import * # Allows the modification of the matplotlib graphics' appearances
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg # ???????????????????????????????????????????????
-########   If needed   #############
 import sys
-
+from mpl_toolkits.mplot3d				 import Axes3D
+from sklearn 							 import svm # Allows to use the SVM classification method
+from sklearn.neural_network				 import MLPClassifier # Allows the use of the neural network method from sklearn
+from matplotlib 						 import style # Allows to modify the graphics' appearance
+from Tkinter							 import * # Allows the use of the TKinter GUI
+from matplotlib.figure					 import * # Allows the modification of the matplotlib graphics' appearances
+from matplotlib.backends.backend_tkagg	 import FigureCanvasTkAgg # ???????????????????????????????????????????????
 #################################    Main window of the GUI    ###################################################
 app = tk.Tk()
 app.title("Classification neuronale") # Give a title to the window
@@ -39,10 +39,16 @@ img2=tk.PhotoImage(file="scikit_learn11.gif")
 fond0.create_image(700,450, image=img2)
 
 ########    Variables    ########
+alpha=IntVar()
 beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
-clf= svm.SVC(kernel='rbf', gamma=0.1, C=0) #### To modify with consistent values
+classe=IntVar()
+clf= svm.SVC(kernel='rbf', gamma=10000000, C=0.00000001) #### To modify with consistent values
+echantillonnage=IntVar()
+echantillons=IntVar()
+gamma=IntVar()
+tol=IntVar()
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
-listeparam=[]
+listeparam=[2,3,5,6,7]
 listeparamcomplete=["nClass","IR","RMP","RH","ST","DTFS","SA","SD","fAHP"]
 listetest=[]
 listeentrainement=[]
@@ -51,22 +57,19 @@ menubar = Menu(app)
 methodes=StringVar()
 methode=StringVar()
 modi=0
-nomfichiersortie=StringVar()
-nomfichiersortie.set('')
+nomfichiersortie=''
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 separateur=StringVar()
-separateur2=StringVar()
-t=IntVar()
-gamma=IntVar()
-alpha=IntVar()
+separateur.set(',')
+separateur2=','
+t=DoubleVar()
+text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
+tmp=IntVar()
 variableatester=IntVar()
 variableparam=IntVar()
 variableparametres=IntVar()
-tmp=IntVar()
-classe=IntVar()
-echantillons=IntVar()
-echantillonnage=IntVar()
-text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
+variableparam.set(1) ###### Par default variableparam = NuSVC
+methodes.set('rbf') #### Indique que la methode par défaut est rbf
 ######Definitions
 def Chargementtest(check): #### Gives the absolute path of the file
 	'''This function retrieves the path to the Test file
@@ -325,7 +328,8 @@ def entrainementdufichier(verif):#### Training of the statistical model
 	if classe==3: ########## If LinearSVC were chosen
 			clf= svm.LinearSVC(C=t3linear) ##### To change the t
 	if classe==4: ####RN Classifier
-		 clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
+		print "clf classifier"
+		clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
 	clf.fit(X_train,y_train)
 	if verif==1:
 		return X_test,y_test
@@ -342,8 +346,8 @@ def ChoixClasseparam(): #### Allows to set classes
 	global variableparam
 	global parametres
 	parametres=Toplevel()
-	texteexplication="Veuillez choisir la classe de SVM : "
-	textexplication=Label(parametres, text=texteexplication)
+	textexplication="Veuillez choisir la classe de SVM (SVC,NuSVC,LinearSVC) ou de Réseaux de Neurones (Classifier) : "
+	textexplication=Label(parametres, text=textexplication)
 	P1 = Radiobutton(parametres, text="SVC", variable=variableparam, value=1,command=choixmethode)
 	P2 = Radiobutton(parametres, text="NuSVC", variable = variableparam, value=2, command=choixmethode)
 	P3 = Radiobutton(parametres, text="LinearSVC", variable=variableparam, value=3, command=choixmethode)
@@ -412,7 +416,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		print tol
 		print gamma, "testgamma"
 		print t, "testt"
-		choixdeshuitparametres()
+		choixdeshuitparametres('')
 		hyperparametres.destroy()
 	global methode
 	global hyperparametres
@@ -461,7 +465,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	validerchoix.pack()
 	hyperparametres.mainloop()
 
-def choixdeshuitparametres(): #### Allow to choose the paramaters
+def choixdeshuitparametres(check): #### Allow to choose the paramaters
 	''' This function allows to user to choose the different paramaters to run the analyze.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
@@ -492,6 +496,8 @@ def choixdeshuitparametres(): #### Allow to choose the paramaters
 		print'.'
 		choixhuitparametres.destroy()
 	global choixhuitparametres
+	if check=="avertissement":
+		avertissement.destroy()
 	choixhuitparametres=Toplevel()
 	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
 	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
@@ -517,16 +523,19 @@ def ChoixNomFichier(check):  #### Give a name to the output file
 	'''
 	if check=="avertissement":
 		avertissement.destroy()
-	def recuperationnomfichier(event):
+	def recuperationnomfichier():
+		choixnomfichier.destroy()
 		global nomfichiersortie
-		nomfichiersortie= entrernomfichier.get()
+		nomfichiersortie= var_nomfichiersortie.get()
+		print nomfichiersortie, "testestest"
 	global nomfichiersortie
+	global choixnomfichier
+	var_nomfichiersortie=StringVar()
 	choixnomfichier = Toplevel()
-	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n Sous la forme example.csv ou example.txt \n"
+	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n Sous la forme example.csv ou example.txt"
 	textechoixfichier = Label(choixnomfichier, text=textechoixfichier)
-	validernomfichier= Button(choixnomfichier, text="Fermer", command=choixnomfichier.destroy)
-	entrernomfichier = Entry(choixnomfichier, width=30, textvariable=nomfichiersortie)
-	entrernomfichier.bind("<Return>",recuperationnomfichier)
+	validernomfichier= Button(choixnomfichier, text="Valider", command=recuperationnomfichier)
+	entrernomfichier = Entry(choixnomfichier, width=30, textvariable=var_nomfichiersortie)
 	textechoixfichier.pack();entrernomfichier.pack();validernomfichier.pack()
 
 def Simulationentrainement():
@@ -581,8 +590,7 @@ def choixechantillons():
 
 def save():
 	#gestion d'erreur à revoir
-	nomfichier=nomfichiersortie.get()
-	if nomfichier=='':
+	if nomfichiersortie=='':
 		global avertissement
 		print "Attention nom de fichier non défini"
 		avertissement=Toplevel()
@@ -595,7 +603,7 @@ def save():
 		A1.pack();
 		avertissement.mainloop()
 	else:
-		file=codecs.open(nomfichier,"w",encoding="utf-8")
+		file=codecs.open(nomfichiersortie,"w",encoding="utf-8")
 		x=0
 		while x<len(resultdataset):
 			y=0
@@ -619,7 +627,7 @@ def addtodataset(filename):
 		file.write('\n')
 		i=i+1
 	file.close
-	
+
 def modiftable():
 	global Verif
 	def finaladd():
@@ -634,7 +642,7 @@ def modiftable():
 	txtavertissement.pack();A1.pack();A2.pack();
 	Verif.mainloop()
 
-def cancel():
+def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans TrainModel
 	shutil.copyfile('Backup_G.csv','ModelG.csv')
 	shutil.copyfile('Yourbackup.csv','TrainModel.csv')
 
@@ -677,14 +685,16 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	#
 	def entrernom(c):
 		global tmp
-		test=Toplevel()
-		A1= Radiobutton(test, text='1',variable=tmp, value=1,command=lambda c=c:vartest(c))
-		A2= Radiobutton(test, text='2',variable=tmp, value=2,command=lambda c=c:vartest(c))
-		A3= Button(test,text='Valider',command=test.destroy)
+		global nclasse
+		nclasse=Toplevel()
+		A1= Radiobutton(nclasse, text='1',variable=tmp, value=1)
+		A2= Radiobutton(nclasse, text='2',variable=tmp, value=2)
+		A3= Button(nclasse,text='Valider',command=lambda c=c:vartest(c))
 		A1.pack();A2.pack();A3.pack();
-		test.mainloop()
+		nclasse.mainloop()
 	#
 	def vartest(c):
+		nclasse.destroy()
 		test=tmp.get()
 		global resultdataset
 		resultdataset[c][0]=test
@@ -716,31 +726,92 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		plt.pie(data, explode=explode, labels=namepart, autopct='%1.1f%%', startangle=90, shadow=True) #### autopct = actual percentage compared to the one indicated
 		plt.axis('equal') #### axis = Create a circular diagram
 		plt.show('Test')
-		'''
-		name = ['TypeI', 'TypeII'] #### Part's name
-		data = [type1, type2] #### Number of type I neurons and number of type II
-		explode=(0, 0.2) #### Separation of the two parts
-		plt.pie(data, explode=explode, labels=name, autopct='%1.1f%%', startangle=90, shadow=True) #####autopct = actual percentage compared to the one indicated
-		plt.axis('equal') #### axis = Create a circular diagram
-		plt.show('Test')
-		'''
 		return
 	#
+	def plot():
+		global avertissement
+		TMP=[]
+		tmp11=[]
+		tmp12=[]
+		tmp21=[]
+		tmp22=[]
+		tmp31=[]
+		tmp32=[]
+		if len(listeparam)>3:
+			print "Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation"
+			avertissement=Toplevel()
+			beep(1)
+			avertissement.title("Avertissement")
+			txtavertissement=Label(avertissement,text="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation. \n Veuillez choisir vos paramètres.")
+			txtavertissement.pack()
+			c="avertissement"
+			A1= Button(avertissement,text="Sélectionner les 3 paramètres nécessaires",command=lambda c=c:choixdeshuitparametres(c))
+			A1.pack();
+			avertissement.mainloop()
+		else:
+			i=0
+			while i<len(resultdataset):
+				if resultdataset[i][0]==1:
+					tmp11.append(resultdataset[i][listeparam[0]+1])
+					if len(listeparam)>1:
+						tmp21.append(resultdataset[i][listeparam[1]+1])
+						if len(listeparam)>2:
+							tmp31.append(resultdataset[i][listeparam[2]+1])
+				if resultdataset[i][0]==2:
+					tmp12.append(resultdataset[i][listeparam[0]+1])
+					if len(listeparam)>1:
+						tmp22.append(resultdataset[i][listeparam[1]+1])
+						if len(listeparam)>2:
+							tmp32.append(resultdataset[i][listeparam[2]+1])
+				i=i+1
+		if len(listeparam)==1:
+			for i in range(len(resultdataset)):
+				TMP.append(i)
+			plt.title(u"Représentation des classes de neurones",fontsize=16) #titre du graph
+			plt.scatter(TMP,tmp11,label='Type 1',color='b',s=10,marker='^')
+			plt.scatter(TMP,tmp12,label='Type 2',color='r',s=10,marker='*')
+			plt.xlabel('Neurones') #légende x
+			plt.ylabel(listeparamcomplete[listeparam[0]+1]) #légende y
+			plt.legend(loc=4)
+			plt.show()
+			return
+		elif len(listeparam)==2:
+			plt.title(u"Représentation des classes de neurones",fontsize=16) #titre du graph
+			plt.scatter(tmp11,tmp21,label='Type 1',color='b',s=10,marker='^')
+			plt.scatter(tmp12,tmp22,label='Type 2',color='r',s=10,marker='*')
+			plt.xlabel(listeparamcomplete[listeparam[0]+1]) #légende x
+			plt.ylabel(listeparamcomplete[listeparam[1]+1]) #légende y
+			plt.legend(loc=4)
+			plt.show()
+			return
+		elif len(listeparam)==3:
+			fig = plt.figure()
+			ax = fig.add_subplot(111, projection='3d')
+			plt.title(u"Représentation des classes de neurones",fontsize=16) #titre du graph
+			ax.scatter(tmp11,tmp21,tmp31,label='Type 1', c='b',s=10,marker='^')
+			ax.scatter(tmp12,tmp22,tmp32,label='Type 2', c='r',s=10,marker='*')
+			ax.set_xlabel(listeparamcomplete[listeparam[0]+1])
+			ax.set_ylabel(listeparamcomplete[listeparam[1]+1])
+			ax.set_zlabel(listeparamcomplete[listeparam[2]+1])
+			plt.legend(loc=4)
+			plt.show()
+			return
 	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.title("Résultats de l'analyse")
 	Analyse.geometry("1200x800+600+300")
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
 	di1=Button(Analyse, text="Afficher le diagramme", command=diagram, bg="SkyBlue3")
+	A4=Button(Analyse, text="Afficher un aperçu de la classification", command=plot, bg="SkyBlue3")
 	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
 	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
 	A3=Button(Analyse,text="Rétablir les modèles à l'original",command=cancel,bg="thistle")
-	instruc=Label(Analyse,text="Pour charger le modèle entraîné, \n il faudra choisir le fichier d'entraînement : \n 'TrainModel.csv'.")
+	instruc=Label(Analyse,text="Pour charger le modèle entraîné, \n il faudra choisir le fichier d'entraînement : \n 'TrainModel.csv' ou 'ModelG.csv'.")
 	canvas=tk.Canvas(Analyse,borderwidth=1)
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();modif.pack();A2.pack();A3.pack();
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();A4.pack();modif.pack();A2.pack();A3.pack();
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
@@ -826,8 +897,6 @@ menu1.add_separator()
 menu1.add_command(label="Ouvrir un fichier test", command=lambda c='':Chargementtest(c))
 menu1.add_separator()
 menu1.add_command(label="Ouvrir un fichier d'entrainement", command=lambda c='':Chargemententrainement(c))
-menu1.add_separator()
-menu1.add_command(label="Enregistrer le projet en cours", command=lambda c='':Chargemententrainement(c))#####Save the project
 menu1.add_separator()
 menubar.add_cascade(label="Fichier", menu=menu1) ###### Name on the toolbar
 
