@@ -42,7 +42,7 @@ fond0.create_image(700,450, image=img2)
 ########    Variables    ########
 alpha=IntVar()
 beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
-classe=IntVar()
+classe=0
 clf= svm.SVC(kernel='rbf', gamma=10000000, C=0.00000001) #### To modify with consistent values
 echantillonnage=IntVar()
 echantillons=IntVar()
@@ -51,12 +51,13 @@ tol=IntVar()
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
 listeparam=[2,3,5,6,7]
 listeparamcomplete=["nClass","IR","RMP","RH","ST","DTFS","SA","SD","fAHP"]
+listclass=["SVC","NuSVC","LinearSVC","Réseau de neurones"]
 listetest=[]
 listeentrainement=[]
 resultdataset=[]
 menubar = Menu(app)
 methodes=StringVar()
-methode=StringVar()
+methode=''
 modi=0
 nomfichiersortie=''
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
@@ -384,7 +385,7 @@ def choixmethode():#### Allows to choose the classification method
 		classe1=Toplevel()
 		classe1.title('Choix dela méthode de classification')
 		classe1.geometry("300x110+875+500")
-		classe1.resizable(False)
+		classe1.resizable(False,False)
 		choixmethodes="Veuillez choisir la méthode de votre choix : "
 		choixmethode=Label(classe1, text=choixmethodes)
 		S1=Radiobutton(classe1, text='Relu',variable=methodes, value='relu', command=choixhyperparametres)
@@ -424,6 +425,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		choixdeshuitparametres('')
 	global methode
 	global hyperparametres
+	global classe
 	methode=methodes.get()
 	classe=variableparam.get()
 	if classe!=3:
@@ -662,7 +664,7 @@ def Warnings(printxt,labeltxt,buttontxt,function):
 	print printxt
 	avertissement=Toplevel()
 	avertissement.resizable(False,False)
-	avertissement.geometry("500x85+775+500")
+	avertissement.geometry("550x85+775+500")
 	beep(1)
 	avertissement.title("Avertissement")
 	txtavertissement=Label(avertissement,text=labeltxt)
@@ -756,10 +758,11 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		tmp32=[]
 		if len(listeparam)>3:
 			printxt="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation"
-			labeltxt="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation. \n Veuillez choisir vos paramètres."
+			labeltxt="Attention il est nécessaire de ne sélectionner \n que 3 paramètres pour cette visualisation. \n Veuillez choisir vos paramètres."
 			buttontxt="Sélectionner les 3 paramètres nécessaires"
 			function="choixdeshuitparametres"
 			Warnings(printxt,labeltxt,buttontxt,choixdeshuitparametres)
+			return
 		else:
 			i=0
 			while i<len(resultdataset):
@@ -810,6 +813,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 			plt.legend(loc=4)
 			plt.show()
 			return
+	#
 	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.title("Résultats de l'analyse")
@@ -817,7 +821,20 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
 	di1=Button(Analyse, text="Afficher le diagramme", command=diagram, bg="SkyBlue3")
 	A4=Button(Analyse, text="Afficher un aperçu de la classification", command=plot, bg="SkyBlue3")
-	A5= Button(Analyse, text= "Choix des paramètres", command= lambda c='':choixdeshuitparametres(c),bg= "SkyBlue3",)
+	A5= Button(Analyse, text= "Choix des paramètres", command= lambda c='':choixdeshuitparametres(c),bg= "SkyBlue3")
+	txtclass="Cette analyse a été réalisée avec la classe :"
+	txtclass=txtclass+listclass[classe-1]
+	txtmethod=''
+	if classe!=3:
+		txtmethod="La méthode :"
+		txtmethod=txtmethod+methode
+	txthyperparam="Mais également l'hyperparamètre : \n"
+	if classe==1:
+		txthyperparam=txthyperparam+"C = 10E"+str(ttext)+"\n"
+		if methode=='rbf' or methode=='sigmoid':
+			txthyperparam=txthyperparam+"gamma = 10E"+str(gammatest)
+		if methode=='poly':
+			txthyperparam=txthyperparam+"degree = 10E"+str(gammatest)
 	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
 	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
 	A3=Button(Analyse,text="Rétablir les modèles à l'original",command=cancel,bg="thistle")
