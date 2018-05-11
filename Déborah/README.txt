@@ -8,7 +8,7 @@ It was a project created by students in their first year of master in Bioinforma
 What is Neurons Classification ?
 ===============================
 
-Neurons Classifocation is an instrument (software) which allows to a user (in the field of neuronal science) to classify in two categories (I and II) neurons thanks to differents electrophysiological parameters.  
+Neurons Classification is an instrument (software) which allows to a user (in the field of neuronal science) to classify in two categories (I and II) neurons thanks to differents electrophysiological parameters.  
 
 
 Language and library used ?
@@ -20,11 +20,11 @@ Libraries = Scikit learn library with svm and MLPClassifier
 	    Matplotlib (graphic visualization)
 	    Numpy (to manipulate the necessary table for sklearn)
 	    tkFont (to modify the TKinter display font)
+	    tkFileDialog (to create a windows to load files)
 	    codecs (to load a file containing UTF-8 characters)
 	    random (to use random variables)
-	    tkFileDialog (to create a windows to load files)
 
-
+  
 
 How do I use Neurons Classification ?
 =====================================
@@ -35,12 +35,12 @@ Please to refer to the manual of this software.
 Modifications or contributions 
 ==============================
 
-If you need or you want to add some methods, class in this software in the purpose of improving the classification of neurons or if a new method is discovered you can to push them    
-
+If you need or you want to add some methods, class in this software in the purpose of improving the classification of neurons or if a new method is discovered you can to write them in the script line     
+If you need to put a method by default you can to modify the script line (45) with your paramaters : clf= svm.SVC(kernel='rbf', gamma=10000000, C=0.00000001) => svm.SVC is our class by default ; rbf is our method by default and gamma and C are the hyperparameters.  
 
 
 Platform (system) support ?
-=================
+===========================
 
 Linux
 MacOS
