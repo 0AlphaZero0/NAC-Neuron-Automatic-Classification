@@ -28,7 +28,6 @@ from matplotlib.backends.backend_tkagg	 import FigureCanvasTkAgg # ?????????????
 app = tk.Tk()
 app.title("Classification neuronale") # Give a title to the window
 app.geometry("800x600+600+300") # Anchor the window
-app.resizable(False,False)
 app.configure(background="SlateGray2")# Background color
 fond0=tk.Canvas(app, width=800, height=600, background='SlateGray2')
 fond0.pack()
@@ -72,7 +71,6 @@ variableparametres=IntVar()
 variableparam.set(1) ###### Par default variableparam = NuSVC
 methodes.set('rbf') #### Indique que la methode par défaut est rbf
 ######Definitions
-
 def Chargementtest(check): #### Gives the absolute path of the file
 	'''This function retrieves the path to the Test file
 	Description:
@@ -103,9 +101,6 @@ def separateurfichier(verif): #### Give the file separator
 	global separateur
 	global loade
 	loade=Toplevel()
-	loade.geometry("150x135+950+500")
-	loade.title('Séparateur du fichier')
-	loade.resizable(False,False)
 	s1 = Radiobutton(loade, text = "Virgule", variable = separateur, value =',',command=resultatsseparateur)
 	s2 = Radiobutton(loade, text = "Point-virgule", variable = separateur, value =';', command=resultatsseparateur)
 	s3 = Radiobutton(loade, text = "Tab", variable = separateur, value ='	',command=resultatsseparateur)
@@ -158,10 +153,16 @@ def load(filename,typefichier): #### File loading
 			y=line.split(',')
 			if typefichier==0 : # trainning file
 				if len(y)>9 or len(y)<9:
-					printxt="Attention fichier d'entraînement incorrect"
-					labeltxt="Attention le fichier d'entraînement soumis, ne correspond pas à l'entrée nécessaire. \n Veuillez chargez un fichier d'entrainement pour l'analyse."
-					buttontxt="Chargement d'un fichier d'entraînement"
-					Warnings(printxt,labeltxt,buttontxt,Chargemententrainement)
+					print "Attention fichier d'entrainement incorrect"
+					avertissement=Toplevel()
+					beep(1)
+					avertissement.title("Avertissement")
+					txtavertissement=Label(avertissement,text="Attention le fichier d'entrainement soumis, ne correspond à l'entrée nécessaire. \n Veuillez chargez un fichier d'entrainement pour l'analyse.")
+					txtavertissement.pack()
+					c="avertissement"
+					A1= Button(avertissement,text="Chargement d'un fichier d'un fichier d'entrainement",command=lambda c=c:Chargementtest(c))
+					A1.pack();
+					avertissement.mainloop()
 					return
 				y[0]=int(y[0])
 				x=1
@@ -172,10 +173,16 @@ def load(filename,typefichier): #### File loading
 			if typefichier==1: # test file
 				x=0
 				if len(y)>8 or len(y)<8:
-					printxt="Attention fichier de test incorrect"
-					labeltxt="Attention le fichier test soumis, ne correspond à l'entrée nécessaire. \n Veuillez chargez un fichier pour l'analyse."
-					buttontxt="Chargement d'un fichier d'un fichier test"
-					Warnings(printxt,labeltxt,buttontxt,Chargementtest)
+					print "Attention fichier de test incorrect"
+					avertissement=Toplevel()
+					beep(1)
+					avertissement.title("Avertissement")
+					txtavertissement=Label(avertissement,text="Attention le fichier test soumis, ne correspond à l'entrée nécessaire. \n Veuillez chargez un fichier pour l'analyse.")
+					txtavertissement.pack()
+					c="avertissement"
+					A1= Button(avertissement,text="Chargement d'un fichier d'un fichier test",command=lambda c=c:Chargementtest(c))
+					A1.pack();
+					avertissement.mainloop()
 					return
 				while x<len(y):
 					y[x]=float(y[x])
@@ -199,16 +206,14 @@ def Chargemententrainement(check):#### Loading of the training file
 	if check=="avertissement":
 		avertissement.destroy()
 	entrainement=Toplevel()
-	entrainement.title("Choix du fichier d'entraînement")
-	entrainement.geometry("200x60+925+500")
-	entrainement.resizable(False,False)
+	entrainement.title("Le fichier d'entraînement")
 	textefichier="Avez-vous un jeu d'essai?"
 	fichiers=Label(entrainement,text=textefichier)
 	fichiers.pack()
 	R1 = Radiobutton(entrainement, text="Oui", variable=variableatester, value=1,command=lambda c='entrainement':resultatsappui(c))
-	R1.pack()
+	R1.pack( anchor = W )
 	R2 = Radiobutton(entrainement, text="Non", variable=variableatester, value=2, command=lambda c='entrainement':resultatsappui(c))
-	R2.pack()
+	R2.pack(anchor = W)
 
 def resultatsappui(check):#### Choice of the training file
 	'''This function allows, via a small TKinter window, to choose among the user's folders the desired file
@@ -227,7 +232,7 @@ def resultatsappui(check):#### Choice of the training file
 	if variable2==1:
 		separateurfichier(1)
 	if variable2==2:
-		nomdufichierentrainement='ModelG.csv'####Path of our test file
+		nomdufichierentrainement=('ModelG.csv')####Path of our test file
 		separateur2=','
 		listeentrainement=load(nomdufichierentrainement,0)
 
@@ -341,10 +346,7 @@ def ChoixClasseparam(): #### Allows to set classes
 	global variableparam
 	global parametres
 	parametres=Toplevel()
-	parametres.title('Choix de la classe')
-	parametres.geometry('400x120+820+500')
-	parametres.resizable(False,False)
-	textexplication="Veuillez choisir la classe de SVM (SVC,NuSVC,LinearSVC) \n ou de Réseaux de Neurones (Classifier) : "
+	textexplication="Veuillez choisir la classe de SVM (SVC,NuSVC,LinearSVC) ou de Réseaux de Neurones (Classifier) : "
 	textexplication=Label(parametres, text=textexplication)
 	P1 = Radiobutton(parametres, text="SVC", variable=variableparam, value=1,command=choixmethode)
 	P2 = Radiobutton(parametres, text="NuSVC", variable = variableparam, value=2, command=choixmethode)
@@ -368,9 +370,6 @@ def choixmethode():#### Allows to choose the classification method
 	classe=variableparam.get()
 	if classe==1 or classe==2: #### Choice of the method in regard of SVC and NuSVC
 		classe1=Toplevel()
-		classe1.title('Choix de la méthode de classification')
-		classe1.geometry("300x110+875+500")
-		classe1.resizable(False,False)
 		choixmethodes="Veuillez choisir la méthode de votre choix : "
 		choixmethode=Label(classe1, text=choixmethodes)
 		R1=Radiobutton(classe1, text='rbf', variable=methodes,value="rbf",command=choixhyperparametres)
@@ -382,10 +381,7 @@ def choixmethode():#### Allows to choose the classification method
 		choixhyperparametres()
 	if classe==4: # Choice of the method in regard of neural network and the Classifier class
 		classe1=Toplevel()
-		classe1.title('Choix dela méthode de classification')
-		classe1.geometry("300x110+875+500")
-		classe1.resizable(False)
-		choixmethodes="Veuillez choisir la méthode de votre choix : "
+		choixmethodes="Quelle est la méthode réseau de neurones de votre choix"
 		choixmethode=Label(classe1, text=choixmethodes)
 		S1=Radiobutton(classe1, text='Relu',variable=methodes, value='relu', command=choixhyperparametres)
 		S2=Radiobutton(classe1, text='Identity',variable=methodes, value='identity', command=choixhyperparametres)
@@ -420,8 +416,8 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 		print tol
 		print gamma, "testgamma"
 		print t, "testt"
-		hyperparametres.destroy()
 		choixdeshuitparametres('')
+		hyperparametres.destroy()
 	global methode
 	global hyperparametres
 	methode=methodes.get()
@@ -429,14 +425,11 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	if classe!=3:
 		classe1.destroy()
 	hyperparametres=Toplevel()
-	hyperparametres.title('Choix des hyperparamètres')
-	hyperparametres.geometry("325x210+865+500")
-	hyperparametres.resizable(False,False)
 	gammatest=IntVar(); alphatest=IntVar(); toltest=IntVar(); degretest=IntVar(); ttest=IntVar(); ttest1poly=IntVar()
 	ttest1linear=IntVar(); ttest3linear=IntVar(); Nutest=IntVar(); Nu2test=IntVar()
 	gammatest.set(-12), ttest.set(-5), toltest.set(-7), alphatest.set(-4), degretest.set(0)
 	ttest1poly.set(-5), ttest1linear.set(-4), ttest3linear.set(-5), Nutest.set(0), Nu2test.set(0)
-	textehyperparametres = "Veuillez régler les hyperparamètres :"
+	textehyperparametres = "Veuillez regler les hyperparamètres :"
 	textehyperparametres2=Label(hyperparametres,text=textehyperparametres)
 	validerchoix= Button(hyperparametres, text="Valider", fg="Black",bg="SkyBlue3", command=validerhyperparam, font=helv36)
 	textehyperparametres2.pack()
@@ -498,13 +491,6 @@ def choixdeshuitparametres(check): #### Allow to choose the paramaters
 			if i!=9:
 				listeparam.append(i)
 		print "Liste des paramètres : ",
-		if listeparam==[]:
-			printxt="Attention vous n'avez sélectionné aucun paramètre"
-			labeltxt="Attention vous n'avez sélectionné aucun paramètre. \n Veuillez sélectionner au moins un paramètre."
-			buttontxt="Sélection des paramètres"
-			choixhuitparametres.destroy()
-			Warnings(printxt,labeltxt,buttontxt,choixdeshuitparametres)
-			return
 		for i in listeparam:
 			print listeparamcomplete[i+1],
 		print'.'
@@ -513,9 +499,6 @@ def choixdeshuitparametres(check): #### Allow to choose the paramaters
 	if check=="avertissement":
 		avertissement.destroy()
 	choixhuitparametres=Toplevel()
-	choixhuitparametres.title('Choix de la combinaison de paramètres')
-	choixhuitparametres.resizable(False,False)
-	choixhuitparametres.geometry("100x200+975+500")
 	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
 	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
 	c1 = Checkbutton(choixhuitparametres, text="IR", variable = varparam, onvalue=0, offvalue=9)
@@ -528,7 +511,6 @@ def choixdeshuitparametres(check): #### Allow to choose the paramaters
 	c8 = Checkbutton(choixhuitparametres, text="fAHP", variable = varparam8, onvalue=7, offvalue=9)
 	c9 = Button(choixhuitparametres, text="Valider", command=recuperationvaleur)
 	c1.pack();c2.pack();c3.pack();c4.pack();c5.pack();c6.pack();c7.pack();c8.pack();c9.pack()
-	choixhuitparametres.mainloop()
 
 def ChoixNomFichier(check):  #### Give a name to the output file
 	''' This function allows to user to give a name to the output file (the results' file).
@@ -545,20 +527,11 @@ def ChoixNomFichier(check):  #### Give a name to the output file
 		choixnomfichier.destroy()
 		global nomfichiersortie
 		nomfichiersortie= var_nomfichiersortie.get()
-		if ".csv" not in nomfichiersortie and ".txt" not in nomfichiersortie:
-			printxt="Attention le nom de fichier ne correspond pas au format attendu."
-			labeltxt="Attention le format du fichier en entrée ne correspond pas au format attendu. \n Veuillez entrer un nom de fichier correct."
-			buttontxt="Choix du nom de fichier de sauvegarde"
-			Warnings(printxt,labeltxt,buttontxt,ChoixNomFichier)
-			return
 		print nomfichiersortie, "testestest"
 	global nomfichiersortie
 	global choixnomfichier
 	var_nomfichiersortie=StringVar()
 	choixnomfichier = Toplevel()
-	choixnomfichier.title('Choix du nom de fichier de sauvegarde')
-	choixnomfichier.resizable(False,False)
-	choixnomfichier.geometry("300x85+875+500")
 	textechoixfichier = "Veuillez choisir le nom du fichier de sortie : \n Sous la forme example.csv ou example.txt"
 	textechoixfichier = Label(choixnomfichier, text=textechoixfichier)
 	validernomfichier= Button(choixnomfichier, text="Valider", command=recuperationnomfichier)
@@ -569,16 +542,20 @@ def Simulationentrainement():
 	global simulation
 	global echantillons
 	if listeentrainement==[]:
-		printxt="Attention fichier d'entraînement non chargé"
-		labeltxt="Attention il n'y a pas de fichier d'entraînement pour la simulation ou le fichier est vide. \n Veuillez charger un fichier."
-		buttontxt="Chargement d'un fichier d'entraînement"
-		Warnings(printxt,labeltxt,buttontxt,Chargemententrainement)
+		global avertissement
+		print "Attention fichier d'entrainement non chargé"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier d'entrainement pour la simulation ou le fichier est vide. \n Veuillez chargez un fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Chargement d'un fichier d'entraînement",command=lambda c=c:Chargemententrainement(c))
+		A1.pack();
+		avertissement.mainloop()
 	else:
 		simulation=Toplevel()
-		simulation.title("Choix de l'échantillonnage pour la simulation")
-		simulation.resizable(False,False)
-		simulation.geometry("325x80+865+500")
-		textesimulation="Veuillez choisir votre méthode d'échantillonnage :"
+		textesimulation="Veuillez choisir votre méthode d'échantillonnage:\n"
 		textesimulation=Label(simulation, text=textesimulation)
 		echantillon1= Radiobutton(simulation, text = "50/50", variable = echantillons, value = 1,command=choixechantillons)
 		echantillon2= Radiobutton(simulation, text = "25/75", variable = echantillons, value = 2, command=choixechantillons)
@@ -590,9 +567,7 @@ def choixechantillons():
 	global echantillonnage
 	simulation.destroy()
 	choixechantillons=Toplevel()
-	choixechantillons.resizable(False,False)
-	choixechantillons.title("Résultats de la simulation du modèle")
-	choixechantillons.geometry("300x75+875+500")
+	choixechantillons.title="Résultats de la simulation du modèle"
 	echantillonnage=echantillons.get()
 	test=entrainementdufichier(1)
 	result=clf.predict(test[0])
@@ -616,16 +591,33 @@ def choixechantillons():
 def save():
 	#gestion d'erreur à revoir
 	if nomfichiersortie=='':
-		printxt="Attention nom de fichier non défini"
-		labeltxt="Attention le nom de fichier de sortie n'a pas été fourni. \n Veuillez entrer un nom de fichier."
-		buttontxt="Choix du nom de fichier de sortie"
-		Warnings(printxt,labeltxt,buttontxt,ChoixNomFichier)
+		global avertissement
+		print "Attention nom de fichier non défini"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention le nom de fichier de sortie n'a pas été fourni. \n Veuillez entrer un nom de fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Choix du nom de fichier de sortie",command=lambda c=c:ChoixNomFichier(c))
+		A1.pack();
+		avertissement.mainloop()
 	else:
-		addtodataset(nomfichiersortie,"w",0)
+		file=codecs.open(nomfichiersortie,"w",encoding="utf-8")
+		x=0
+		while x<len(resultdataset):
+			y=0
+			while y<len(resultdataset[x]):
+				file.write(str(resultdataset[x][y]))
+				file.write(',')
+				y=y+1
+			file.write('\n')
+			x=x+1
+		file.close
 
-def addtodataset(filename,mod,nb):
-	file=codecs.open(filename,mod,encoding="utf-8")
-	i=nb
+def addtodataset(filename):
+	file=codecs.open(filename,"a",encoding="utf-8")
+	i=1
 	while i<len(resultdataset):
 		j=0
 		while j<len(resultdataset[i]):
@@ -640,13 +632,10 @@ def modiftable():
 	global Verif
 	def finaladd():
 		if modi!=0:
-			addtodataset('TrainModel.csv',"a",1)
-		addtodataset('ModelG.csv',"a",1)
+			addtodataset('TrainModel.csv')
+		addtodataset('ModelG.csv')
 		Verif.destroy()
 	Verif=Toplevel()
-	Verif.title('Vérification')
-	Verif.resizable(False,False)
-	Verif.geometry("350x85+875+500")
 	txtavertissement=Label(Verif,text="Etes-vous sûr de vouloir entraîner les modèles?")
 	A1=Button(Verif, text='Oui',command=finaladd)
 	A2=Button(Verif, text='Non', command=Verif.destroy)
@@ -656,21 +645,6 @@ def modiftable():
 def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans TrainModel
 	shutil.copyfile('Backup_G.csv','ModelG.csv')
 	shutil.copyfile('Yourbackup.csv','TrainModel.csv')
-
-def Warnings(printxt,labeltxt,buttontxt,function):
-	global avertissement
-	print printxt
-	avertissement=Toplevel()
-	avertissement.resizable(False,False)
-	avertissement.geometry("500x85+775+500")
-	beep(1)
-	avertissement.title("Avertissement")
-	txtavertissement=Label(avertissement,text=labeltxt)
-	txtavertissement.pack()
-	c="avertissement"
-	A1= Button(avertissement,text=buttontxt,command=lambda c=c:function(c))
-	A1.pack();
-	avertissement.mainloop()
 
 def Lanceranalyse(): #### Start the analyse of neuron classification
 	''' This function allows to give the neuron's type (I or II).
@@ -684,18 +658,28 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	global resultdataset
 	global avertissement
 	if listetest==[]:
-		printxt="Attention fichier de test non chargé"
-		labeltxt="Attention il n'y a pas de fichier de test pour l'analyse ou le fichier est vide. \n Veuillez charger un fichier."
-		buttontxt="Chargement d'un fichier test"
-		function="Chargementtest"
-		Warnings(printxt,labeltxt,buttontxt,Chargementtest)
+		print "Attention fichier de test non chargé"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier de test pour l'analyse ou le fichier est vide. \n Veuillez chargez un fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier test",command=lambda c=c:Chargementtest(c))
+		A1.pack();
+		avertissement.mainloop()
 		return
 	if listeentrainement==[]:
-		printxt="Attention fichier d'entrainement non chargé"
-		labeltxt="Attention il n'y a pas de fichier d'entrainement pour l'analyse ou le fichier est vide. \n Veuillez charger un fichier."
-		buttontxt="Chargement d'un fichier d'entrainement"
-		function="Chargemententrainement"
-		Warnings(printxt,labeltxt,buttontxt,Chargemententrainement)
+		print "Attention fichier d'entrainement non chargé"
+		avertissement=Toplevel()
+		beep(1)
+		avertissement.title("Avertissement")
+		txtavertissement=Label(avertissement,text="Attention il n'y a pas de fichier d'entrainement pour l'analyse ou le fichier est vide. \n Veuillez chargez un fichier.")
+		txtavertissement.pack()
+		c="avertissement"
+		A1= Button(avertissement,text="Chargement d'un fichier d'un fichier d'entrainement",command=lambda c=c:Chargemententrainement(c))
+		A1.pack();
+		avertissement.mainloop()
 		return
 	resultdataset=[]
 	#
@@ -755,11 +739,16 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		tmp31=[]
 		tmp32=[]
 		if len(listeparam)>3:
-			printxt="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation"
-			labeltxt="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation. \n Veuillez choisir vos paramètres."
-			buttontxt="Sélectionner les 3 paramètres nécessaires"
-			function="choixdeshuitparametres"
-			Warnings(printxt,labeltxt,buttontxt,choixdeshuitparametres)
+			print "Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation"
+			avertissement=Toplevel()
+			beep(1)
+			avertissement.title("Avertissement")
+			txtavertissement=Label(avertissement,text="Attention il est nécessaire de ne sélectionner que 3 paramètres pour cette visualisation. \n Veuillez choisir vos paramètres.")
+			txtavertissement.pack()
+			c="avertissement"
+			A1= Button(avertissement,text="Sélectionner les 3 paramètres nécessaires",command=lambda c=c:choixdeshuitparametres(c))
+			A1.pack();
+			avertissement.mainloop()
 		else:
 			i=0
 			while i<len(resultdataset):
@@ -813,11 +802,10 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	entrainementdufichier(0)
 	Analyse=Toplevel()
 	Analyse.title("Résultats de l'analyse")
-	Analyse.geometry("1200x800+500+200")
+	Analyse.geometry("1200x800+600+300")
 	A1=Button(Analyse, text="Sauvegarder les résultats", command=save, bg="SkyBlue3")
 	di1=Button(Analyse, text="Afficher le diagramme", command=diagram, bg="SkyBlue3")
 	A4=Button(Analyse, text="Afficher un aperçu de la classification", command=plot, bg="SkyBlue3")
-	A5= Button(Analyse, text= "Choix des paramètres", command= lambda c='':choixdeshuitparametres(c),bg= "SkyBlue3",)
 	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
 	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
 	A3=Button(Analyse,text="Rétablir les modèles à l'original",command=cancel,bg="thistle")
@@ -826,7 +814,7 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	frame = tk.Frame(canvas)
 	vsb = tk.Scrollbar(Analyse, orient="vertical", command=canvas.yview)
 	canvas.configure(yscrollcommand=vsb.set)
-	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();A4.pack();A5.pack();modif.pack();A2.pack();A3.pack();
+	vsb.pack(side="right", fill="y");canvas.pack(side="left", fill="both", expand=True);A1.pack();di1.pack();A4.pack();modif.pack();A2.pack();A3.pack();
 	canvas.create_window((4,4), window=frame, anchor="nw")
 	frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 	dataset=[]
@@ -869,10 +857,9 @@ def presentation(): #### Presentation of the project's group
 		No return.
 	'''
 	presentation=Toplevel()
-	presentation.resizable(False,False)
 	presentation.title("Presentation")
 	presentation.geometry("800x600+600+300")
-	textepresentation="Actuellement étudiants en Master 1 à l'Université de Bordeaux,\n nous avons pour projet de classer des neurones en deux types : Type I et Type II.\n Les données electrophysiologiques vont être la source de classification.\n 8 paramètres sont donc retenus : IR,RMP,RH,SD,DTFS,SA,SD,fAHP \n"
+	textepresentation="Actuellement etudiant en master I à l'Université de Bordeaux,\n nous avons pour projet de classer des neurones en deux types : Type I et Type II.\n Les données electrophysiologiques vont être la source de classification.\n 8 paramètres sont donc retenus : IR,RMP,RH,SD,DTFS,SA,SD,fAHP \n"
 	text=Label(presentation,text=textepresentation)
 	text.pack()
 	presentation.mainloop()
@@ -880,7 +867,6 @@ def presentation(): #### Presentation of the project's group
 def explicationlogiciel(): ###### Explications of the software
 	explication=Toplevel()
 	explication.title("Le logiciel")
-	explication.resizable(False,False)
 	explication.geometry("1000x500+600+300")
 	texteexplication="Présentation du logiciel : \n"
 	text=Label(explication, text=texteexplication)
