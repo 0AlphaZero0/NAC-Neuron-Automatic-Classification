@@ -42,13 +42,13 @@ fond0.create_image(700,450, image=img2)
 alpha=IntVar()
 beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
 classe=IntVar()
-clf= svm.SVC(kernel='rbf', gamma=10000000, C=0.00000001) #### A modifier
+clf= svm.SVC(kernel='rbf', gamma=10000000, C=0.00000001) #### To modify with consistent values
 echantillonnage=IntVar()
 echantillons=IntVar()
 gamma=IntVar()
 tol=IntVar()
 helv36 = tkFont.Font(family='Helvetica', size=10, weight='bold')
-listeparam=[2,3,5,6,7] ####modifier
+listeparam=[2,3,5,6,7]
 listeparamcomplete=["nClass","IR","RMP","RH","ST","DTFS","SA","SD","fAHP"]
 listetest=[]
 listeentrainement=[]
@@ -57,11 +57,11 @@ menubar = Menu(app)
 methodes=StringVar()
 methode=StringVar()
 modi=0
-nomfichiersortie=''#### à verifier
+nomfichiersortie=''
 pourtitre = tkFont.Font(family='Helvetica', size=25, weight='bold')
 separateur=StringVar()
-separateur.set(',') ####modifié
-separateur2=',' ####modifié
+separateur.set(',')
+separateur2=','
 t=DoubleVar()
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 tmp=IntVar()
@@ -730,7 +730,8 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 	#
 	def plot():
 		global avertissement
-		TMP=[]
+		TMP1=[]
+		TMP2=[]
 		tmp11=[]
 		tmp12=[]
 		tmp21=[]
@@ -765,11 +766,13 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 							tmp32.append(resultdataset[i][listeparam[2]+1])
 				i=i+1
 		if len(listeparam)==1:
-			for i in range(len(resultdataset)):
-				TMP.append(i)
+			for i in range(len(tmp11)):
+				TMP1.append(i)
+			for j in range(len(tmp12)):
+				TMP2.append(j)
 			plt.title(u"Représentation des classes de neurones",fontsize=16) #titre du graph
-			plt.scatter(TMP,tmp11,label='Type 1',color='b',s=10,marker='^')
-			plt.scatter(TMP,tmp12,label='Type 2',color='r',s=10,marker='*')
+			plt.scatter(TMP1,tmp11,label='Type 1',color='b',s=10,marker='^')
+			plt.scatter(TMP2,tmp12,label='Type 2',color='r',s=10,marker='*')
 			plt.xlabel('Neurones') #légende x
 			plt.ylabel(listeparamcomplete[listeparam[0]+1]) #légende y
 			plt.legend(loc=4)

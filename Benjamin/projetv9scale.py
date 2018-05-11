@@ -202,7 +202,6 @@ def entrainementdufichier(verif):#### Training of the statistical model
 		for i in listeparam:
 			s.append(sample[i+1])
 		dataset.append(s)
-	print dataset,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 	######## Analyse
 	if verif==0:
 		for i in dataset:

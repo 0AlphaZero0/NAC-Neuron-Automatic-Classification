@@ -546,6 +546,7 @@ def choixechantillons():
 	choixechantillons.mainloop()
 
 def save():
+	#gestion d'erreur à revoir
 	nomfichier=nomfichiersortie.get()
 	if nomfichier=='':
 		global avertissement
