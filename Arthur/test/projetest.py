@@ -428,6 +428,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	global hyperparametres
 	global classe
 	global ttest
+	global gammatest
 	methode=methodes.get()
 	classe=variableparam.get()
 	if classe!=3:
