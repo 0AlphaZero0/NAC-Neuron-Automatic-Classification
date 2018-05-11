@@ -65,6 +65,7 @@ separateur=StringVar()
 separateur.set(',')
 separateur2=','
 t=DoubleVar()
+ttest=0
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=pourtitre)
 tmp=IntVar()
 variableatester=IntVar()
@@ -325,7 +326,7 @@ def entrainementdufichier(verif):#### Training of the statistical model
 			clf= svm.LinearSVC(C=t3linear) ##### To change the t
 	if classe==4: ####RN Classifier
 		print "clf classifier"
-		clf = MLPClassifier(solver='lbfgs', activation=methode, batch_size='auto', alpha=alpha, hidden_layer_sizes=(100,), random_state=None, tol=tol, verbose=False, warm_start=False)
+		clf = MLPClassifier(solver='lbfgs', activation=methode, alpha=alpha, hidden_layer_sizes=(4,), tol=tol)
 	clf.fit(X_train,y_train)
 	if verif==1:
 		return X_test,y_test
@@ -426,6 +427,7 @@ def choixhyperparametres(): #### Allow to choose the hyperparameters of the meth
 	global methode
 	global hyperparametres
 	global classe
+	global ttest
 	methode=methodes.get()
 	classe=variableparam.get()
 	if classe!=3:
@@ -830,11 +832,12 @@ def Lanceranalyse(): #### Start the analyse of neuron classification
 		txtmethod=txtmethod+methode
 	txthyperparam="Mais également l'hyperparamètre : \n"
 	if classe==1:
-		txthyperparam=txthyperparam+"C = 10E"+str(ttext)+"\n"
+		txthyperparam=txthyperparam+"C = 10E"+str(ttest)+"\n"
 		if methode=='rbf' or methode=='sigmoid':
 			txthyperparam=txthyperparam+"gamma = 10E"+str(gammatest)
 		if methode=='poly':
 			txthyperparam=txthyperparam+"degree = 10E"+str(gammatest)
+	
 	modif=Label(Analyse,text="\n Si vous souhaitez modifier les résultats, \n appuyez sur le 1 ou 2 souhaité. \n Puis choisissez le résultat attendu.\n \n Si vous souhaitez entraîner les modèles,\n cliquer sur le bouton ci-dessous,\n ATTENTION veillez à bien vérifier les résultats \n AVANT l'entraînement!",relief=FLAT,borderwidth=1)
 	A2=Button(Analyse,text="Entraîner les modèles avec vos résultats",command=modiftable,bg="thistle")
 	A3=Button(Analyse,text="Rétablir les modèles à l'original",command=cancel,bg="thistle")
