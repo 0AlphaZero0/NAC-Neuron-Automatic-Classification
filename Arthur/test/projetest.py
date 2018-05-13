@@ -50,12 +50,11 @@ import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
 import webbrowser
 from matplotlib 						 import style # Allows to modify the graphics' appearance
-from matplotlib.backends.backend_tkagg	 import FigureCanvasTkAgg # Allw some option in matlpotlib to make 3D graphs
-from matplotlib.figure					 import * # Allows the modification of the matplotlib graphics' appearances
+from matplotlib.backends.backend_tkagg	 import FigureCanvasTkAgg # Allow some option in matlpotlib to make 3D graphs
 from mpl_toolkits.mplot3d				 import Axes3D
 from sklearn 							 import svm # Allows to use the SVM classification method
 from sklearn.neural_network				 import MLPClassifier # Allows the use of the neural network method from sklearn
-from Tkinter							 import * # Allows the use of the TKinter GUI
+from Tkinter							 import IntVar,StringVar,Menu,Label,Toplevel,Radiobutton,Button,Entry,Scale,Checkbutton,FLAT # Allows the use of the TKinter GUI
 #################################    Main window of the GUI    ###################################################
 app = tk.Tk()
 app.title("Classification neuronale") # Give a title to the window
@@ -866,12 +865,19 @@ def Warnings(printxt,labeltxt,buttontxt,function): #### Permet la gestion d'erre
 	Winwarnings.title("Avertissement")
 	txtavertissement=Label(Winwarnings,text=labeltxt)
 	txtavertissement.pack()
-	c="avertissement"
-	A1= Button(Winwarnings,text=buttontxt,command=lambda c=c:function(c))
+	A1= Button(Winwarnings,text=buttontxt,command=lambda c="avertissement":function(c))
 	A1.pack()
 	Winwarnings.mainloop()
 
-def txtrecall(mod):
+def txtrecall(mod): #### Affichage d'un rappel des paramètres
+	'''Création d'une string avec les paramètres enregistré
+	Description:
+		Ici on créé une string à partir des différents paramètres récupérés une string qui résume le tout
+	Args:
+		mod = string qui commence notre string en fonction de l'analyse
+	Return:
+		No return here.
+	'''
 	txtclass=mod+listclass[classes-1]+"\n"
 	txtmethod=''
 	if classes!=3:
