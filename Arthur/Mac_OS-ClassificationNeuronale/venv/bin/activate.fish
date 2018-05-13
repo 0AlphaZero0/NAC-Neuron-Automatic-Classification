@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/alphazero/Mac_OS-ClassificationNeuronale/venv"
+set -gx VIRTUAL_ENV "/home/alphazero/Documents/GitHub/Projet-Neuro/Arthur/Mac_OS-ClassificationNeuronale/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

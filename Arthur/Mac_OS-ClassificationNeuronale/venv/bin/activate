@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/alphazero/Mac_OS-ClassificationNeuronale/venv"
+VIRTUAL_ENV="/home/alphazero/Documents/GitHub/Projet-Neuro/Arthur/Mac_OS-ClassificationNeuronale/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

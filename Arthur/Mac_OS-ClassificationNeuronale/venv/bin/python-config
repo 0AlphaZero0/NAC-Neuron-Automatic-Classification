@@ -1,4 +1,4 @@
-#!/home/alphazero/Mac_OS-ClassificationNeuronale/venv/bin/python
+#!/home/alphazero/Documents/GitHub/Projet-Neuro/Arthur/Mac_OS-ClassificationNeuronale/venv/bin/python
 
 import sys
 import getopt
