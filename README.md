@@ -16,11 +16,20 @@ Thouvenin Arthur : athouvenin@outlook.fr
 
 **Defense** : https://www.overleaf.com/14303504qzthnffthftb#/55103801/
 
-**Necessary**
+**Necessary** :
 - Python2.7
 - Sckiti-leran: sklearn
 - Matlplotlib
 - Tkinter
+
+
+
+
+
+
+
+
+
 
 Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
 Documentation scikit :
