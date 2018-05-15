@@ -1,96 +1,32 @@
-# Projet-Neuro
+# Neuron-classification with Machine Learning
 Développement d'un outil de classification automatique de signaux neuronaux biologiques.
 
 
-**Cahier des charges** : https://www.overleaf.com/13775721dzzjsknmydhv
+Blais Benjamin : ben.blais@laposte.net
+Cottais Déborah : d.cottais1@gmail.com
+De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr
+Jouan Clément : jouan.clement@hotmail.fr
+Thouvenin Arthur : athouvenin@outlook.fr
 
-**Rapport** : https://www.overleaf.com/13781350mcsgyrmmnxxg
-Soutenance = 20 min -> 15 diapos +10min de questions
+**Specifications** : https://www.overleaf.com/13775721dzzjsknmydhv
 
-**Présentation** :https://www.overleaf.com/14303504qzthnffthftb#/55103801/
+**Report** : https://www.overleaf.com/13781350mcsgyrmmnxxg
+
+**Defense**
+20 min -> 15 diapos +10min de questions
+https://www.overleaf.com/14303504qzthnffthftb#/55103801/
 
 
-Package Caret(Rstudio/R) : http://topepo.github.io/caret/index.html
-
-Logiciel R/Rstudio
-
-Langage Python
+**Necessary**
+- Python2.7
+- Sckiti-leran: sklearn
+- Matlplotlib
+- Tkinter
 
 Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
 Documentation scikit :
 - http://scikit-learn.org/stable/modules/svm.html docs
 - https://www.youtube.com/watch?v=ZD5lJGq1rvQ Youtube
 - https://pythonprogramming.net/linear-svc-example-scikit-learn-svm-python/
-
-
-# A lire absolument jusqu'au bout!!!!
-
-Créer un compte github https://github.com/
-
-<p align='center'; fontstyle='blod';> 
-	##################!!!!   PENSER A PULL AVANT DE TRAVAILLER   !!!!##################
-</p>
-
-<p align='center'; fontstyle='blod';> 
-	Et ne travailler que dans votre dossier!
-</p>
-
-
-## INSTALLER GITHUB (normalement installé par défaut sur linux)
-
-	`sudo apt-get install git`
-
----
-
-## IMPORTER LE DOSSIER
-
-	`git clone https://github.com/0AlphaZero0/Projet-Neuro.git`
-
----
-
-## METTRE A JOUR LE DOSSIER
-
-	//dans le répertoir courant
-	`git pull`
-
----
-
-## ENVOYER LES MODIFICATIONS
-
-	//dans le répertoir courant
-	`git add --all`
-	`git commit -m "update" //choisir un nom pour la mise à jour 
-	(pas forcément "update" mais plutôt ce que vous avez modifié)`
-	`git push //envoyer sur le github`
----
-
-## LOGICIEL ATOM
-
-Ce logiciel va nous permettre de travailler en même temps sur un même script.
-	
-Télécharger et installer Atom : https://atom.io/
-
-	Ouvrir Atom :
-		Install a Package -> Open Installer
-		Search packages : "teletype" -> Install
-		Une fois installé vous verrez une petite antenne en bas à droite, tout est bien insatllé!
-		En cliquant dessus Sign In avec votre compte GitHub (copié le token et collé le dans Atom)
-
-## LOGICIEL DISCORD
-
-Ce logiciel nécessite un micro/casque si possible (écouteur et micro des écouteurs marchent également)
-	
-Il est possible de l'installer ou de directement passer par le navigateur d'un ordinateur :
-		https://discordapp.com/
-		
-Utiliser ce lien pour rejoindre le serveur du projet : https://discord.gg/kE8jJ8g
-	(serveur bioinfo : https://discord.gg/gZ4U3YV)
-
-Vous êtes entrer vous n'avez plus qu'à cliquer sur le salon de votre choix.
-		
-## SI VOUS AVEZ UN DOUTE UNE ERREUR NE FAITES RIEN
-
-	- Contacter les autres
-	- Sauvez vos modifications sur une clé usb
 
 ---
