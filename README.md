@@ -3,10 +3,15 @@ Développement d'un outil de classification automatique de signaux neuronaux bio
 
 
 Blais Benjamin : ben.blais@laposte.net
+
 Cottais Déborah : d.cottais1@gmail.com
+
 De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr
+
 Jouan Clément : jouan.clement@hotmail.fr
+
 Thouvenin Arthur : athouvenin@outlook.fr
+
 
 **Specifications** : https://www.overleaf.com/13775721dzzjsknmydhv
 
