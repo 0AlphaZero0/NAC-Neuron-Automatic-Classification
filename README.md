@@ -10,11 +10,11 @@ Jouan Clément : jouan.clement@hotmail.fr
 Thouvenin Arthur : athouvenin@outlook.fr  
 
 
-**Specifications** : [specifications] (https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
+**Specifications** : [specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
 
-**Report** : [report] (https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
+**Report** : [report](https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
 
-**Defense** : [defense] (https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
+**Defense** : [defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
 
 **Necessary** :
 - Python2.7
