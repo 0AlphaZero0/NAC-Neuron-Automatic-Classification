@@ -2,7 +2,7 @@ Neuron-classification with Machine Learning
 ===========================================
 Development of a tool for automatic classification of biological neural signals.
 
-***CONTACT***
+***CONTACT***  
 Blais Benjamin : ben.blais@laposte.net  
 Cottais Déborah : d.cottais1@gmail.com  
 De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr  
