@@ -13,10 +13,7 @@ Thouvenin Arthur : athouvenin@outlook.fr
 
 **Report** : https://www.overleaf.com/13781350mcsgyrmmnxxg
 
-**Defense**
-20 min -> 15 diapos +10min de questions
-https://www.overleaf.com/14303504qzthnffthftb#/55103801/
-
+**Defense** : https://www.overleaf.com/14303504qzthnffthftb#/55103801/
 
 **Necessary**
 - Python2.7
