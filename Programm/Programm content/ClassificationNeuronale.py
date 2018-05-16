@@ -15,28 +15,28 @@
 
 '''
 						Neural Classification Programm
-	This program allows a user to classify neurons thanks to predefined files. The user can do so by using classication methods 
-	based on Machine Learning. Here, the library used to access these learning methods is scikit-learn. 
+	This program allows a user to classify neurons thanks to predefined files. The user can do so by using classication methods
+	based on Machine Learning. Here, the library used to access these learning methods is scikit-learn.
 	Thus library is largely followed by the community and is suitable to answer the expectations of this program.
-	The software also use libraries such as matplotlib and TKinter in order to produce a more visual rendering of the 
+	The software also use libraries such as matplotlib and TKinter in order to produce a more visual rendering of the
 	output results.
-	Thus, the user will be able to choose, according to his knowledge on the classification methods, the parameters
-	and hyperparameters necessary for the classification he desires to run. If the user has no knowledge over those methods, a default method 
+	Thus, the user will be able to choose, according to his knowledge on the classification's methods, the parameters
+	and hyperparameters necessary for the classification he desires to run. If the user has no knowledge over those methods, a default method
 	is avalaible.
-	Indeed, following a study and an in-depth exploration of those methods and parameters, we have come to conclude that 
-	the SVC class, 
-		the RBF method
-		a C equal to 1E-7
-		a gamme equal to 1E7
-		and the combinaison of the following parameters : RMP, RH, SA, SD, fAHP
-	are the most suitable settings in most cases. 
+	Indeed, following a study and an in-depth exploration of those methods and parameters, we have come to conclude that
+	the SVC class,
+		the RBF method,
+		a C equal to 1E-7,
+		a gamme equal to 1E7,
+		and the combinaison of the following parameters : RH,ST, SA, SD, fAHP
+	are the most suitable settings in most cases.
 	However, we suggest the user not to use data from various experiments. Indeed, it seems that the experimentations conditions
 	and data collections greatly influence the training of a classification model.
-	We define here two type of files : 
+	We define here to type of files :
 		The test file : the file to be classified
 		The training file : the file allowing the creation of the classification model.
-	
-	
+
+
 '''
 
 import codecs # Allows to load a file containing UTF-8 characters
@@ -110,10 +110,10 @@ fortitle = tkFont.Font(family='Helvetica', size=25, weight='bold')
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=fortitle)
 #######################################################    FUNCTIONS    #######################################################
 
-def loadtest(check): #### directs, with error handling, to the loading function					
-	'''This function implements an error management when loading the file. 
+def loadtest(check): #### goes, with error handling, to the loading function
+	'''This function implements an error management when loading the file.
 	Description:
-		If this function is called from a warning it will destroy the warning window and it will execute the 
+		If this function is called from a warning it will destroy the warning window and it will execute the
 		separatorfile function for a test file.
 	Args:
 		Check = check if the function call comes from the warning functions
@@ -124,7 +124,7 @@ def loadtest(check): #### directs, with error handling, to the loading function
 		Winwarnings.destroy()
 	separatorfile(2)
 
-def separatorfile(verif): #### Give the file separator                                               	 	####CLEAN ### A TRADUIRE
+def separatorfile(verif): #### Give the file separator
 	''' This function allows to give the file separator
 	Description:
 		Here, the user can choose the separator of his file. There are five possibilities.
@@ -136,42 +136,40 @@ def separatorfile(verif): #### Give the file separator                          
 	def sepresults(tmp): ### Retrieving the separator as a string
 		'''This function is used to retrieved the separator entered by the user in the form of a string.
 		Description:
-			Here the separator variable must be retrievedd as a string, so we get the separator variable which is 
+			Here the separator variable must be retrieved as a string, so we get the separator variable which is
 			in the form PYVARx
 		Args:
 			tmp = value in the form PYVARx
 		Return:
-			No return. Here, global variable separateur is modified to get it in other functions
+			No return. Here, global variable separateur is modified to retrieve it in other functions
  		'''
 		global separator
 		separator=tmp.get()
 		print separator
 	global Winsep
 	Winsep=Toplevel()
-	Winsep.geometry("200x180+950+500")
+	Winsep.geometry("150x135+950+500")
 	Winsep.title('Séparateur du fichier')
 	Winsep.resizable(False,False)
 	tmp=StringVar()
 	tmp.set(',')
-	textseparator="Veuillez choisir le séparateur :"
-	textseparator=Label(Winsep, text=textseparator)
 	s1=Radiobutton(Winsep, text = "Virgule", variable = tmp, value =',',command= lambda : sepresults(tmp))
 	s2=Radiobutton(Winsep, text = "Point-virgule", variable = tmp, value =';', command=lambda : sepresults(tmp))
 	s3=Radiobutton(Winsep, text = "Tab", variable = tmp, value ='	',command=lambda : sepresults(tmp))
 	s4=Radiobutton(Winsep, text = "Deux points", variable = tmp, value =':', command=lambda :sepresults(tmp))
 	s5=Radiobutton(Winsep, text = "Espace", variable = tmp, value =' ', command=lambda : sepresults(tmp))
 	s9=Button(Winsep, text="Valider", command=lambda c=verif:finalload(c),fg= "Black", bg= "SkyBlue3", font= helv36, bd= 4)
-	textseparator.pack();s1.pack();s2.pack();s3.pack();s4.pack();s5.pack();s9.pack()
+	s1.pack();s2.pack();s3.pack();s4.pack();s5.pack();s9.pack()
 	Winsep.mainloop()
 
-def finalload(verif): #### Chargement du fichier d'entrainement / fichier test            					####CLEAN ### A TRADUIRE
+def finalload(verif): #### Chargement du fichier d'entrainement / fichier test
 	'''This function, according to its call, will load the test or training file in our 2D lists
 	Description:
 		Here the test or training file will be loaded according to the call of this function
 	Args:
 		verif = check whether the function should execute itself for test (0) or for the training (1)
 	Return:
-		No return. Here the trainlist and testlist will be filled by the loading of the files. The userdataset 
+		No return. Here the trainlist and testlist will be filled by the loading of the files. The function userdataset
 		allows to retrieve elsewhere the information according to which the user has entered his training file
 	'''
 	global trainlist
@@ -189,14 +187,14 @@ def finalload(verif): #### Chargement du fichier d'entrainement / fichier test  
 		testfilename=tkFileDialog.askopenfilename(initialdir = "/net/cremi",title = "Selection du fichier test",filetypes = (("Fichier csv","*.csv"),("Fichier texte","*.txt")))
 		testlist=load(testfilename,1)
 
-def load(filename,typeofile): #### File loading                                                           ####CLEAN ### A TRADUIRE
+def load(filename,typeofile): #### File loading
 	'''This function allows to load the file into the script
 	Description:
 		Here, the file is converted into an array which will be returned for reuse
 		The typeofile variable is used to determined whether it is necessary to take into account the first column
 		because it can contain (for the training file) the type of neuron
 	Args:
-		filename = it is the name of the file that is requested as an input
+		filename = it is the name of the file which is requested as an input
 		typeofile = allows to define if it is a Test file or a Training file
 	Return:
 		Here, a two dimensional list is returned, which is useful for converting into an numpy array
@@ -239,7 +237,6 @@ def load(filename,typeofile): #### File loading                                 
 					x=x+1
 				dataset.append(y)
 	file.close
-	files.close()
 	os.remove("tmp.csv")
 	return dataset
 
@@ -248,11 +245,11 @@ def loadtrain(check):#### Loading of the training file														####CLEAN ##
 	Description:
 		Here, a window is created to allow the user to choose whether he wants to use his own data or the default one (thanks to yes/no buttons)
 	Args:
-		check = allows to know if the window comes from a warning and then destroy it 
+		check = allows to know if the window comes from a warning and then destroy it
 	Return:
 		There is no return, Here, only testvariable and Winent are modified as global variables.
-		testvariable keep the user choice
-		Winent is the windows created which will be destroyed in the next function 
+		testvariable keeps the user choice
+		Winent is the windows created which will be destroyed in the next function
 	'''
 	global testvariable
 	global Winent
@@ -273,12 +270,12 @@ def loadtrain(check):#### Loading of the training file														####CLEAN ##
 def choicetrain(check):#### Choice of the training file													####CLEAN ### A TRADUIRE
 	'''This function allows, via a small TKinter window, to choose among the user's folders the desired file
 	Description :
-		Here, a TKinter window is opened allowing the user to choose his file and allowing the program to recover the absolute path
+		Here, a TKinter window is opened allowing the user to choose his file and allowing the program to retrieve the absolute path
 		which will be used for the training of the statistical model thanks to the function trainingfile()
 	Args :
-		check = allows to know if the window comes from a warning and then destroy it 
+		check = allows to know if the window comes from a warning and then destroy it
 	Return :
-		There is no return, only the trainlist variable is modified,which allows to train the statistic 
+		There is no return, only the trainlist variable is modified, which allows to train the statistic
 		model thanks to the trainingfile() function
 	'''
 	global separator
@@ -301,7 +298,7 @@ def trainingfile(verif):#### Training of the statistical model										####CLEA
 		verif = allows to know if the function was called for the classification or the simulation
 	Return :
 		X_test = two-dimensional list containing the values ​​of the parameters on which to perform the simulation
-		y_test = list des classes des neurones
+		y_test = list of the neurons classes
 		The variable clf is modified, it is the one which contains the training method,
 		 it will be modified according to the choice of the user
 	'''
@@ -402,13 +399,13 @@ def choiceparamclass(): #### Allows to set classes															####CLEAN ### A
 		No Args required.
 	Return :
 		There is no return here. It modifies the paramvariable variable to adjust the training method class
-		And Winclasse which is the window that can be detroyed in the next function
+		and Winclasse which is the window that can be detroyed in the next function
 	'''
 	global paramvariable
 	global Winclasse
 	Winclasse=Toplevel()
 	Winclasse.title('Choix de la classe')
-	Winclasse.geometry('400x170+820+500')
+	Winclasse.geometry('400x150+820+500')
 	Winclasse.resizable(False,False)
 	explanationtext="Veuillez choisir la classe de SVM (SVC,NuSVC,LinearSVC) \n ou de Réseaux de Neurones (Classifier) : "
 	explanationtext=Label(Winclasse, text=explanationtext)
@@ -424,7 +421,7 @@ def bydefault(): #### Permet le réglage par défaut des paramètres											#
 	'''This function allows to restore the default parameters obtained during our analysis
 	Description:
 		Here, all necessary variables are set by default
-	Args: 
+	Args:
 		No Args required
 	Return:
 		No return
@@ -448,9 +445,9 @@ def methodchoice():#### Allows to choose the classification method											###
 	Args:
 		No args required
 	Return :
-		There is no return here. It modifies the 
+		There is no return here. It modifies the
 			- methods which corresponds to the method chosen by the user
-			- classes which allows to restore the class chosen by the user 
+			- classes which allows to restore the class chosen by the user
 			- Winmet which corresponds to the Tkinter window and can be destroyed in the next function	'''
 	global methods
 	global classes
@@ -494,7 +491,7 @@ def hyperparamchoice(): #### Allow to choose the hyperparameters of the method		
 		There is no return here.
 		Global variables modified :
 			First, the method is retrieved
-			The variable winhyper is used for the TKinter window and then destroy it in the following function. 
+			The variable winhyper is used for the TKinter window and then destroy it in the following function.
 			The class is also retrieved
 
 	'''
@@ -573,9 +570,9 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 	''' This function allows to user to choose a combination of paramaters to run the classification.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
-		If the button is not checked it returns 9 if the user doesn't want to choose this paramater. This is default value.
+		If the button is not checked it returns 9. This is default value.
 	Args:
-		check = Allows to know if it comes from the function Warnings 
+		check = Allows to know if it comes from the function Warnings
 	Return:
 		No return here.
 		Only Win8param serves as Tkinter window to be destroyed later
@@ -584,17 +581,17 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 		'''Here the combinations of parameters are retrieved, they are necessary for the training of the classification model
 		Description:
 			The values ​​of the preceding buttons are retrieved and then, according to their value (if they were checked or not)
-			they are added to the "paramlist" which corresponds to the parameters combinaison. 
+			they are added to the "paramlist" which corresponds to the parameters combinaison.
 		Args:
 			No args required
 		Return:
 			No return here.
 			Here, only the "paramlist" will be modified as a global variable, allowing the other functions to have an access to
-			the chosen combinaison 
+			the chosen combinaison
 		'''
 		global paramlist
 		paramlist=[]
-		p1=varparam.get() 
+		p1=varparam.get()
 		p2=varparam2.get()
 		p3=varparam3.get()
 		p4=varparam4.get()
@@ -624,7 +621,7 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 	Win8param=Toplevel()
 	Win8param.title('Choix de la combinaison de paramètres')
 	Win8param.resizable(False,False)
-	Win8param.geometry("300x250+975+500")
+	Win8param.geometry("300x220+975+500")
 	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
 	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
 	paramstext="Veuillez choisir la combinaison de paramètres : "   ### Modifié
@@ -642,11 +639,11 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 	Win8param.mainloop()
 
 def outputfilename(check):  #### Give a name to the output file											####CLEAN ### A TRADUIRE
-	''' This function allows to user to give a name to the output file (the results' file).
+	''' This function allows to user to give a name to the output file (the results file).
 	Description:
 		Here the user can enter the name of his output file.
 	Args:
-		check = allows to know if the function call come from the function Warning, and then destroy the window Warnings 
+		check = allows to know if the function call come from the function Warning, and then destroy the window Warnings
 	Return:
 		No return.
 		Golbal variables:
@@ -657,7 +654,7 @@ def outputfilename(check):  #### Give a name to the output file											####CL
 	def recoveryfilename(): #### Récupération du nom de fichier de sortie								####CLEAN ### A TRADUIRE
 		''' The name given by the user is retrieved
 		Description:
-			When the user has entered his filename, the last is retrieved as a TKinter variable then transform into a string. 
+			When the user has entered his filename, the last is retrieved as a TKinter variable then transform into a string.
 		Args:
 			No args required
 		Return:
@@ -674,7 +671,6 @@ def outputfilename(check):  #### Give a name to the output file											####CL
 			buttontxt="Choix du nom de fichier de sauvegarde"
 			Warnings(printxt,labeltxt,buttontxt,outputfilename)
 			return
-		print theoutputfilename, "testestest"
 	global Winoutfile
 	var_theoutputfilename=StringVar()
 	Winoutfile = Toplevel()
@@ -688,10 +684,10 @@ def outputfilename(check):  #### Give a name to the output file											####CL
 	choicefiletext.pack();entrernomfichier.pack();validernomfichier.pack()
 
 def choicesample(): #### Choix de l'échantillonnage												####CLEAN ### A TRADUIRE
-	'''In this function, the user is given the choice between the sampling method he wishes to launch 
+	'''In this function, the user is given the choice between the sampling method he wishes to launch for
 	the classification simulation.
 	Description:
-		Here, the user will be able to chose between 3 ways to sample his training files
+		Here, the user will be able to choose between 3 ways to sample his training files
 			75% for the training and 25% for the test
 			50% for the training and 50% for the test
 			25% for the training and 75% for the test
@@ -715,7 +711,7 @@ def choicesample(): #### Choix de l'échantillonnage												####CLEAN ### A 
 		Winech=Toplevel()
 		Winech.title("Choix de l'échantillonnage pour la simulation")
 		Winech.resizable(False,False)
-		Winech.geometry("325x100+865+500")
+		Winech.geometry("325x80+865+500")
 		simulationtext="Veuillez choisir votre méthode d'échantillonnage :"
 		simulationtext=Label(Winech, text=simulationtext)
 		echantillon1= Radiobutton(Winech, text = "50/50", variable = samples, value = 1,command=simulationresults)
@@ -725,11 +721,11 @@ def choicesample(): #### Choix de l'échantillonnage												####CLEAN ### A 
 		Winech.mainloop()
 
 def simulationresults(): #### Simulation de la classification												####CLEAN ### A TRADUIRE
-	'''Training of the classification model according to the sampling then simulation of the classification and 
+	'''Training of the classification model according to the sampling then simulation of the classification and
 	comparison of the results with the predefined values
 	Description:
 		We will first start a classification model according to the chosen sampling and then launch a classification simulation
-		with the parameters chosen by the user always according to the sampling then with the results of this classification we compare
+		with the parameters chosen by the user (according to the sampling) then with the results of this classification we compare
 		with the predefined values ​​and then transforms everything into the success percentage which will then be displayed in the Tkinter window.
 	Args:
 		No args required.
@@ -788,7 +784,7 @@ def addtodataset(filename,mod,nb): #### Ecris dans le fichier souhaité à la su
 		it is possible to save the results of the classification into the file or to rewrite the file.
 	Args:
 		filename = name of the file in which it is written
-		mod = allows to modify the mode of writing, following or not
+		mod = allows to modify the mode of writing
 		nb = allows to ignore or not the first list of resultdataset (header: nClass, IR, RMP, ...) when writing
 	'''
 	file=codecs.open(filename,mod,encoding="utf-8")
@@ -804,7 +800,7 @@ def addtodataset(filename,mod,nb): #### Ecris dans le fichier souhaité à la su
 	file.close
 
 def modiftable(): #### Permet de modifier les jeux de données												####CLEAN ### A TRADUIRE
-	'''This first part of the function makes it possible to verify whether the user is sure to modify the training files.
+	'''This first part of the function makes it possible to verify whether the user is sure if he wants to modify the training files.
 	Description:
 		Here a window Tkinter is created to check that the user wishes to add his results to the next trainings.
 	Args:
@@ -816,7 +812,7 @@ def modiftable(): #### Permet de modifier les jeux de données												####CL
 	def finaladd(): #### Ajout aux fichiers des résulats obtenu et vérifié									####CLEAN ### A TRADUIRE
 		'''Writing into the files the results of classifications
 		Description:
-			Here we write in our training files and if the user entered his file the results will be added to his file. 
+			Here we write in our training files and if the user entered his file the results will be added to his file.
 		Args:
 			No args required.
 		Return:
@@ -839,7 +835,7 @@ def modiftable(): #### Permet de modifier les jeux de données												####CL
 def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans TrainModel					####CLEAN ### A TRADUIRE
 	'''Returns to the status of backups files
 	Description:
-		If the user chooses to use these results to train his next models when he has not checked his results 
+		If the user chooses to use these results to train his next models when he has not checked his results
 		or even if he wants to return to the previous step this function will copy what is in the file backup to the models
 	Args:
 		No args required.
@@ -850,9 +846,9 @@ def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans T
 	shutil.copyfile('Yourbackup.csv','TrainModel.csv')
 
 def Warnings(printxt,labeltxt,buttontxt,function): #### Permet la gestion d'erreurs							####CLEAN ### A TRADUIRE
-	'''This function is a function called when an error can take place, in order to prevent possible errors
+	'''This function is called when an error can take place, in order to prevent possible errors
 	Description:
-		Here is a completely customizable function when calling, we can choose what is displayed in the window but also
+		Here is a completely customizable function. When it is called, we can choose what is displayed in the window but also
 		what function to call to resolve the error
 	Args:
 		printxt = string that will appear in the terminal
@@ -983,7 +979,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		Args:
 			No args needed.
 		Return:
-			No return needed.		
+			No return needed.
 		'''
 		canvas.configure(scrollregion=canvas.bbox("all"))
 	#
@@ -1010,10 +1006,10 @@ def startanalyse(): #### Start the analyse of neuron classification
 				j=j+1
 			i=i+1
 	#
-	def diagram(): #### Affichage du diagramme																	####CLEAN ### A TRADUIRE 
+	def diagram(): #### Affichage du diagramme																	####CLEAN ### A TRADUIRE
 		'''Displays a pie chart
 		Description:
-			Here we will use the number of type 1 and the number of type 2 to have a percentage that we will be use in the graph
+			Here we will use the number of type 1 and the number of type 2 to have a percentage that we will be used in the graph
 		Args:
 			No args needed
 		Return:
@@ -1030,7 +1026,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 	def plot(): #### Affiche un graph en 3D ou 2D selon la liste de paramètre
 		'''Display a graph in 3D or 2D according to the user's parameters selection
 		Description:
-			Here we will set up the data for the graph and the visualization however we are limited by a vision in 3D and therefore we can not
+			Here we will set up the data for the graph and the visualization. However, we are limited by a vision in 3D and therefore we can not
 			choose more than 3 parameters.
 			So depending on the length of the paramlist we can determine if the user must choose among these parameters or not.
 		Args:
