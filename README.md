@@ -43,7 +43,10 @@ Thouvenin Arthur : athouvenin@outlook.fr
 
 **Defense** : [defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
 
-**Necessary** :
+
+
+***Installation***
+**Dependencies** :
 - Python2.7
 - Sckiti-leran: sklearn
 - Matlplotlib
