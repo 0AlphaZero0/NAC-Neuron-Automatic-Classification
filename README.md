@@ -38,7 +38,7 @@ and run LaClassificationNeuronale.exe
 
 **MacOS et UNIX**  
 Before use the script you need to install some packages:  
-  -python  
+  -python2.7 (if you are on MacOS)  
   -pip  
   -numpy  
   -scipy  
