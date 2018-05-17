@@ -53,8 +53,7 @@ Libraries = Scikit learn library with svm and MLPClassifier
 
 	
 ========sklearn
-	    sklearn
-.svm (Allows to use the SVM classification method)
+	    sklearn.svm (Allows to use the SVM classification method)
 	    	
 	    sklearn.neural_network
  
