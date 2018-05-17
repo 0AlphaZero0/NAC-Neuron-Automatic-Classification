@@ -37,7 +37,7 @@ Just unpack the file : Classification-Neuronale.zip
 and run LaClassificationNeuronale.exe
 
 **MacOS et UNIX**  
-Before use the script you need to install some packages:
+Before use the script you need to install some packages:  
   -python  
   -pip  
   -numpy  
