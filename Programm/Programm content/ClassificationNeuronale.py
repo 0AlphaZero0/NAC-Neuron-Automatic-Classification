@@ -50,10 +50,10 @@ import sys # Allow to modify files on the OS
 import tkFont # Allows to modify the TKinter display font
 import Tkinter as tk # Allows the TKinter database with the abreviation tk
 import tkFileDialog  # Allows to create a windows to load files
-import webbrowser
+import webbrowser # Allow to use url to open a webbrowser
 from matplotlib 						 import style # Allows to modify the graphics' appearance
 from matplotlib.backends.backend_tkagg	 import FigureCanvasTkAgg # Allow some option in matlpotlib to make 3D graphs
-from mpl_toolkits.mplot3d				 import Axes3D
+from mpl_toolkits.mplot3d				 import Axes3D # Allows to use 3D graph
 from sklearn 							 import svm # Allows to use the SVM classification method
 from sklearn.neural_network				 import MLPClassifier # Allows the use of the neural network method from sklearn
 from Tkinter							 import IntVar,StringVar,Menu,Label,Toplevel,Radiobutton,Button,Entry,Scale,Checkbutton,FLAT # Allows the use of the TKinter GUI
@@ -73,7 +73,7 @@ img2=tk.PhotoImage(file="scikit-learn.gif")
 fond0.create_image(700,450, image=img2)
 
 #######################################################    VARIBALES    #######################################################
-beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
+beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x) # Make a sound
 classes=1
 sampling=IntVar()
 samples=IntVar()
@@ -110,7 +110,7 @@ fortitle = tkFont.Font(family='Helvetica', size=25, weight='bold')
 text=Label(app, text="Classification Neuronale", fg="RoyalBlue3", bg="SlateGray2", font=fortitle)
 #######################################################    FUNCTIONS    #######################################################
 
-def loadtest(check): #### goes, with error handling, to the loading function
+def loadtest(check): #### Goes, with error handling, to the loading function
 	'''This function implements an error management when loading the file.
 	Description:
 		If this function is called from a warning it will destroy the warning window and it will execute the
@@ -162,7 +162,7 @@ def separatorfile(verif): #### Give the file separator
 	s1.pack();s2.pack();s3.pack();s4.pack();s5.pack();s9.pack()
 	Winsep.mainloop()
 
-def finalload(verif): #### Chargement du fichier d'entrainement / fichier test
+def finalload(verif): #### Load a trainning file OR a file to analyze
 	'''This function, according to its call, will load the test or training file in our 2D lists
 	Description:
 		Here the test or training file will be loaded according to the call of this function
@@ -240,7 +240,7 @@ def load(filename,typeofile): #### File loading
 	os.remove("tmp.csv")
 	return dataset
 
-def loadtrain(check):#### Loading of the training file														####CLEAN ### A TRADUIRE
+def loadtrain(check):#### Loading of the training file
 	'''This function allows the user to choose a training file from his own data or a default file given by us
 	Description:
 		Here, a window is created to allow the user to choose whether he wants to use his own data or the default one (thanks to yes/no buttons)
@@ -267,7 +267,7 @@ def loadtrain(check):#### Loading of the training file														####CLEAN ##
 	R2 = Radiobutton(Winent, text="Non", variable=testvariable, value=2, command=lambda c='trainning':choicetrain(c))
 	R2.pack()
 
-def choicetrain(check):#### Choice of the training file													####CLEAN ### A TRADUIRE
+def choicetrain(check):#### Choice of the training file
 	'''This function allows, via a small TKinter window, to choose among the user's folders the desired file
 	Description :
 		Here, a TKinter window is opened allowing the user to choose his file and allowing the program to retrieve the absolute path
@@ -289,7 +289,7 @@ def choicetrain(check):#### Choice of the training file													####CLEAN ##
 		separator=','
 		trainlist=load('Backup_G.csv',0)
 
-def trainingfile(verif):#### Training of the statistical model										####CLEAN ### A TRADUIRE
+def trainingfile(verif):#### Training of the statistical model
 	'''Here, in function of the class and the model as well asthe  hyperparameters of the method,
 	 the training table will allow to train the statistical model
 	Description :
@@ -307,7 +307,7 @@ def trainingfile(verif):#### Training of the statistical model										####CLEA
 	dataset=[]
 	y_train=[]
 	X_train=[]
-	#Choix des combinaisons de paramètres
+	#Choice of combination of parameters
 	for sample in trainlist:
 		s=[]
 		s.append(sample[0])
@@ -391,7 +391,7 @@ def trainingfile(verif):#### Training of the statistical model										####CLEA
 	if verif==1:
 		return X_test,y_test
 
-def choiceparamclass(): #### Allows to set classes															####CLEAN ### A TRADUIRE
+def choiceparamclass(): #### Allows to set classes
 	'''This function allows the user to choose between the different classes in order to personalize, if he wants to, the training method
 	Description:
 		Here, thanks to a TKinter window, the user will be able to choose between different classes of training methods
@@ -417,7 +417,7 @@ def choiceparamclass(): #### Allows to set classes															####CLEAN ### A
 	explanationtext.pack();P1.pack();P2.pack();P3.pack();P4.pack();P5.pack()
 	Winclasse.mainloop()
 
-def bydefault(): #### Permet le réglage par défaut des paramètres											####CLEAN ### A TRADUIRE
+def bydefault(): #### Allow to fix parameters by default
 	'''This function allows to restore the default parameters obtained during our analysis
 	Description:
 		Here, all necessary variables are set by default
@@ -438,7 +438,7 @@ def bydefault(): #### Permet le réglage par défaut des paramètres											#
 	t=0.0000001
 	paramlist=[2,3,5,6,7]
 
-def methodchoice():#### Allows to choose the classification method											####CLEAN ### A TRADUIRE
+def methodchoice():#### Allows to choose the classification method
 	'''This function allows the user to choose between different methods in order to personalize, if he wants to, the training method
 	Description:
 		Here, via a TKinter window, the user will be able to choose between different methods of training methods
@@ -481,7 +481,7 @@ def methodchoice():#### Allows to choose the classification method											###
 		S4=Radiobutton(Winmet, text='Logistic',variable=methods, value='logistic', command=hyperparamchoice)
         methodchoice.pack();S1.pack();S2.pack();S3.pack();S4.pack()
 
-def hyperparamchoice(): #### Allow to choose the hyperparameters of the method							####CLEAN ### A TRADUIRE
+def hyperparamchoice(): #### Allow to choose the hyperparameters of the method
 	'''In this function, the user is asked if he wants to adjust the hyperparameters of the chosen method
 	Description :
 		Here, in function of the chosen method, the user can choose different values for the hyperparameters
@@ -495,7 +495,7 @@ def hyperparamchoice(): #### Allow to choose the hyperparameters of the method		
 			The class is also retrieved
 
 	'''
-	def confirmhyperparam(): #### Permet de modifier les hyperparamètres 									####CLEAN ### A TRADUIRE
+	def confirmhyperparam(): #### Allow to modify hyperparameters
 		'''Here, the required hyperparameters will be modified to be retrieved for the model training.
 		Description:
 			Here, the input values given by the user are retrieved then transformed in order to use them for the classification.
@@ -566,7 +566,7 @@ def hyperparamchoice(): #### Allow to choose the hyperparameters of the method		
 	confirmchoice.pack()
 	Winhyper.mainloop()
 
-def eightparamchoice(check): #### Allow to choose the paramaters										####CLEAN ### A TRADUIRE
+def eightparamchoice(check): #### Allow to choose the paramaters
 	''' This function allows to user to choose a combination of paramaters to run the classification.
 	Description:
 		Every button return a value between 0 and 8 corresponding of the 8 differents paramaters.
@@ -577,7 +577,7 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 		No return here.
 		Only Win8param serves as Tkinter window to be destroyed later
 	'''
-	def recoveryvalue(): #### Récupération combinaison des paramètres choisi							####CLEAN ### A TRADUIRE
+	def recoveryvalue(): #### Take comninbation choose by the user
 		'''Here the combinations of parameters are retrieved, they are necessary for the training of the classification model
 		Description:
 			The values ​​of the preceding buttons are retrieved and then, according to their value (if they were checked or not)
@@ -624,8 +624,8 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 	Win8param.geometry("300x220+975+500")
 	varparam=IntVar();varparam2=IntVar();varparam3=IntVar();varparam4=IntVar();varparam5=IntVar();varparam6=IntVar();varparam7=IntVar();varparam8=IntVar()
 	varparam.set(9);varparam2.set(9); varparam3.set(9); varparam4.set(9); varparam5.set(9); varparam6.set(9); varparam7.set(9), varparam8.set(9)
-	paramstext="Veuillez choisir la combinaison de paramètres : "   ### Modifié
-	paramstext=Label(Win8param, text=paramstext)     ### Modifié
+	paramstext="Veuillez choisir la combinaison de paramètres : "
+	paramstext=Label(Win8param, text=paramstext)
 	c1 = Checkbutton(Win8param, text="IR", variable = varparam, onvalue=0, offvalue=9)
 	c2 = Checkbutton(Win8param, text="RMP", variable = varparam2, onvalue=1, offvalue=9)
 	c3 = Checkbutton(Win8param, text="RH", variable = varparam3, onvalue=2, offvalue=9)
@@ -638,7 +638,7 @@ def eightparamchoice(check): #### Allow to choose the paramaters										####CL
 	paramstext.pack();c1.pack();c2.pack();c3.pack();c4.pack();c5.pack();c6.pack();c7.pack();c8.pack();c9.pack()
 	Win8param.mainloop()
 
-def outputfilename(check):  #### Give a name to the output file											####CLEAN ### A TRADUIRE
+def outputfilename(check):  #### Give a name to the output file
 	''' This function allows to user to give a name to the output file (the results file).
 	Description:
 		Here the user can enter the name of his output file.
@@ -651,7 +651,7 @@ def outputfilename(check):  #### Give a name to the output file											####CL
 	'''
 	if check=="avertissement":
 		Winwarnings.destroy()
-	def recoveryfilename(): #### Récupération du nom de fichier de sortie								####CLEAN ### A TRADUIRE
+	def recoveryfilename(): #### Take back output filenameRécupération du nom de fichier de sortie
 		''' The name given by the user is retrieved
 		Description:
 			When the user has entered his filename, the last is retrieved as a TKinter variable then transform into a string.
@@ -683,7 +683,7 @@ def outputfilename(check):  #### Give a name to the output file											####CL
 	entrernomfichier = Entry(Winoutfile, width=30, textvariable=var_theoutputfilename)
 	choicefiletext.pack();entrernomfichier.pack();validernomfichier.pack()
 
-def choicesample(): #### Choix de l'échantillonnage												####CLEAN ### A TRADUIRE
+def choicesample(): #### Choice of sampling
 	'''In this function, the user is given the choice between the sampling method he wishes to launch for
 	the classification simulation.
 	Description:
@@ -720,7 +720,7 @@ def choicesample(): #### Choix de l'échantillonnage												####CLEAN ### A 
 		simulationtext.pack();echantillon1.pack();echantillon2.pack();echantillon3.pack()
 		Winech.mainloop()
 
-def simulationresults(): #### Simulation de la classification												####CLEAN ### A TRADUIRE
+def simulationresults(): #### Classification simulation
 	'''Training of the classification model according to the sampling then simulation of the classification and
 	comparison of the results with the predefined values
 	Description:
@@ -743,14 +743,40 @@ def simulationresults(): #### Simulation de la classification												####CLE
 	sampling=samples.get()
 	test=trainingfile(1)
 	result=clf.predict(test[0])
-	beep(1)# Permet d'émettre un son
+	beep(1)# Allow to make a sound
+	# True positive bien identifié pour 1
+	# False positive mal identifié pour 2
+	# True negatice mal identifié pour 1
+	# False negative bien identifié pour 2
 	x=0
 	summ=0
+	trueposi=0
+	falsepos=0
+	trueneg=0
+	falseneg=0
 	length=len(test[1])
 	while x<len(test[1]):
 		if result[x]==test[1][x]:
 			summ=summ+1
+			if result[x]==1:
+				trueposi=trueposi+1
+			else:
+				falseneg=falseneg+1
+		else:
+			if test[1][x]==2:
+				falsepos=falsepos+1
+			else:
+				trueneg=trueneg+1
 		x=x+1
+	# A optimiser avec boucle for
+	trueposi=(float(trueposi)/length)*100
+	trueposi=round(trueposi,2)
+	falsepos=(float(falsepos)/length)*100
+	falsepos=round(falsepos,2)
+	trueneg=(float(trueneg)/length)*100
+	trueneg=round(trueneg,2)
+	falseneg=(float(falseneg)/length)*100
+	falseneg=round(falseneg,2)
 	percentage=(float(summ)/length)*100
 	percentage=round(percentage,2)
 	print percentage,"%"
@@ -760,10 +786,11 @@ def simulationresults(): #### Simulation de la classification												####CLE
 	txtparam=txtrecall(txtclass)
 	param=Label(Winsimulation,text=txtparam)
 	Q1= Button(Winsimulation, text= "Fermer", command= Winsimulation.destroy)
+	### ADD DIAGRAMMM
 	simulationtext.pack();textepourcentage.pack();param.pack();Q1.pack()
 	Winsimulation.mainloop()
 
-def save(): #### Sauvegarde des résultats de la classification dans le fichier de sortie					####CLEAN ### A TRADUIRE
+def save(): #### Save of classification results in the output file
 	'''Here we save the results in the desired file
 	Description:
 		If the file name has not been chosen, the user will be asked to choose one
@@ -777,7 +804,7 @@ def save(): #### Sauvegarde des résultats de la classification dans le fichier 
 	else:
 		addtodataset(theoutputfilename,"w",0)
 
-def addtodataset(filename,mod,nb): #### Ecris dans le fichier souhaité à la suite ou réécrit				####CLEAN ### A TRADUIRE
+def addtodataset(filename,mod,nb): #### Write in choosed file ou write after his content
 	'''This function allows you to write into the desired files
 	Description:
 		This function makes it possible to write into a file, according to the arguments during the call,
@@ -799,7 +826,7 @@ def addtodataset(filename,mod,nb): #### Ecris dans le fichier souhaité à la su
 		i=i+1
 	file.close
 
-def modiftable(): #### Permet de modifier les jeux de données												####CLEAN ### A TRADUIRE
+def modiftable(): #### Allow to modify results datasets (classification)
 	'''This first part of the function makes it possible to verify whether the user is sure if he wants to modify the training files.
 	Description:
 		Here a window Tkinter is created to check that the user wishes to add his results to the next trainings.
@@ -809,7 +836,7 @@ def modiftable(): #### Permet de modifier les jeux de données												####CL
 		No return here.
 	'''
 	global Winverif
-	def finaladd(): #### Ajout aux fichiers des résulats obtenu et vérifié									####CLEAN ### A TRADUIRE
+	def finaladd(): #### Add results after classification and verification to trainning files
 		'''Writing into the files the results of classifications
 		Description:
 			Here we write in our training files and if the user entered his file the results will be added to his file.
@@ -832,7 +859,7 @@ def modiftable(): #### Permet de modifier les jeux de données												####CL
 	txtavertissement.pack();A1.pack();A2.pack()
 	Winverif.mainloop()
 
-def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans TrainModel					####CLEAN ### A TRADUIRE
+def cancel(): #### Cancel modiftable
 	'''Returns to the status of backups files
 	Description:
 		If the user chooses to use these results to train his next models when he has not checked his results
@@ -845,7 +872,7 @@ def cancel(): ####Copier le backup dans le modelG.csv et copie Yourbackup dans T
 	shutil.copyfile('Backup_G.csv','ModelG.csv')
 	shutil.copyfile('Yourbackup.csv','TrainModel.csv')
 
-def Warnings(printxt,labeltxt,buttontxt,function): #### Permet la gestion d'erreurs							####CLEAN ### A TRADUIRE
+def Warnings(printxt,labeltxt,buttontxt,function): #### Allow to prevent errors
 	'''This function is called when an error can take place, in order to prevent possible errors
 	Description:
 		Here is a completely customizable function. When it is called, we can choose what is displayed in the window but also
@@ -873,7 +900,7 @@ def Warnings(printxt,labeltxt,buttontxt,function): #### Permet la gestion d'erre
 	A1.pack()
 	Winwarnings.mainloop()
 
-def txtrecall(mod): #### Affichage d'un rappel des paramètres
+def txtrecall(mod): #### Sentence to make a quick summary
 	'''Creation of a string with the saved parameters
 	Description:
 		A string is created from the different parameters retrieved
@@ -934,7 +961,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		buttontxt="Chargement d'un fichier d'entrainement"
 		Warnings(printxt,labeltxt,buttontxt,loadtrain)
 		return
-	def changetype(c): #### Correction de la valeur déterminée par le modèle									####CLEAN ### A TRADUIRE
+	def changetype(c): #### Value correction
 		'''Here, when displaying the results table, we will be able to edit the neuron type
 		Description:
 			The user can click on the number of his choice to modify it according to his desire
@@ -955,7 +982,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		A1.pack();A2.pack();A3.pack()
 		Winchoiceclass.mainloop()
 	#
-	def vartest(c): #### Modification de la valeur souhaité dans les résultats									####CLEAN ### A TRADUIRE
+	def vartest(c): #### Modify specified value in result dataset
 		'''Modify the classification result for the desired neuron
 		Description:
 			We modify according to the choice of the user the value in resultdataset
@@ -971,7 +998,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		choice.set(0)
 		tableresults(frame)
 	#
-	def onFrameConfigure(canvas): #### Scrollbar dans le tableau de résultats									####CLEAN ### A TRADUIRE
+	def onFrameConfigure(canvas): #### Scrollbar in result tab
 		'''Allows the use of a scrollbar in the results window
 		Description:
 			The results window of the classification will have a scrollbar, indeed if the size of the array is larger than the window,
@@ -983,7 +1010,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		'''
 		canvas.configure(scrollregion=canvas.bbox("all"))
 	#
-	def tableresults(frame): #### Tableau de résultats															####CLEAN ### A TRADUIRE
+	def tableresults(frame): #### Result tab
 		'''Displaying the results of the classification in the form of a table
 		Description:
 			Here via two nested loops we display the table in the results window
@@ -1006,7 +1033,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 				j=j+1
 			i=i+1
 	#
-	def diagram(): #### Affichage du diagramme																	####CLEAN ### A TRADUIRE
+	def diagram(): #### Display diagramm
 		'''Displays a pie chart
 		Description:
 			Here we will use the number of type 1 and the number of type 2 to have a percentage that we will be used in the graph
@@ -1023,7 +1050,7 @@ def startanalyse(): #### Start the analyse of neuron classification
 		plt.show("Type de neurones")
 		return
 	#
-	def plot(): #### Affiche un graph en 3D ou 2D selon la liste de paramètre
+	def plot(): #### Display a 3D or 2D according to the choice of the user
 		'''Display a graph in 3D or 2D according to the user's parameters selection
 		Description:
 			Here we will set up the data for the graph and the visualization. However, we are limited by a vision in 3D and therefore we can not
@@ -1127,10 +1154,10 @@ def startanalyse(): #### Start the analyse of neuron classification
 		for i in paramlist:
 			s.append(sample[i])
 		dataset.append(s)
-	X_test=np.array(dataset)# Passage du tableau en format numpy
-	result=clf.predict(X_test)####################### PREDICTION !!!!!!
-	resultdataset.append(completeparamlist) # ajout de l'entête
-	#boucle pour former le tableau à 2D final
+	X_test=np.array(dataset)# Tab goes to a numpy array
+	result=clf.predict(X_test)####################### CLASSIFICATION
+	resultdataset.append(completeparamlist) # add a header
+	# Loop to prepare to display a 2D tab
 	d=0
 	while d<len(result):
 		sample=[]
@@ -1169,7 +1196,7 @@ def presentation(): #### Presentation of the project's group
 	text.pack()
 	presentation.mainloop()
 
-def softwarexplanation(): ###### Explications of the software
+def softwarexplanation(): ###### Explanations of the software
 	'''This function allows the user to access the help
 	Args:
 		No arguments.
@@ -1183,7 +1210,7 @@ def softwarexplanation(): ###### Explications of the software
 	Sklearn=Button(explanation, text="Lien vers Scikit-Learn",fg="Black",bg="SkyBlue3",command=lambda:webbrowser.open('http://scikit-learn.org/stable/'))
 	SVM=Button(explanation, text="Lien vers la documentation des SVM",fg="Black",bg="SkyBlue3",command=lambda:webbrowser.open('http://scikit-learn.org/stable/modules/svm.html#'))
 	NeuronNetwork=Button(explanation, text="Lien vers la documentation des Réseaux de neurones",fg="Black",bg="SkyBlue3",command=lambda:webbrowser.open('http://scikit-learn.org/stable/modules/neural_networks_supervised.html'))
-	presentationtext="Veuillez vous reporter au manuel d'utilisation" ### Manuel + Lien scikit-learn
+	presentationtext="Veuillez vous reporter au manuel d'utilisation" ### Manual + Lien scikit-learn
 	text=Label(explanation, text=presentationtext)
 	text.pack();Sklearn.pack();SVM.pack();NeuronNetwork.pack()
 	explanation.mainloop()
