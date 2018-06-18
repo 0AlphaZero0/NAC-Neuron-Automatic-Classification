@@ -5,17 +5,16 @@
 ## Table of contents
 
 - [Descritption](#description)
-- [Status](#status)
-- [What's included](#whats-included)
-- [Bugs and feature requests](#bugs-and-feature-requests)
+- [User installation](#user-installation)
+  - [Dependencies](#dependencies)
+- [Source code](#source-code)
+- [Customer](#customer)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Community](#community)
 - [Versioning](#versioning)
 - [Creators](#creators)
 - [Copyright and license](#copyright-and-license)
-
-
 
 
 ## Description
@@ -35,8 +34,7 @@ d'étudiants.
 
 ## User installation
 
-***Installation***
-**Dependencies** :
+#### Dependencies :
 - Python2.7
 - Sckiti-leran: sklearn
 - Matlplotlib
