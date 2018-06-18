@@ -13,7 +13,7 @@
 - [Customer](#customer)
 - [Contact](#contact)
 - [Related documents](#related-docs)
-  - [Specification](#specification)
+  - [Specifications](#specifications)
   - [Report](#specification)
   - [Defense](#defense)
 
@@ -87,10 +87,10 @@ De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr
 Jouan Clément : jouan.clement@hotmail.fr  
 Thouvenin Arthur : athouvenin@outlook.fr
 
-<a name="realted-docs"></a>
+<a name="related-docs"></a>
 ## Related documents
 
-<a name="specification"></a>
+<a name="specifications"></a>
 #### Specifications : 
 [specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
 
