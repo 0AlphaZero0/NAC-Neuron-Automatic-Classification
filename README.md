@@ -81,11 +81,15 @@ André Garenne (andre.garenne@u-bordeaux.fr),Equipe MNEMOSYNE, laboratoire IMN
 
 <a name="contact"></a>
 ## Contact
-Blais Benjamin : ben.blais@laposte.net  
-Cottais Déborah : d.cottais1@gmail.com  
-De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr  
-Jouan Clément : jouan.clement@hotmail.fr  
-Thouvenin Arthur : athouvenin@outlook.fr
+
+***Author:***
+  Thouvenin Arthur : athouvenin@outlook.fr
+
+***Contributors :***
+  Blais Benjamin : ben.blais@laposte.net  
+  Cottais Déborah : d.cottais1@gmail.com  
+  De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr  
+  Jouan Clément : jouan.clement@hotmail.fr  
 
 <a name="related-docs"></a>
 ## Related documents
