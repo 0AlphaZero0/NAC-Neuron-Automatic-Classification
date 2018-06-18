@@ -1,10 +1,6 @@
-<p align="center">
-<h3 align="center>
-           Neuron-classification with Machine Learning
-           </h3>
-  ===========================================
-  Development of a tool for automatic classification of biological neural signals.
-</p>
+<h1 align="center">NAC</h1>
+<p align="center">Neuron Automatic Classification</p>
+<p align="center">Tool for automatic classification of biological neural signals.</p>
 
 ## Demandeur
 
