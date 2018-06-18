@@ -75,18 +75,21 @@ You can check the latest source swith the command :
 André Garenne (andre.garenne@u-bordeaux.fr),
 Equipe MNEMOSYNE, laboratoire IMN
 
-***CONTACT***  
+#### CONTACT :
 Blais Benjamin : ben.blais@laposte.net  
 Cottais Déborah : d.cottais1@gmail.com  
 De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr  
 Jouan Clément : jouan.clement@hotmail.fr  
 Thouvenin Arthur : athouvenin@outlook.fr
 
-**Specifications** : [specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
+#### Specifications : 
+[specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
 
-**Report** : [report](https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
+#### Report : 
+[report](https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
 
-**Defense** : [defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
+#### Defense : 
+[defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
 
 
 Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
