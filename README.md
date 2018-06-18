@@ -2,9 +2,20 @@
 <p align="center">Neuron Automatic Classification</p>
 <p align="center">Tool for automatic classification of biological neural signals.</p>
 
-## Customer
-André Garenne (andre.garenne@u-bordeaux.fr),
-Equipe MNEMOSYNE, laboratoire IMN
+## Table of contents
+
+- [Descritption](#description)
+- [Status](#status)
+- [What's included](#whats-included)
+- [Bugs and feature requests](#bugs-and-feature-requests)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Community](#community)
+- [Versioning](#versioning)
+- [Creators](#creators)
+- [Copyright and license](#copyright-and-license)
+
+
 
 
 ## Description du sujet de projet, et outils logiciels :
@@ -60,15 +71,16 @@ If you already have a working installation of any of these packages :
 You can check the latest source swith the command :
 <pre><code>     git clone https://github.com/0AlphaZero0/Projet-Neuro.git</code></pre>
 
-
+## Customer
+André Garenne (andre.garenne@u-bordeaux.fr),
+Equipe MNEMOSYNE, laboratoire IMN
 
 ***CONTACT***  
 Blais Benjamin : ben.blais@laposte.net  
 Cottais Déborah : d.cottais1@gmail.com  
 De Oliveira Lila : lila.de-oliveira@etu.u-bordeaux.fr  
 Jouan Clément : jouan.clement@hotmail.fr  
-Thouvenin Arthur : athouvenin@outlook.fr  
-
+Thouvenin Arthur : athouvenin@outlook.fr
 
 **Specifications** : [specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
 
