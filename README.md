@@ -7,14 +7,10 @@
 - [Descritption](#description)
 - [User installation](#user-installation)
   - [Dependencies](#dependencies)
+  - [Windows](#windows)
+  - [MacOS and UNIX](#macos-unix)
 - [Source code](#source-code)
 - [Customer](#customer)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [Community](#community)
-- [Versioning](#versioning)
-- [Creators](#creators)
-- [Copyright and license](#copyright-and-license)
 
 <a name="description"></a>
 ## Description 
@@ -42,11 +38,13 @@ d'étudiants.
 - Matlplotlib
 - Tkinter
 
-**Windows**  
+<a name="windows"></a>
+#### Windows :
 Just unpack the file : Classification-Neuronale.zip 
 and run LaClassificationNeuronale.exe
 
-**MacOS et UNIX**  
+<a name="macos-unix"></a>
+#### MacOS and UNIX :
 Before use the script you need to install some packages:  
   -python2.7 (if you are on MacOS)  
   -pip  
