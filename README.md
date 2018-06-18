@@ -2,8 +2,7 @@
 <p align="center">Neuron Automatic Classification</p>
 <p align="center">Tool for automatic classification of biological neural signals.</p>
 
-## Demandeur
-
+## Customer
 André Garenne (andre.garenne@u-bordeaux.fr),
 Equipe MNEMOSYNE, laboratoire IMN
 
