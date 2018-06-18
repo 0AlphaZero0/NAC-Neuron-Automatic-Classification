@@ -17,7 +17,7 @@
 - [Copyright and license](#copyright-and-license)
 
 
-## Description
+## Description <a name="description"></a>
 
 Des données électrophysiologiques concernant deux populations de neurones distinctes ont
 été recueillies par plusieurs équipes de recherche avec des mesures et des paramètres
@@ -32,9 +32,9 @@ bibliothèque **Caret** et du **logiciel R** mais également en utilisant le **l
 Scikit-Learn**. Toute autre solution peut être envisagée et ceci peut être discuté avec le groupe
 d'étudiants.
 
-## User installation
+## User installation <a name="user-installation"></a>
 
-#### Dependencies :
+#### Dependencies : <a name="dependencies"></a>
 - Python2.7
 - Sckiti-leran: sklearn
 - Matlplotlib
@@ -65,11 +65,11 @@ If you already have a working installation of any of these packages :
   <pre><code>     pip -review --auto
      sudo apt-get update && apt-get upgrade</code></pre>
 
-## Source code
+## Source code <a name="source-code"></a>
 You can check the latest source swith the command :
 <pre><code>     git clone https://github.com/0AlphaZero0/Projet-Neuro.git</code></pre>
 
-## Customer
+## Customer <a name="customer"></a>
 André Garenne (andre.garenne@u-bordeaux.fr),
 Equipe MNEMOSYNE, laboratoire IMN
 
