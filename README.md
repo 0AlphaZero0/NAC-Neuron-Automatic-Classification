@@ -1,5 +1,5 @@
 <p align="center">
-  Neuron-classification with Machine Learning 
+<h3 align="center>Neuron-classification with Machine Learning </h3>
   ===========================================
   Development of a tool for automatic classification of biological neural signals.
 </p>
