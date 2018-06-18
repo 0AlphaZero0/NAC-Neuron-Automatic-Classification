@@ -18,7 +18,7 @@
 
 
 
-## Description du sujet de projet, et outils logiciels :
+## Description
 
 Des données électrophysiologiques concernant deux populations de neurones distinctes ont
 été recueillies par plusieurs équipes de recherche avec des mesures et des paramètres
