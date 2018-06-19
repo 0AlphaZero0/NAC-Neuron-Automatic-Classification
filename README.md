@@ -16,6 +16,7 @@
   - [Specifications](#specifications)
   - [Report](#specification)
   - [Defense](#defense)
+- [Usefull links](#usefull-links)
 
 <a name="description"></a>
 ## Description 
@@ -109,11 +110,11 @@ André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 [Link to defense](https://drive.google.com/open?id=1y15v8rmb-nSddkTqOnmX7ppa-vZr1tq2 "Link to the document")
 (in french)
 
+<a name="usefull-links"></a>
+## Usefull links
 
-Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
-Documentation scikit :
-- http://scikit-learn.org/stable/modules/svm.html docs
-- https://www.youtube.com/watch?v=ZD5lJGq1rvQ Youtube
-- https://pythonprogramming.net/linear-svc-example-scikit-learn-svm-python/
-
----
+- Scikit-Learn : [Sklearn](http://scikit-learn.org/stable/index.html# "Link to Scikit-Learn website")
+  - SVM from Scikit-Learn : [SVM](http://scikit-learn.org/stable/modules/svm.html "Link to SVM documentation from Sklearn")
+  - Neural Network from Scikit-Learn : [Neural Network](http://scikit-learn.org/stable/modules/neural_networks_supervised.html "Link to Neural Network documentation from Sklearn")
+  
+- Playlist of youtube videos which explain how scikit-learn work (by Sentdex) : [Scikit-learn Machine Learning with Python and SKlearn](https://www.youtube.com/watch?v=URTZ2jKCgBc&list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3 "Scikit-learn Machine Learning with Python and SKlearn")
