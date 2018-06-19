@@ -77,7 +77,7 @@ You can check the latest source swith the command :
 
 <a name="customer"></a>
 ## Customer 
-André Garenne (andre.garenne@u-bordeaux.fr),Equipe MNEMOSYNE, laboratoire IMN
+André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 
 <a name="contact"></a>
 ## Contact
