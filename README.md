@@ -55,7 +55,7 @@ For the first time, open a terminal and use these command :
 <pre><code>     sudo apt-get install python2.7
      python get-pip.py
      pip install -U numpy,scipy,scikit-learn
-     python -mpip install matplotlib
+     python -m pip install matplotlib
      apt-get install python-tk</code></pre>
 
 If you already have a working installation of any of these packages :
