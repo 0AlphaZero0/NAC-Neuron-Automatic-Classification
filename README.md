@@ -96,15 +96,15 @@ André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 
 <a name="specifications"></a>
 #### Specifications : 
-[specifications](https://www.overleaf.com/13775721dzzjsknmydhv "Link to the document")
+[Link to specifications](https://drive.google.com/open?id=1pr_l8iCtvyq6EVjVE3XpWFjlLITfh9DM "Link to the document")
 
 <a name="report"></a>
 #### Report : 
-[report](https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
+[Link to report](https://www.overleaf.com/13781350mcsgyrmmnxxg "Link to the document")
 
 <a name="defense"></a>
 #### Defense : 
-[defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
+[Link to defense](https://www.overleaf.com/14303504qzthnffthftb#/55103801/ "Link to the document")
 
 
 Librairie Scikit-Learn : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique
