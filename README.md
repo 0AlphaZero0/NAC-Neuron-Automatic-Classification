@@ -21,18 +21,9 @@
 <a name="description"></a>
 ## Description 
 
-Des données électrophysiologiques concernant deux populations de neurones distinctes ont
-été recueillies par plusieurs équipes de recherche avec des mesures et des paramètres
-expérimentaux communs. L'objectif du projet est de trouver un moyen de classer
-automatiquement les neurones à partir de ces données avec le meilleur taux de prédiction
-possible. Cette alternative présenterait plusieurs avantages comme celui d'éviter le recours à
-des animaux transgéniques.
+Electrophysiological data for two distinct populations of neurons were collected by several research teams with common experimental measurements and parameters. The goal of the project is to find a way to automatically classify neurons from these data with the best possible prediction rate. This alternative would have several advantages such as avoiding the use of transgenic animals.
 
-Un jeu de données est mis à la disposition des étudiants avec la catégorie (1 ou 2) de chaque
-neurone. Idéalement une méthode d'apprentissage supervisé est envisagée à l'aide de la
-bibliothèque **Caret** et du **logiciel R** mais également en utilisant le **langage Python** et **la librairie
-Scikit-Learn**. Toute autre solution peut être envisagée et ceci peut être discuté avec le groupe
-d'étudiants.
+A dataset is made available to students with the category (1 or 2) of each neuron. Ideally a supervised learning method is envisaged using the **Caret library** and the **R software** but also using the **Python language** and the **Scikit-Learn library**. Any other solution can be considered and this can be discussed with the group of students.
 
 <a name="user-installation"></a>
 ## User installation 
