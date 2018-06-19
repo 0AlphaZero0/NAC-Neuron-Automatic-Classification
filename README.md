@@ -53,7 +53,7 @@ Before use the script you need to install some packages:
 
 For the first time, open a terminal and use these command :
 <pre><code>     sudo apt-get install python2.7
-     python ge-pip.py
+     python get-pip.py
      pip install -U numpy,scipy,scikit-learn
      python -mpip install matplotlib
      apt-get install python-tk</code></pre>
