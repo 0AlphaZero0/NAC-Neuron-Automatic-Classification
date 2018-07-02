@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-# Projet de programmation Python - Virus killer
-# BLAIS Benjamin
-# COTTAIS Déborah
-# DE OLIVEIRA Lila
-# JOUAN Clément
 # THOUVENIN Arthur
-######################## SI BESOIN
+########################
 import sys
 import os
 import random
 import codecs
 #######################
-
 from sklearn import datasets
 from sklearn import svm
 from csv import reader
@@ -81,6 +75,23 @@ def save(percentage,t,ft):
 		file.write(',')
 	file.write('\n')
 	file.close
+#
+def equalize(tmp,dataset,typ):
+	while tmp>0:
+		rand=random.randint(0,len(dataset)-1)
+		if dataset[rand][0]==typ:
+			dataset.pop(rand)
+			tmp=tmp-1
+	return dataset
+#
+def countype(dataset):
+	typeone=0
+	for i in dataset:
+		if i[0]==1:
+			typeone=typeone+1
+	typetwo=len(dataset)-typeone
+	return typeone,typetwo
+#
 ########################################     MAIN     ######################################
 listecombin=[1,2,3,4,5,6,7,8]
 features = ['nClass','IR','RMP','RH','ST','DTFS','SA','SD','fAHP']
@@ -102,29 +113,33 @@ for combin in all_combin:
 			u.append(sample[j])
 		dataset.append(u)
 	##### need to split data  #####
-	#les échantillons ne sont pas mélangés dans dataset donc besoin de random
+	typeof=countype(dataset)
+	typeone=typeof[0]
+	typetwo=typeof[1]
+	if typetwo>typeone:
+		tmp=typetwo-typeone
+		dataset=equalize(tmp,dataset,2)
+	if typeone>typetwo:
+		tmp=typeone-typetwo
+		dataset=equalize(tmp,dataset,1)
 	g=0
 	datalength=len(dataset)
 	while g!=len(dataset):
 		top=len(dataset)-1
 		rand=random.randint(0,top)
 		if datalength/4<len(dataset):
-			train.append(dataset.pop(rand))
+			if len(dataset)%2==0 and dataset[rand][0]==1 or len(dataset)%2!=0 and dataset[rand][0]==2:
+				train.append(dataset.pop(rand))
+			else:
+				top=top+1
+				pass
 			#on met 75% ici
 		else:
 			test.append(dataset.pop(0))
 			#on met 25% ici
-	print "TRAIN = ",len(train)
-	print "TEST = ",len(test)
-	'''
-	#print dataset
-	for i in dataset:
-		if x%2==0:
-			train.append(i)
-		else:
-			test.append(i)
-		x=x+1
-	'''
+	typeof=countype(test)
+	typeone=typeof[0]
+	typetwo=typeof[1]
 	####### séparation train ######
 	for i in train:
 		y_train.append(i.pop(0))
@@ -151,6 +166,12 @@ for combin in all_combin:
 		x=0
 		somme=0
 		length=len(y_test)
+		print "Origina",y_test
+		print "Prédict",result
+		print "TYPE 1 = ",typeone
+		print "TYPE 2 = ",typetwo
+		print "TRAIN = ",len(train)
+		print "TEST = ",len(test)
 		while x<len(y_test):
 			if result[x]==y_test[x]:
 				somme=somme+1
