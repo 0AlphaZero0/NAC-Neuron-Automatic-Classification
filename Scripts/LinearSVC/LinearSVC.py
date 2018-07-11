@@ -21,12 +21,12 @@ style.use("ggplot")
 def load(filename): # load le fichier
 	''' Cette fonction permet de charger le fichier dans le script
 	Description:
-		Ici on convertit le fichier en un tableau que l'on retourne pour le réutiliser,
-		il faut faire attention cependant on considère ici que la première colonne contient la classe du neurone
+		Ici on convertit le fichier en un tableau que l'on retourne pour le reutiliser,
+		il faut faire attention cependant on considere ici que la premiere colonne contient la classe du neurone
 	Args:
-		C'est le nom du fichier qui est demandé en entrée
+		C'est le nom du fichier qui est demande en entree
 	Return:
-		On retourne ici une liste à deux dimension, ce qui est très utile pour la conversion en array numpy
+		On retourne ici une liste a deux dimension, ce qui est tres utile pour la conversion en array numpy
 	'''
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
@@ -105,7 +105,6 @@ for combin in all_combin:
 	y_test=[]
 	train=[]
 	test=[]
-	x=0
 	for sample in DATA:
 		u=[]
 		u.append(sample[0])
@@ -132,7 +131,6 @@ for combin in all_combin:
 				train.append(dataset.pop(rand))
 			else:
 				top=top+1
-				pass
 			#on met 75% ici
 		else:
 			test.append(dataset.pop(0))
@@ -140,10 +138,10 @@ for combin in all_combin:
 	typeof=countype(test)
 	typeone=typeof[0]
 	typetwo=typeof[1]
-	####### séparation train ######
+	####### separation train ######
 	for i in train:
 		y_train.append(i.pop(0))
-	####### spéaration test #######
+	####### spearation test #######
 	for i in test:
 		y_test.append(i.pop(0))
 	################################
@@ -167,7 +165,7 @@ for combin in all_combin:
 		somme=0
 		length=len(y_test)
 		print "Origina",y_test
-		print "Prédict",result
+		print "Predict",result
 		print "TYPE 1 = ",typeone
 		print "TYPE 2 = ",typetwo
 		print "TRAIN = ",len(train)
@@ -177,7 +175,7 @@ for combin in all_combin:
 				somme=somme+1
 			x=x+1
 		percentage=(float(somme)/length)*100
-		print percentage,"% pour un C=",t,"ainsi que les paramètres : ",
+		print percentage,"% pour un C=",t,"ainsi que les parametres : ",
 		listftsave=[]
 		for j in combin:
 			if j==combin[len(combin)-1]:
