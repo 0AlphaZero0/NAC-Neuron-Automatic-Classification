@@ -18,7 +18,7 @@ style.use("ggplot")
 
 ########################################   FONCTIONS   ######################################
 # features = 0:nClass 1:IR 2:RMP 3:RH 4:ST 5:DTFS 6:SA 7:SD 8:fAHP 9:ID
-def load(filename): # load le fichier
+def load(filename): # load file
 	''' Cette fonction permet de charger le fichier dans le script
 	Description:
 		Ici on convertit le fichier en un tableau que l'on retourne pour le reutiliser,
@@ -99,102 +99,91 @@ fichier=raw_input("\nEntrer le nom du fichier : \n")
 DATA= load(fichier)
 print "\n Le fichier fait",len(DATA),"samples.\n"
 all_combin=combinaisons(listecombin)
+
+####    COMBINAISONS    ####
 for combin in all_combin:
-	dataset=[]
-	y_train=[]
-	y_test=[]
-	train=[]
-	test=[]
-	for sample in DATA:
-		u=[]
-		u.append(sample[0])
-		for j in combin:
-			u.append(sample[j])
-		dataset.append(u)
-	##### need to split data  #####
-	typeof=countype(dataset)
-	typeone=typeof[0]
-	typetwo=typeof[1]
-	if typetwo>typeone:
-		tmp=typetwo-typeone
-		dataset=equalize(tmp,dataset,2)
-	if typeone>typetwo:
-		tmp=typeone-typetwo
-		dataset=equalize(tmp,dataset,1)
-	g=0
-	datalength=len(dataset)
-	while g!=len(dataset):
-		top=len(dataset)-1
-		rand=random.randint(0,top)
-		if datalength/4<len(dataset):
-			if len(dataset)%2==0 and dataset[rand][0]==1 or len(dataset)%2!=0 and dataset[rand][0]==2:
-				train.append(dataset.pop(rand))
-			else:
-				top=top+1
-			#on met 75% ici
-		else:
-			test.append(dataset.pop(0))
-			#on met 25% ici
-	typeof=countype(test)
-	typeone=typeof[0]
-	typetwo=typeof[1]
-	####### separation train ######
-	for i in train:
-		y_train.append(i.pop(0))
-	####### spearation test #######
-	for i in test:
-		y_test.append(i.pop(0))
-	################################
-	X_test = np.array(test)
-	X_train = np.array(train)
-	t=0.00001
-	first=1
-	a=0
-	top=0
-	while top==0:
-		if t==100000000:
-			print 'BROKE'
-			break
-		clf = svm.LinearSVC(C = t)
-		clf.fit(X_train,y_train)
-		################################
-		result=clf.predict(X_test)
-		################################
-		y_test=np.array(y_test)
-		x=0
-		somme=0
-		length=len(y_test)
-		print "Origina",y_test
-		print "Predict",result
-		print "TYPE 1 = ",typeone
-		print "TYPE 2 = ",typetwo
-		print "TRAIN = ",len(train)
-		print "TEST = ",len(test)
-		while x<len(y_test):
-			if result[x]==y_test[x]:
-				somme=somme+1
-			x=x+1
-		percentage=(float(somme)/length)*100
-		print percentage,"% pour un C=",t,"ainsi que les parametres : ",
-		listftsave=[]
-		for j in combin:
-			if j==combin[len(combin)-1]:
-				listftsave.append(features[j])
-				print features[j]
-				break
-			listftsave.append(features[j])
-			print features[j],
-		save(percentage,t,listftsave)
-		if first==0:
-			if tmp==percentage:
-				a=a+1
-				if a==8:
-					print "BROKE"
-					break
-			else:
-				a=0
-		tmp=percentage
-		first=0
-		t=t*10
-		
-		
+    SET=[]
+    for sample in DATA:
+        u=[]
+        u.append(sample[0])
+        for j in combin:
+            u.append(sample[j])
+        SET.append(u)
+    ####    EQUALIZE    ####
+    typeof=countype(SET)
+    typeone,typetwo=typeof[0],typeof[1]
+    if typetwo>typeone:
+        tmp=typetwo-typeone
+        SET=equalize(tmp,SET,2)
+    if typeone>typetwo:
+        tmp=typeone-typetwo
+        SET=equalize(tmp,SET,1)
+    t=0.00001
+    while t<100000000:#first hyparam
+        k,g,TMP=5,0,0
+        meanperc=[]
+        while k>0:#stabilisation of mean
+            dataset=[x[:] for x in SET] # copy a clean version of SET in dataset
+            y_test=[]
+            y_train=[]
+            train=[]
+            test=[]
+            datalength=len(dataset)
+            '''
+            print SET[0],"SET",id(SET)
+            print dataset[0],"dataset", id(dataset)
+            print "train",id(train)
+            print "test",id(test)
+            '''
+            while g!=len(dataset):#random selction for train and test
+                top=len(dataset)-1
+                rand=random.randint(0,top)
+                if datalength/4<len(dataset):
+                    if len(dataset)%2==0 and dataset[rand][0]==1 or len(dataset)%2!=0 and dataset[rand][0]==2:
+                        train.append(dataset.pop(rand)) #75%
+                    else:
+                        top=top+1
+                else:
+                    test.append(dataset.pop(0)) #25%
+            typeof=countype(test)
+            typeone,typetwo=typeof[0],typeof[1]
+            for i in train:#split train
+                y_train.append(i.pop(0))
+            for i in test:#split test
+                y_test.append(i.pop(0))
+            X_test=np.array(test)
+            X_train=np.array(train)
+            clf=svm.LinearSVC(C=t)# MODEL CREATION
+            clf.fit(X_train,y_train)
+            result=clf.predict(X_test)
+            y_test=np.array(y_test)
+            somme,x=0,0
+            while x<len(y_test): #Percentage of this turn
+                if result[x]==y_test[x]:
+                    somme=somme+1
+                x=x+1
+            percentage=(float(somme)/len(y_test))*100
+            meanperc.append(percentage)
+            summean=0
+            for i in meanperc:#mean of all percentage
+                summean=summean+i
+            MEAN=summean/len(meanperc)
+            """
+            print MEAN,"%"
+            """
+            if k==1 and round(MEAN,2)!=round(TMP,2):# PRECISION OF ANALYSE HERE ROUNDED TO XX.xx
+                k=k+1
+            TMP=MEAN
+            k=k-1
+        print "Original ",y_test,"\n","Prediction   ",result,"\n","TYPE 1 = ",typeone,"\n","TYPE 2 = ",typetwo,"\n","TRAIN = ",len(train),"\n","TEST = ",len(test)
+        print MEAN,"% pour un C=",t,"ainsi que les parametres : ",
+        listftsave=[]
+        for j in combin:#save hyperparam,param,mean
+            if j==combin[len(combin)-1]:
+                listftsave.append(features[j])
+                print features[j]
+                break
+            listftsave.append(features[j])
+            print features[j],
+        save(MEAN,t,listftsave)
+        t=t*10
