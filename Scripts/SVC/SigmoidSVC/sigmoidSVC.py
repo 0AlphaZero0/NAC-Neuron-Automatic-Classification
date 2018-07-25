@@ -7,27 +7,11 @@ import os
 import random
 import codecs
 #######################
-from sklearn import datasets
 from sklearn import svm
-from csv import reader
-from matplotlib import style
 import numpy as np
-import matplotlib.pyplot as plt
-import urllib
-style.use("ggplot")
-
 ########################################   FONCTIONS   ######################################
 # features = 0:nClass 1:IR 2:RMP 3:RH 4:ST 5:DTFS 6:SA 7:SD 8:fAHP 9:ID
 def load(filename): # load file
-	''' Cette fonction permet de charger le fichier dans le script
-	Description:
-		Ici on convertit le fichier en un tableau que l'on retourne pour le reutiliser,
-		il faut faire attention cependant on considere ici que la premiere colonne contient la classe du neurone
-	Args:
-		C'est le nom du fichier qui est demande en entree
-	Return:
-		On retourne ici une liste a deux dimension, ce qui est tres utile pour la conversion en array numpy
-	'''
 	dataset=[]
 	file = codecs.open(filename, "r",encoding="utf-8")
 	for line in file.readlines():
@@ -65,10 +49,12 @@ def combinaisons(a):
     return all #a=[1,2,3,4] print(combinaisons(a))
 #
 def save(percentage,t,ft):
-	file=codecs.open("resultECH175train-25test-linear2.csv","a",encoding="utf-8")
+	file=codecs.open("resultSigmoid-SVC.csv","a",encoding="utf-8")
 	file.write(str(percentage))
 	file.write(',')
 	file.write(str(t))
+	file.write(',')
+	file.write(str(h))
 	file.write(',')
 	for i in ft:
 		file.write(str(i))
@@ -129,12 +115,6 @@ for combin in all_combin:# choose the good combination
 				train=[]
 				test=[]
 				datalength=len(dataset)
-				'''
-				print SET[0],"SET",id(SET)
-				print dataset[0],"dataset", id(dataset)
-				print "train",id(train)
-				print "test",id(test)
-				'''
 				while g!=len(dataset):# random selection for train and test
 					top=len(dataset)-1
 					rand=random.randint(0,top)
@@ -153,7 +133,7 @@ for combin in all_combin:# choose the good combination
 					y_test.append(i.pop(0))
 				X_test=np.array(test)
 				X_train=np.array(train)
-				clf=svm.SVC(kernel='rbf',gamma=h,C=t)### MODEL CREATION
+				clf=svm.SVC(kernel='sigmoid',gamma=h,C=t)### MODEL CREATION
 				clf.fit(X_train,y_train)
 				result=clf.predict(X_test)
 				y_test=np.array(y_test)
@@ -168,15 +148,14 @@ for combin in all_combin:# choose the good combination
 				for i in meanperc:# mean of all percentage => comparison with precedent mean
 					summean=summean+i
 				MEAN=summean/len(meanperc)
-				"""
-				print MEAN,"%"
-				"""
+				print percentage,"%"
+				print "=>",MEAN,"%"
 				if k==1 and round(MEAN,2)!=round(TMP,2):# PRECISION OF ANALYSE HERE ROUNDED TO XX.xx | if there previous mean (TMP) != actual mean (MEAN) so there is a new turn added
 					k=k+1
 				TMP=MEAN
 				k=k-1
-			print "Original ",y_test,"\n","Prediction   ",result,"\n","TYPE 1 = ",typeone,"\n","TYPE 2 = ",typetwo,"\n","TRAIN = ",len(train),"\n","TEST = ",len(test)
-			print MEAN,"% pour un C=",t,"ainsi que les parametres : ",
+			print "Original 	",y_test,"\n","Prediction   ",result,"\n","TYPE 1 = ",typeone,"\n","TYPE 2 = ",typetwo,"\n","TRAIN = ",len(train),"\n","TEST = ",len(test)
+			print MEAN,"% pour un C=",t,"et un gamma=",h,"ainsi que les parametres : ",
 			listftsave=[]
 			for j in combin:#save correct param, hyperparam, mean in file
 				if j==combin[len(combin)-1]:
