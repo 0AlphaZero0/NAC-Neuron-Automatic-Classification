@@ -103,7 +103,7 @@ André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 
 <a name="defense"></a>
 #### Defense : 
-[Link to defense](https://drive.google.com/open?id=1y15v8rmb-nSddkTqOnmX7ppa-vZr1tq2 "Link to the document")
+[Link to defense](https://github.com/0AlphaZero0/NAC-Neuron-Automatic-Classification/blob/master/Project%20Presentation.pdf "Link to the document")
 (in french)
 
 <a name="usefull-links"></a>
