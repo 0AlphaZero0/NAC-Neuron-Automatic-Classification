@@ -88,7 +88,7 @@ André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 
 <a name="order"></a>
 #### Order : 
-[Link to order](https://github.com/0AlphaZero0/NAC-Neuron-Automatic-Classification/blob/master/Specifications.pdf "Link to the document") 
+[Link to order](https://github.com/0AlphaZero0/NAC-Neuron-Automatic-Classification/blob/master/Order.pdf "Link to the document") 
 (in french)
 
 <a name="specifications"></a>
