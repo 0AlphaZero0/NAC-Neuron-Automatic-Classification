@@ -88,7 +88,7 @@ André Garenne (andre.garenne@u-bordeaux.fr), Team MNEMOSYNE, laboratory IMN
 
 <a name="specifications"></a>
 #### Specifications : 
-[Link to specifications](https://drive.google.com/open?id=1pr_l8iCtvyq6EVjVE3XpWFjlLITfh9DM "Link to the document") 
+[Link to specifications](https://github.com/0AlphaZero0/NAC-Neuron-Automatic-Classification/blob/master/Specifications.pdf "Link to the document") 
 (in french)
 
 <a name="report"></a>
